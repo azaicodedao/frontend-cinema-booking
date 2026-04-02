@@ -1,0 +1,137 @@
+.mst-card {
+    display: flex;
+    gap: 24px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.mst-poster {
+    width: 140px;
+    height: 200px;
+    background: var(--bg3);
+    border-radius: var(--rsm);
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    border: 1px solid var(--border);
+}
+
+.mst-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mst-age {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--gold);
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.mst-info {
+    flex: 1;
+}
+
+.mst-title {
+    font-family: var(--fh);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--t1);
+}
+
+.mst-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.st-group {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+}
+
+.st-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--t2);
+    margin-bottom: 12px;
+}
+
+.stgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+}
+
+.stc {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.stc:hover:not(.full) {
+    border-color: var(--gold);
+    background: rgba(232, 160, 32, .05);
+    transform: translateY(-2px);
+}
+
+.sttime {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--gold);
+    margin-bottom: 2px;
+}
+
+.stroom {
+    font-size: 11px;
+    color: var(--t3);
+    margin-bottom: 4px;
+}
+
+.stavail {
+    font-size: 10px;
+    color: var(--green);
+    font-weight: 600;
+}
+
+.stc.full {
+    opacity: .5;
+    cursor: not-allowed;
+    background: var(--bg4);
+}
+
+.stfull {
+    font-size: 10px;
+    color: var(--red);
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    .mst-card {
+        flex-direction: column;
+        gap: 16px;
+    }
+    .mst-poster {
+        width: 100px;
+        height: 150px;
+    }
+}

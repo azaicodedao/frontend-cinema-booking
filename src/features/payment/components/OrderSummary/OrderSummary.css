@@ -1,0 +1,43 @@
+.order-summary {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 22px;
+  margin-bottom: 14px;
+}
+
+.order-summary__title {
+  font-family: var(--fh);
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 13px;
+}
+
+.order-summary__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.order-summary__row:last-child {
+  border-bottom: none;
+}
+
+.order-summary__row--total {
+  font-weight: 700;
+  font-size: 16px;
+  padding-top: 13px;
+}
+
+.order-summary__label {
+  color: var(--t2);
+}
+
+.order-summary__value--total {
+  color: var(--gold);
+  font-family: var(--fh);
+  font-size: 22px;
+}

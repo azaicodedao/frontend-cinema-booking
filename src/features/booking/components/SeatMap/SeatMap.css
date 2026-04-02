@@ -1,0 +1,99 @@
+/* Seat map - wireframe matching */
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.seat-map__screen {
+  text-align: center;
+  background: rgba(78, 143, 255, 0.1);
+  border: 1px solid rgba(78, 143, 255, 0.2);
+  border-radius: var(--rxs);
+  padding: 6px;
+  font-size: 11px;
+  color: var(--blue);
+  letter-spacing: 0.16em;
+  margin-bottom: 18px;
+  font-weight: 600;
+  width: 100%;
+}
+
+.seat-map__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.seat-map__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.seat-map__row-label {
+  font-size: 10px;
+  color: var(--t3);
+  width: 14px;
+  text-align: center;
+  font-family: var(--fh);
+  font-weight: 600;
+}
+
+.seat-map__seats {
+  display: flex;
+  gap: 6px;
+}
+
+.seat-map__seat {
+  width: 30px;
+  height: 26px;
+  border-radius: 5px 5px 3px 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 700;
+  transition: all 0.1s;
+  flex-shrink: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+.seat-map__seat:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.seat-map__seat--available {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--t3);
+}
+
+.seat-map__seat--available:hover {
+  background: var(--bg4);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.seat-map__seat--selected {
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  color: #08080d;
+}
+
+.seat-map__seat--booked {
+  background: var(--bg4);
+  border: 1px solid transparent;
+  cursor: not-allowed;
+  opacity: 0.33;
+}
+
+.seat-map__seat--holding {
+  background: rgba(78, 143, 255, 0.2);
+  border: 1px solid rgba(78, 143, 255, 0.36);
+  cursor: not-allowed;
+}

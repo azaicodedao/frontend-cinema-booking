@@ -1,0 +1,81 @@
+.form-field {
+  margin-bottom: 17px;
+}
+
+.form-field__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--t2);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.form-field__label--required::after {
+  content: ' *';
+  color: var(--red);
+}
+
+.form-field__input-wrapper {
+  position: relative;
+}
+
+.form-field__input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--rsm);
+  padding: 10px 14px;
+  color: var(--t1);
+  font-size: 14px;
+  font-family: var(--fb);
+  outline: none;
+  transition: border 0.14s;
+}
+
+.form-field__input:focus {
+  border-color: rgba(232, 160, 32, 0.45);
+}
+
+.form-field__input--readonly {
+  background: var(--bg4);
+  color: var(--t3);
+  cursor: not-allowed;
+}
+
+.form-field__input--error {
+  border-color: rgba(232, 64, 64, 0.5);
+}
+
+.form-field__input--has-toggle {
+  padding-right: 42px;
+}
+
+.form-field__toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--t3);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+}
+
+.form-field__toggle:hover {
+  color: var(--t2);
+  transform: translateY(-50%);
+}
+
+.form-field__error {
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--red);
+}
+
+.form-field__hint {
+  font-size: 11px;
+  color: var(--t3);
+  margin-top: 5px;
+}

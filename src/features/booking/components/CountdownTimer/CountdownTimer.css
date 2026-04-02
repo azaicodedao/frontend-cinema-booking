@@ -1,0 +1,33 @@
+.countdown {
+  font-family: var(--fh);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--gold);
+  text-align: right;
+}
+
+.countdown--expired {
+  color: var(--red);
+}
+
+.countdown--urgent {
+  color: var(--red);
+}
+
+.countdown__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.countdown__label {
+  font-size: 10px;
+  color: var(--t3);
+  margin-top: 2px;
+  font-family: var(--fb);
+  font-weight: 400;
+}
+
+.countdown__time {
+  font-variant-numeric: tabular-nums;
+}

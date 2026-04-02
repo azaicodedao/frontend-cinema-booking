@@ -1,0 +1,47 @@
+.auth-page {
+  max-width: 440px;
+  margin: 36px auto;
+}
+
+.auth-page__card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 40px;
+}
+
+.auth-page__title {
+  font-family: var(--fh);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.auth-page__subtitle {
+  font-size: 13px;
+  color: var(--t2);
+  margin-bottom: 26px;
+}
+
+.auth-page__footer {
+  text-align: center;
+  margin-top: 17px;
+  font-size: 13px;
+  color: var(--t2);
+}
+
+.auth-page__footer a {
+  color: var(--gold);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth-page__error {
+  background: rgba(232, 64, 64, 0.08);
+  border: 1px solid rgba(232, 64, 64, 0.2);
+  border-radius: var(--rsm);
+  padding: 10px 14px;
+  color: var(--red);
+  font-size: 13px;
+  margin-bottom: 17px;
+}

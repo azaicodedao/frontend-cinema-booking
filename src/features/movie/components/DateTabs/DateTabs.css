@@ -1,0 +1,47 @@
+.dtabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+}
+
+.dtabs::-webkit-scrollbar {
+    height: 4px;
+}
+
+.dtabs::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+}
+
+.dtab {
+    padding: 10px 22px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all .2s ease;
+    color: var(--t2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+}
+
+.dtab.on {
+    background: var(--gold-dim);
+    border-color: var(--gold);
+    color: var(--gold);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+}
+
+.dtab:hover:not(.on) {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(232, 160, 32, .05);
+}

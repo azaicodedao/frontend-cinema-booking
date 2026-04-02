@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  --bg0: #09090f;
+  --bg1: #0f1018;
+  --bg2: #161825;
+  --bg3: #1d2030;
+  --bg4: #252840;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-h: rgba(255, 255, 255, 0.16);
+  --gold: #e8a020;
+  --gold-dim: rgba(232, 160, 32, 0.16);
+  --gold-glow: rgba(232, 160, 32, 0.07);
+  --red: #e84040;
+  --green: #2ec87a;
+  --blue: #4e8fff;
+  --t1: #eeeef6;
+  --t2: #8e8fa8;
+  --t3: #50516a;
+  --fh: 'Sora', sans-serif;
+  --fb: 'DM Sans', sans-serif;
+  --r: 12px;
+  --rsm: 8px;
+  --rxs: 6px;
+
+  /* Backwards-compat aliases used by existing components */
+  --primary: #e8a020;
+  --bg-dark: #09090f;
+  --bg-card: #161825;
+  --text-main: #eeeef6;
+  --text-muted: #8e8fa8;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg0);
+  color: var(--t1);
+  font-family: var(--fb);
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: var(--fb);
+  transition: all 0.14s;
+}
+
+button:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}

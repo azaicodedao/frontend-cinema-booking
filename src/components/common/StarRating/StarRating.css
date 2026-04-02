@@ -1,0 +1,23 @@
+.star-rating {
+  display: flex;
+  gap: 6px;
+}
+
+.star-rating__star {
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--t3);
+  transition: all 0.12s;
+  filter: grayscale(1);
+  line-height: 1;
+  user-select: none;
+}
+
+.star-rating__star--lit {
+  color: var(--gold);
+  filter: none;
+}
+
+.star-rating__star:hover {
+  transform: scale(1.18);
+}

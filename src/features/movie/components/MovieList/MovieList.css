@@ -1,0 +1,52 @@
+.movie-list__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.movie-list__header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.movie-list__title {
+  font-family: var(--fh);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.movie-list__badge {
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 2px 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.movie-list__badge--now {
+  background: rgba(46, 200, 122, 0.13);
+  color: var(--green);
+  border: 1px solid rgba(46, 200, 122, 0.27);
+}
+
+.movie-list__badge--soon {
+  background: var(--gold-dim);
+  color: var(--gold);
+  border: 1px solid rgba(232, 160, 32, 0.24);
+}
+
+.movie-list__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(152px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.movie-list__empty {
+  font-size: 13px;
+  color: var(--t3);
+  padding: 16px 0 28px;
+}

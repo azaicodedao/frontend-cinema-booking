@@ -1,0 +1,354 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+
+#screen-detail {
+    padding-top: 40px;
+    padding-bottom: 80px;
+    background: var(--bg1);
+}
+
+.back {
+    display: inline-block;
+    margin-bottom: 24px;
+    color: var(--t2);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color .2s;
+}
+
+.back:hover {
+    color: var(--gold);
+}
+
+.dhero {
+    display: flex;
+    gap: 40px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+}
+
+.dposter {
+    width: 280px;
+    height: 420px;
+    border-radius: var(--r);
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dposter img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dinfo {
+    flex: 1;
+}
+
+.dtitle {
+    font-family: 'Sora', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--t1);
+    margin-bottom: 12px;
+    line-height: 1.2;
+}
+
+.trow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.tag {
+    padding: 6px 14px;
+    border-radius: 6px;
+    background: var(--bg3);
+    color: var(--t2);
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+}
+
+.tag.g {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(232, 160, 32, .05);
+}
+
+.rrow {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.rnum {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    font-family: 'Sora', sans-serif;
+}
+
+.rct {
+    color: var(--t3);
+    font-size: 14px;
+}
+
+.ddesc {
+    color: var(--t2);
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 800px;
+}
+
+.arow {
+    display: flex;
+    gap: 16px;
+}
+
+.btn-cta {
+    background: var(--gold);
+    color: #000;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 12px 32px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: transform .2s ease, opacity .2s ease;
+}
+
+.btn-cta:hover {
+    transform: translateY(-2px);
+    opacity: .95;
+}
+
+.btn-trailer {
+    background: transparent;
+    color: var(--t1);
+    font-weight: 700;
+    font-size: 16px;
+    padding: 12px 32px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: background .2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-trailer:hover {
+    background: var(--bg3);
+    border-color: var(--t3);
+}
+
+.cwrap {
+    background: var(--bg2);
+    border-radius: var(--r);
+    padding: 32px;
+    border: 1px solid var(--border);
+}
+
+.shd {
+    margin-bottom: 24px;
+}
+
+.stitle {
+    font-family: 'Sora', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* MINI DATE TABS */
+.dt-mini-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.dt-tab {
+    flex-shrink: 0;
+    width: 90px;
+    height: 60px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.dt-tab:hover {
+    border-color: var(--t3);
+}
+
+.dt-tab.active {
+    background: var(--gold);
+    border-color: var(--gold);
+}
+
+.dt-tab.active span {
+    color: #000 !important;
+}
+
+.d-name {
+    font-size: 11px;
+    color: var(--t3);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.d-part {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--t1);
+}
+
+/* TIME SLOTS GRID v2 */
+.st-grid-v2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+}
+
+.st-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+    text-decoration: none;
+    transition: all .2s;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: relative;
+}
+
+.st-btn:hover:not(.full) {
+    border-color: var(--gold);
+    background: rgba(232, 160, 32, .05);
+    transform: translateY(-2px);
+}
+
+.st-time-val {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--gold);
+    font-family: 'Sora', sans-serif;
+}
+
+.st-room-val {
+    font-size: 11px;
+    color: var(--t2);
+    font-weight: 600;
+}
+
+.st-seats-val {
+    font-size: 9px;
+    color: var(--t3);
+    margin-top: 4px;
+}
+
+.st-btn.full {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--bg1);
+}
+
+.st-full-tag {
+    font-size: 10px;
+    color: var(--red);
+    font-weight: 700;
+}
+
+/* REVIEWS */
+.ci {
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+}
+
+.ci:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+
+.chd {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.av {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.cuser {
+    display: flex;
+    flex-direction: column;
+}
+
+.cmeta {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--t3);
+    margin-top: 2px;
+}
+
+.cstars {
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.ctxt {
+    font-size: 14px;
+    color: var(--t2);
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .dhero {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .dtitle {
+        font-size: 28px;
+    }
+    .trow {
+        justify-content: center;
+    }
+    .rrow {
+        justify-content: center;
+    }
+    .arow {
+        flex-direction: column;
+    }
+}
