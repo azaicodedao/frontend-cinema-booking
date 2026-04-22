@@ -1,6 +1,12 @@
 import React from 'react';
 import './SeatLegend.css';
 
+/**
+ * Component Hiển thị Chú giải các loại Ghế ngồi.
+ * Nằm bên dưới màn hình chọn, chú thích các màu sắc: Trống, Đang chọn, Đã bán, Đang giữ...
+ *
+ * @returns {JSX.Element} Thanh chú giải trạng thái ghế.
+ */
 const SeatLegend = () => {
   const items = [
     { label: 'Available', className: 'seat-legend__dot--available' },

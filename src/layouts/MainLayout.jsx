@@ -27,11 +27,16 @@ const MainLayout = () => {
 
         {isAuthenticated ? (
           <div className="nav-actions">
-            <Link to="/tickets" className="nav-link">Vé của tôi</Link>
-            <Link to="/profile" className="nav-link">Hồ sơ</Link>
-            <div className="nav-avatar" onClick={logout} title="Đăng xuất">
-              {currentUser?.fullName?.charAt(0)?.toUpperCase() || 'U'}
-            </div>
+            <div className="nav-link" onClick={logout} style={{ cursor: 'pointer' }}>Đăng xuất</div>
+            <Link to="/profile" className="nav-avatar-link" title="Hồ sơ">
+              <div className="nav-avatar">
+                {currentUser?.avatarUrl ? (
+                  <img src={currentUser.avatarUrl} alt="Avatar" className="nav-avatar-img" />
+                ) : (
+                  currentUser?.fullName?.charAt(0)?.toUpperCase() || 'U'
+                )}
+              </div>
+            </Link>
           </div>
         ) : (
           <div className="nav-actions">

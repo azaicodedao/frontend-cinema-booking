@@ -1,14 +1,23 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useParams, Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useRef, useContext } from 'react';
+import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
+import AuthContext from '../../../context/AuthContext';
 import MovieService from '../services/movie.api';
 import ReviewApi from '../services/review.api';
 import api from '../../../services/apiClient';
 import './MovieDetails.css';
 
+/**
+ * Trang Tổng hợp Chi tiết Phim (Movie Details).
+ * Cung cấp thông tin Poster, Trailer, Đánh giá và Lịch chiếu chi tiết cho 1 bộ phim theo ID truyền vào trên đường dẫn.
+ *
+ * @returns {JSX.Element} Màn hình hiển thị chi tiết phim.
+ */
 const MovieDetails = () => {
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const showtimesRef = useRef(null);
+  const { isAuthenticated } = useContext(AuthContext);
   const [movie, setMovie] = useState(null);
   const [groupedShowtimes, setGroupedShowtimes] = useState({});
   const [dates, setDates] = useState([]);
@@ -17,25 +26,30 @@ const MovieDetails = () => {
   const [loading, setLoading] = useState(true);
   const [showSchedule, setShowSchedule] = useState(new URLSearchParams(location.search).get('book') === 'true');
 
+  /**
+   * Gọi song song 3 API để lấy: Thông tin chi tiết Phim, Các suất chiếu, Bình luận.
+   */
   useEffect(() => {
     setLoading(true);
     Promise.all([
       MovieService.getMovieDetail(id),
       api.get(`showtimes/movie/${id}`).then((res) => res.data.data || res.data).catch(() => []),
-      ReviewApi.getByMovie(id).catch(() => []),
+      ReviewApi.getReviewsByMovie(id).then((res) => res.data || []).catch(() => []),
     ]).then(([movieData, showtimeData, reviewData]) => {
       setMovie(movieData);
       
-      // Group showtimes by showDate (LocalDate string from Java)
       const grouped = {};
-      const showtimesList = Array.isArray(showtimeData) ? showtimeData : [];
+      const now = new Date();
+      const showtimesList = (Array.isArray(showtimeData) ? showtimeData : [])
+        .filter(st => new Date(st.startTime) >= now);
+
       showtimesList.forEach(st => {
         const dateKey = st.showDate;
         if (!grouped[dateKey]) grouped[dateKey] = [];
         grouped[dateKey].push(st);
       });
 
-      // Sort showtimes in each date by startTime
+      // Sắp xếp các suất chiếu trong cùng 1 ngày theo thứ tự Thời gian (Sớm tới Muộn)
       Object.keys(grouped).forEach(date => {
         grouped[date].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
       });
@@ -53,6 +67,7 @@ const MovieDetails = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
+  /** Tự động trượt mượt mà (smooth scroll) màn hình xuống Khu vực Lịch chiếu khi bấm 'Đặt vé ngay' */
   const scrollToShowtimes = () => {
     setShowSchedule(true);
   };
@@ -123,7 +138,13 @@ const MovieDetails = () => {
             </div>
 
             <div className="arow">
-              <button className="btn-cta" onClick={scrollToShowtimes}>Đặt vé ngay</button>
+              <button className="btn-cta" onClick={() => {
+                if (!isAuthenticated) {
+                  navigate('/login', { state: { from: location } });
+                } else {
+                  scrollToShowtimes();
+                }
+              }}>Đặt vé ngay</button>
               {movie.trailerUrl && (
                 <a href={movie.trailerUrl} target="_blank" rel="noopener noreferrer" className="btn-trailer">
                   ▶ Xem trailer
@@ -140,7 +161,17 @@ const MovieDetails = () => {
               <div className="stitle">Lịch chiếu tại rạp</div>
             </div>
             
-            {dates.length > 0 ? (
+            {!isAuthenticated ? (
+              <div className="empty-st" style={{ textAlign: 'center', padding: '40px 0' }}>
+                <p style={{ marginBottom: '20px', color: 'var(--t2)' }}>Vui lòng đăng nhập để xem lịch chiếu và đặt vé.</p>
+                <button 
+                  className="btn-gold" 
+                  onClick={() => navigate('/login', { state: { from: location } })}
+                >
+                  Đăng nhập ngay
+                </button>
+              </div>
+            ) : dates.length > 0 ? (
               <>
                 {/* MINI DATE TABS */}
                 <div className="dt-mini-tabs">

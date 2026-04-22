@@ -1,3 +1,8 @@
+/* =========================================================
+   Các quy tắc CSS định dạng nút Phân trang (Pagination)
+   ========================================================= */
+
+/* Căn giữa chuỗi phân trang */
 .pagination {
   display: flex;
   gap: 6px;
@@ -5,6 +10,7 @@
   margin-top: 24px;
 }
 
+/* Nút điều hướng thông thường (1,2,3 hoặc tiến, lùi) */
 .pagination__btn {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -23,6 +29,7 @@
   box-shadow: none;
 }
 
+/* Khi trang đang được chọn (trang hiện hành) */
 .pagination__btn--active {
   background: var(--gold-dim);
   border-color: rgba(232, 160, 32, 0.38);

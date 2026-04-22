@@ -1,15 +1,9 @@
-/* =========================================================
-   Các quy tắc CSS dùng cho Giao diện Màn hình Thanh Toán
-   ========================================================= */
-
-/* Chia đôi màn hình trên desktop: Cột tóm tắt (to) - Cột Phương thức (nhỏ) */
 .playout {
     display: grid;
     grid-template-columns: 1fr 355px;
     gap: 22px;
 }
 
-/* Hộp thẻ báo cáo Cảnh báo thời gian Giữ Chỗ màu cam */
 .cwarn {
     background: rgba(232, 160, 32, .08);
     border: 1px solid rgba(232, 160, 32, .3);
@@ -20,7 +14,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 16px;
 }
 
 .cwarn strong {
@@ -114,17 +107,6 @@
     font-size: 14px;
     margin-bottom: 24px;
     line-height: 1.6;
-}
-
-.btn-cta {
-    background: var(--gold);
-    color: #000;
-    border: none;
-    border-radius: var(--rmd);
-    padding: 12px 24px;
-    font-family: var(--fh);
-    font-weight: 700;
-    cursor: pointer;
 }
 
 @media (max-width: 900px) {

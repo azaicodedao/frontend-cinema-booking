@@ -1,4 +1,8 @@
-/* Seat map - wireframe matching */
+/* =========================================================
+   Các quy tắc CSS cấu trúc lưới Sơ đồ chỗ ngồi của phòng chiếu (SeatMap)
+   Tạo phong cách Dark Mode với viền ghế vàng đặc trưng.
+   ========================================================= */
+
 .seat-map {
   display: flex;
   flex-direction: column;
@@ -6,6 +10,7 @@
   gap: 16px;
 }
 
+/* Thanh mô phỏng lại màn hình máy chiếu */
 .seat-map__screen {
   text-align: center;
   background: rgba(78, 143, 255, 0.1);
@@ -20,6 +25,7 @@
   width: 100%;
 }
 
+/* Grid bọc ngoài các dòng */
 .seat-map__grid {
   display: flex;
   flex-direction: column;
@@ -46,6 +52,7 @@
   gap: 6px;
 }
 
+/* Tạo hình thái cho 1 nút bấm (1 chiếc ghế) */
 .seat-map__seat {
   width: 30px;
   height: 26px;
@@ -67,6 +74,7 @@
   box-shadow: none;
 }
 
+/* CSS biến thể dựa vào trạng thái ghế */
 .seat-map__seat--available {
   background: var(--bg3);
   border: 1px solid var(--border);

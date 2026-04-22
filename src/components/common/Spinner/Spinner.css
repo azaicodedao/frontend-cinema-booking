@@ -1,3 +1,8 @@
+/* =========================================================
+   Các quy tắc CSS dùng cho Vòng xoay Loading (Spinner)
+   ========================================================= */
+
+/* Bao ngoài khối xoay, giúp nó căn giữa */
 .spinner {
   display: flex;
   align-items: center;
@@ -5,11 +10,12 @@
   padding: 40px;
 }
 
+/* Thẻ thực hiện hình vòng tròn và gắn hiệu ứng xoay (animation) */
 .spinner__circle {
-  border: 3px solid var(--bg4);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  border: 3px solid var(--bg4); /* Vòng nền tối mờ */
+  border-top-color: var(--gold); /* Đoạn sáng màu vàng để tạo độ quay */
+  border-radius: 50%; /* Bo tròn thành vòng tròn */
+  animation: spin 0.7s linear infinite; /* Animation xoay không giới hạn */
 }
 
 .spinner--small .spinner__circle {

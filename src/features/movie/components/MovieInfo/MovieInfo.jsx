@@ -1,6 +1,14 @@
 import React from 'react';
 import './MovieInfo.css';
 
+/**
+ * Component biểu diễn Chi tiết Phim (Poster lớn, Đạo diễn, Diễn viên, Mô tả).
+ * Nằm trên cùng của trang Chi tiết Phim (MovieDetails).
+ *
+ * @param {Object} props - Tham số cấp vào.
+ * @param {Object} props.movie - JSON của bộ phim lấy từ Backend.
+ * @returns {JSX.Element} Giao diện tóm tắt thông tin Phim.
+ */
 const MovieInfo = ({ movie }) => {
   return (
     <div className="movie-info">

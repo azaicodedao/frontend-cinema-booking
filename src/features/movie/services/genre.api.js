@@ -2,7 +2,9 @@ import api from '../../../services/apiClient';
 
 const GENRE_URL = 'genres';
 
+/** Object gọi API Quản lý Thể Loại Phim (Hành động, Hài,...) */
 const GenreApi = {
+  /** Lấy tất cả thể loại từ server */
   getAll() {
     return api.get(GENRE_URL).then((res) => res.data.data);
   },

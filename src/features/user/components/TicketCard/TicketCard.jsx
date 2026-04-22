@@ -2,6 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './TicketCard.css';
 
+/**
+ * Component Thẻ tóm tắt một Lệnh Đặt Vé (Ticket Card).
+ * Hiển thị dạng chữ nhật nhỏ gọn trong danh sách "Lịch sử mua vé" ở trang Cá Nhân (Profile).
+ * Trang thái đơn: PENDING (Chưa thanh toán), CONFIRMED (Đã thanh toán), CANCELLED (Bị hủy).
+ *
+ * @param {Object} props - Dữ liệu cấp vào.
+ * @param {Object} props.booking - Thông tin lệnh vé thu nhỏ từ API Lịch sử giao dịch.
+ * @returns {JSX.Element} Khối thẻ giao dịch.
+ */
 const TicketCard = ({ booking }) => {
   const statusClass = {
     CONFIRMED: 'ticket-card__status--confirmed',

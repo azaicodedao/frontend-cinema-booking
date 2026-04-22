@@ -1,19 +1,15 @@
 import api from '../../../services/apiClient';
 
-const REVIEW_URL = 'reviews/';
-
+/** Dịch vụ giao tiếp với hệ thống Đánh giá và Bình luận */
 const ReviewApi = {
+  getReviewsByMovie: (movieId) => api.get(`/reviews/movie/${movieId}`).then(res => res.data),
+  getReviewSummary: (movieId) => api.get(`/reviews/movie/${movieId}/summary`).then(res => res.data),
+  addReview: (reviewData) => api.post('/reviews', reviewData).then(res => res.data),
+  
+  // Alias for backward compatibility
   getByMovie(movieId) {
-    return api.get(REVIEW_URL + 'movie/' + movieId).then((res) => res.data);
-  },
-
-  create(data) {
-    return api.post(REVIEW_URL, data);
-  },
-
-  getMyReviewForBooking(bookingId) {
-    return api.get(REVIEW_URL + 'booking/' + bookingId).then((res) => res.data);
-  },
+    return this.getReviewsByMovie(movieId);
+  }
 };
 
 export default ReviewApi;

@@ -1,3 +1,8 @@
+/* =========================================================
+   Các quy tắc CSS định dạng khối thông báo nhanh (Toast)
+   ========================================================= */
+
+/* Định vị Toast nổi tự do, thường nằm ở góc dưới bên phải màn hình */
 .toast {
   position: fixed;
   bottom: 24px;
@@ -16,10 +21,12 @@
   max-width: 360px;
 }
 
+/* Các màu viền dựa theo kiểu (Type) */
 .toast--success { border-color: rgba(46, 200, 122, 0.3); }
 .toast--error { border-color: rgba(232, 64, 64, 0.3); }
 .toast--info { border-color: rgba(78, 143, 255, 0.3); }
 
+/* Nút dấu nhân(X) để đóng thông báo thủ công */
 .toast__close {
   background: none;
   border: none;

@@ -1,6 +1,15 @@
 import React from 'react';
 import './DateTabs.css';
 
+/**
+ * Component hiển thị Thanh danh sách 7 ngày liên tiếp để chọn Lịch Chiếu.
+ * Tự động tính toán ngày bắt đầu từ Hôm nay.
+ *
+ * @param {Object} props - Thuộc tính truyền vào.
+ * @param {string} props.selectedDate - Ngày đang được người dùng bấm chọn (định dạng YYYY-MM-DD).
+ * @param {Function} props.onDateChange - Hàm gọi ngược lại thẻ cha khi người dùng bấm chọn ngày khác.
+ * @returns {JSX.Element} Thanh cuộn ngày tháng.
+ */
 const DateTabs = ({ selectedDate, onDateChange }) => {
     const dates = [];
     const today = new Date();

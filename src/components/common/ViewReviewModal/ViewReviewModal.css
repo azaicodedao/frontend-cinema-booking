@@ -1,0 +1,116 @@
+/* =========================================================
+   Các quy tắc CSS định dạng Hộp thoại hiển thị Modal xem Review (ViewReviewModal)
+   ========================================================= */
+
+/* Lớp màu xám đen bao phủ che giao diện gốc đằng sau */
+.vrm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* Khung hiển thị nội dung chính nằm rỗng ở chính giữa nền tối */
+.vrm-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Nút dấu nhân X để đóng cửa sổ */
+.vrm-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: var(--t3);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.vrm-close-btn:hover {
+    color: var(--gold);
+}
+
+.vrm-title {
+    font-family: var(--fh);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--t1);
+    margin-bottom: 20px;
+    padding-right: 20px;
+}
+
+.vrm-stars {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+/* Định dạng biểu tượng 1 ngôi sao lẻ */
+.vrm-star {
+    font-size: 32px;
+    color: var(--t4); /* Inactive light gray/faded */
+}
+
+.vrm-star.active {
+    color: var(--gold);
+}
+
+/* Khung background tối tối phía sau dòng chữ để nổi text lên */
+.vrm-comment {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    padding: 16px;
+    min-height: 80px;
+    color: var(--t2);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.vrm-no-comment {
+    color: var(--t4);
+    font-style: italic;
+    text-align: center;
+}
+
+.vrm-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+.vrm-date {
+    font-size: 12px;
+    color: var(--t4);
+}
+
+/* Các hiệu ứng Animation trồi lên và hiện rõ ra */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -1,113 +1,250 @@
-.ticket-view {
-  max-width: 720px;
+.screen-ticket-page {
+    padding: 60px 20px;
+    min-height: 100vh;
+    background: var(--bg1);
+    color: var(--t1);
 }
 
-.ticket-view__title {
-  font-family: var(--fh);
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.ticket-view__subtitle {
-  font-size: 13px;
-  color: var(--t2);
-  margin-bottom: 22px;
-}
-
-/* Ticket wrapper: wireframe .twrap */
-.ticket-view__wrap {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  overflow: hidden;
-  margin-bottom: 18px;
-}
-
-.ticket-view__header {
-  background: var(--bg3);
-  padding: 18px 22px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.ticket-view__film-name {
-  font-family: var(--fh);
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.ticket-view__txn-id {
-  font-size: 12px;
-  color: var(--t3);
-  margin-top: 4px;
-}
-
-.ticket-view__status {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--green);
-  background: rgba(46, 200, 122, 0.1);
-  border: 1px solid rgba(46, 200, 122, 0.2);
-  border-radius: 20px;
-  padding: 3px 10px;
-}
-
-/* Ticket body */
-.ticket-view__body {
-  padding: 22px;
-  display: grid;
-  grid-template-columns: 1fr 200px;
-  gap: 26px;
-}
-
-/* Detail rows */
-.ticket-view__detail-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-
-.ticket-view__detail-row:last-child {
-  border-bottom: none;
-}
-
-.ticket-view__detail-label {
-  color: var(--t3);
-  font-size: 12px;
-}
-
-/* QR box */
-.ticket-view__qr {
-  width: 200px;
-  height: 200px;
-  background: var(--bg3);
-  border-radius: var(--rsm);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px dashed var(--border);
-  gap: 8px;
-  font-size: 11px;
-  color: var(--t3);
-  text-align: center;
-}
-
-.ticket-view__actions {
-  display: flex;
-  gap: 10px;
-}
-
-@media (max-width: 600px) {
-  .ticket-view__body {
-    grid-template-columns: 1fr;
-  }
-  .ticket-view__qr {
+.screen-ticket-page .inner {
+    max-width: 900px;
     margin: 0 auto;
-  }
+}
+
+.back {
+    background: none;
+    border: none;
+    color: var(--t3);
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.back:hover {
+    color: var(--gold);
+}
+
+.ptitle {
+    font-family: var(--fh);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+
+.psub {
+    font-size: 14px;
+    color: var(--t3);
+    margin-bottom: 30px;
+}
+
+/* UC12b: Transaction Detail Summary */
+.ocard {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 26px;
+    margin-bottom: 24px;
+}
+
+.ocard h3 {
+    font-family: var(--fh);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--t2);
+}
+
+.orow {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+}
+
+.orow:last-child {
+    border-bottom: none;
+}
+
+.orow .c2 {
+    color: var(--t3);
+}
+
+.orow.tot {
+    margin-top: 10px;
+    padding-top: 18px;
+    border-top: 1.5px solid var(--border);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.pb {
+    color: var(--gold);
+    font-family: var(--fh);
+}
+
+/* UC11: E-Ticket */
+.twrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.thd {
+    background: var(--bg3);
+    padding: 22px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.tfilm {
+    font-family: var(--fh);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--t1);
+}
+
+.sok {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--green);
+    background: rgba(46, 200, 122, 0.1);
+    border: 1px solid rgba(46, 200, 122, 0.2);
+    border-radius: 20px;
+    padding: 4px 12px;
+    letter-spacing: 0.05em;
+}
+
+.ttabs {
+    display: flex;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 10px;
+}
+
+.ttab {
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--t3);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.ttab:hover {
+    color: var(--t1);
+}
+
+.ttab.on {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+}
+
+.invalid-ticket {
+    opacity: 0.5;
+    filter: grayscale(1);
+    position: relative;
+    pointer-events: none;
+}
+
+.invalid-ticket::before {
+    content: "CANCELLED";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    font-size: 80px;
+    font-weight: 900;
+    color: rgba(255, 0, 0, 0.2);
+    border: 10px solid rgba(255, 0, 0, 0.2);
+    padding: 10px 40px;
+    z-index: 10;
+    pointer-events: none;
+    letter-spacing: 10px;
+}
+
+.tbody {
+    padding: 30px 28px;
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 40px;
+}
+
+.trow2 {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+}
+
+.trow2:last-child {
+    border-bottom: none;
+}
+
+.tlbl {
+    color: var(--t3);
+    font-size: 12px;
+}
+
+.qrbox {
+    background: var(--bg3);
+    border: 1.5px dashed var(--border);
+    border-radius: var(--rsm);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.qr-code-mock {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 15px;
+}
+
+.qr-label {
+    font-size: 12px;
+    color: var(--t1);
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.qr-id {
+    font-size: 10px;
+    color: var(--t3);
+    font-family: var(--fh);
+}
+
+.gap10 {
+    display: flex;
+    gap: 12px;
+}
+
+.p-loading, .p-error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    color: var(--t3);
+}
+
+@media (max-width: 768px) {
+    .tbody {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .qrbox {
+        width: 100%;
+        padding: 40px 0;
+    }
 }

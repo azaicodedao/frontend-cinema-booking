@@ -1,60 +1,70 @@
-.form-field {
+/* =========================================================
+   File CSS chứa toàn bộ định dạng giao diện cho Component Input 
+   Lưu ý: Các class bên trong Component Input sử dụng tiền tố 'input-group'
+   ========================================================= */
+
+/* Bao ngoài toàn bộ nhóm để tạo khoảng cách với các thành phần khác */
+.input-group {
   margin-bottom: 17px;
 }
 
-.form-field__label {
+/* Nhãn chú thích của trường nhập liệu (Label) */
+.input-group__label {
   font-size: 12px;
   font-weight: 500;
   color: var(--t2);
   margin-bottom: 6px;
-  display: block;
+  display: block; /* Bắt buộc xuống dòng với ô input */
 }
 
-.form-field__label--required::after {
+/* Dấu sao màu đỏ đằng sau chữ required */
+.input-group__required::after {
   content: ' *';
   color: var(--red);
 }
 
-.form-field__input-wrapper {
+/* Biến thẻ cha bao quanh input thành dạng relative để đính nút tắt/bật mật khẩu lên trên */
+.input-group__wrapper {
   position: relative;
 }
 
-.form-field__input {
+/* Thiết kế cơ bản của ô nhập liệu (thanh input) */
+.input-group__input {
   width: 100%;
-  background: var(--bg3);
+  background: var(--bg3); /* Nền tối vừa */
   border: 1px solid var(--border);
-  border-radius: var(--rsm);
+  border-radius: var(--rsm); /* Góc bo tròn nhỏ */
   padding: 10px 14px;
-  color: var(--t1);
+  color: var(--t1); /* Màu chữ trắng/sáng */
   font-size: 14px;
   font-family: var(--fb);
-  outline: none;
-  transition: border 0.14s;
+  outline: none; /* Bỏ viền mặc định của trình duyệt */
+  transition: border 0.14s; /* Hiệu ứng đổi màu viền mượt khi nhấp vô */
 }
 
-.form-field__input:focus {
+/* Ứng xử khi chuột click vào rãnh nhập (tạo border màu vàng) */
+.input-group__input:focus {
   border-color: rgba(232, 160, 32, 0.45);
 }
 
-.form-field__input--readonly {
+/* Chế độ chỉ đạo, không cho nhập liệu */
+.input-group__input--readonly {
   background: var(--bg4);
   color: var(--t3);
   cursor: not-allowed;
 }
 
-.form-field__input--error {
+/* Khi có thông báo lỗi, đổi viền thành màu đỏ */
+.input-group--error .input-group__input {
   border-color: rgba(232, 64, 64, 0.5);
 }
 
-.form-field__input--has-toggle {
-  padding-right: 42px;
-}
-
-.form-field__toggle {
+/* CSS cho nút tắt/hiển thị mật khẩu nằm bên phải, canh giữa dọc */
+.input-group__toggle {
   position: absolute;
   right: 12px;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%); /* Kéo lùi lên 50% tự thân để nằm ngay tâm */
   background: none;
   border: none;
   color: var(--t3);
@@ -63,17 +73,20 @@
   padding: 0;
 }
 
-.form-field__toggle:hover {
+.input-group__toggle:hover {
   color: var(--t2);
   transform: translateY(-50%);
 }
 
-.form-field__error {
+/* Thông điệp lỗi nhỏ hiển thị bên dưới thẻ input */
+.input-group__error {
+  display: block;
   margin-top: 5px;
   font-size: 11px;
   color: var(--red);
 }
 
+/* Thông báo hoặc gợi ý bình thường hiển thị bên dưới */
 .form-field__hint {
   font-size: 11px;
   color: var(--t3);

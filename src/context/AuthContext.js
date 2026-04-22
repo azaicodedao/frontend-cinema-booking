@@ -4,6 +4,7 @@ const AuthContext = createContext({ // giá trị mặc định cho Context này
   currentUser: null, //  Lưu trữ thông tin của người dùng đang đăng nhập (ví dụ: một object chứa {id, name, email}). Mặc định là null vì khi mới mở app, chưa có ai đăng nhập.
   setCurrentUser: () => {}, // Một hàm rỗng đóng vai trò là "giữ chỗ" (placeholder). Sau này, bạn sẽ thay thế nó bằng hàm setState thực tế để cập nhật lại currentUser
   login: () => {},
+  register: () => {},
   logout: () => {},
   isAuthenticated: false, // Một biến kiểu Boolean (đúng/sai) để kiểm tra nhanh xem người dùng đã đăng nhập hay chưa (thường dùng để bảo vệ các Router)
   isAdmin: false,

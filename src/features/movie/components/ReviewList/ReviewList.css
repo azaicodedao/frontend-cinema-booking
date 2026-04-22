@@ -1,7 +1,12 @@
+/* =========================================================
+   Các quy tắc CSS định dạng Danh sách Bình luận (ReviewList)
+   ========================================================= */
+
 .review-list {
   padding: 0;
 }
 
+/* Tiêu đề "Reviews (X)" */
 .review-list__title {
   font-family: var(--fh);
   font-size: 15px;
@@ -9,23 +14,26 @@
   margin-bottom: 6px;
 }
 
-.review-item {
+/* Khung hiển thị từng đánh giá */
+.review-list__item {
   padding: 13px 0;
   border-bottom: 1px solid var(--border);
 }
 
-.review-item:last-child {
+.review-list__item:last-child {
   border-bottom: none;
 }
 
-.review-item__header {
+/* Flexbox chứa Ảnh đại diện và Thông tin Tên, Ngày tháng */
+.review-list__header {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 6px;
 }
 
-.review-item__avatar {
+/* Vòng tròn ảnh đại diện mặc định */
+.review-list__avatar {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -39,23 +47,27 @@
   flex-shrink: 0;
 }
 
-.review-item__name {
+.review-list__user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.review-list__username {
   font-size: 13px;
   font-weight: 700;
 }
 
-.review-item__stars {
-  color: var(--gold);
-  font-size: 12px;
-}
-
-.review-item__date {
+.review-list__date {
   font-size: 11px;
   color: var(--t3);
+  margin-left: auto; /* Đẩy sang phải cùng */
 }
 
-.review-item__text {
+/* Đoạn chữ bình luận của người dùng */
+.review-list__comment {
   font-size: 13px;
   color: var(--t2);
   line-height: 1.62;
+  margin-left: 38px; /* Thụt lùi so với avatar */
 }

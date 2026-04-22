@@ -1,0 +1,192 @@
+/* =========================================================
+   Định dạng giao diện trang Xem/Viết Đánh Giá Phim 
+   ========================================================= */
+
+/* Lưới tổng thẻ cha: Chia 2 cột, 1 cột to bên trái, 1 cột nhỏ (340px) bên phải */
+.review-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
+    margin-top: 24px;
+}
+
+@media (max-width: 992px) {
+    .review-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Card chứa thông tin phim thu nhỏ ở trên cùng bên trái */
+.review-movie-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--rlg);
+    padding: 20px;
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.review-movie-poster {
+    width: 120px;
+    height: 180px;
+    border-radius: var(--rsm);
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+}
+
+.review-movie-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.review-movie-info {
+    flex: 1;
+}
+
+.review-movie-title {
+    font-family: var(--fh);
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--t1);
+    margin-bottom: 8px;
+}
+
+.review-movie-meta {
+    font-size: 14px;
+    color: var(--t3);
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Card chứa Biểu mẫu (Form) đánh giá */
+.review-form-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--rlg);
+    padding: 32px;
+}
+
+.review-section-title {
+    font-family: var(--fh);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--t1);
+    margin-bottom: 16px;
+}
+
+/* Hiệu ứng các Ngôi sao (Stars) dùng trong đánh giá */
+.star-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.star-btn {
+    font-size: 42px;
+    color: var(--bg4);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    line-height: 1;
+}
+
+.star-btn.active, .star-btn.hover {
+    color: var(--gold);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.star-label {
+    font-size: 14px;
+    color: var(--t3);
+    margin-bottom: 32px;
+}
+
+/* Ô nhập văn bản (Textarea) dùng cho nhận xét dài */
+.rta {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--rsm);
+    padding: 16px;
+    color: var(--t1);
+    font-family: inherit;
+    font-size: 15px;
+    resize: none;
+    transition: all 0.3s ease;
+}
+
+.rta:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.1);
+}
+
+.cct {
+    text-align: right;
+    font-size: 12px;
+    color: var(--t3);
+    margin-top: 8px;
+}
+
+/* Card phụ (Sidebar) nằm bên phải gợi ý cách đánh giá */
+.review-sidebar-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--rlg);
+    padding: 24px;
+}
+
+.review-tip-item {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--t2);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.review-tip-icon {
+    font-size: 16px;
+}
+
+/* Giao diện chúc mừng khi gửi đánh giá thành công */
+.review-success-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--rlg);
+    padding: 48px 32px;
+    text-align: center;
+    max-width: 520px;
+    margin: 40px auto;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.review-success-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+}
+
+.review-success-title {
+    font-family: var(--fh);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--gold);
+    margin-bottom: 12px;
+}
+
+.review-success-sub {
+    color: var(--t3);
+    margin-bottom: 32px;
+    line-height: 1.6;
+}

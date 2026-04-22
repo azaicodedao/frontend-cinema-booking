@@ -2,6 +2,14 @@ import React from 'react';
 import StarRating from '../../../../components/common/StarRating/StarRating';
 import './ReviewList.css';
 
+/**
+ * Component hiển thị danh sách các bài Đánh giá (Review) gồm Sao và Nội dung bình luận.
+ * Nằm ngang bên dưới trang Chi Tiết Phim.
+ *
+ * @param {Object} props - Tham số.
+ * @param {Array} props.reviews - Mảng các bình luận đã vượt qua kiểm duyệt tải về từ API.
+ * @returns {JSX.Element} Danh sách review.
+ */
 const ReviewList = ({ reviews = [] }) => {
   if (reviews.length === 0) {
     return <p className="review-list__empty">No reviews yet. Be the first to review!</p>;

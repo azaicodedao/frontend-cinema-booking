@@ -1,3 +1,8 @@
+/* =========================================================
+   Các quy tắc CSS dùng riêng cho màn hình nền Đăng ký (Register Page)
+   ========================================================= */
+
+/* Bao ngoài toàn bộ trang đăng ký, căn giữa màn hình */
 .register-page {
   display: flex;
   align-items: center;
@@ -5,6 +10,7 @@
   min-height: 60vh;
 }
 
+/* Hộp khung Card nổi màu tối của trang Đăng Ký */
 .register-page__card {
   background: var(--bg-card);
   padding: 40px;

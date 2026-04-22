@@ -1,6 +1,20 @@
 import React, { useState } from 'react';
 import './Input.css';
 
+/**
+ * Component Input tái sử dụng (Reusable Input Component).
+ * Cung cấp một thẻ input có kèm nhãn (label), nút ẩn/hiện mật khẩu và hiển thị lỗi.
+ * 
+ * @param {Object} props - Danh sách các thuộc tính truyền từ component cha.
+ * @param {string} props.label - Chữ hiển thị bên trên ô nhập (Tên trường dữ liệu).
+ * @param {string} [props.type='text'] - Loại của ô nhập (text, password, email...).
+ * @param {string} props.name - Tên (name attribute) của thẻ input để phân biệt khi submit.
+ * @param {any} props.value - Giá trị hiện tại của ô nhập.
+ * @param {Function} props.onChange - Hàm được gọi khi người dùng gõ phím.
+ * @param {string} [props.placeholder] - Chữ in mờ làm gợi ý trong ô.
+ * @param {string} [props.error] - Dòng chữ lỗi hiển thị bên dưới ô nhập màu đỏ.
+ * @returns {JSX.Element} Khối giao diện của trường nhập liệu.
+ */
 const Input = ({
   label,
   type = 'text',

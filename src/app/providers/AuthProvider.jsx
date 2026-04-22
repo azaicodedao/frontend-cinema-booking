@@ -27,6 +27,11 @@ const AuthProvider = ({ children }) => {
     return userData;
   }, []);
 
+  /** Gọi API đăng ký qua AuthService. */
+  const register = useCallback(async (fullName, email, password) => {
+    return await AuthService.register(fullName, email, password);
+  }, []);
+
   /** Xóa dữ liệu ở cả "kho lưu trữ" (AuthService.logout) và xóa luôn trạng thái trong React (setCurrentUser(null)). */
   const logout = useCallback(() => {
     AuthService.logout();
@@ -34,7 +39,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const isAuthenticated = !!currentUser; // Biến currentUser thành kiểu boolean. Có user = true, không có = false
-  const isAdmin = currentUser?.roles?.includes('ADMIN') || false; // Kiểm tra nhanh xem trong mảng roles của người dùng có quyền ADMIN hay không. Bạn sẽ dùng biến này để ẩn/hiện menu quản trị.
+  const isAdmin = currentUser?.user?.role === 'ADMIN'; // Kiểm tra xem người dùng có quyền ADMIN hay không.
 
 /**Cấu trúc thực tế của AuthContext sau khi khởi tạo
 {
@@ -50,6 +55,7 @@ const AuthProvider = ({ children }) => {
         currentUser,
         setCurrentUser,
         login,
+        register,
         logout,
         isAuthenticated,
         isAdmin,

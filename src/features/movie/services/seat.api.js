@@ -6,11 +6,11 @@ const SeatApi = {
   },
 
   holdSeat: (seatId, showtimeId) => {
-    return api.post('/seats/hold', { seatId, showtimeId });
+    return api.post('/seats/hold', { seatIds: [seatId], showtimeId });
   },
 
   releaseSeat: (seatId, showtimeId) => {
-    return api.post('/seats/release', { seatId, showtimeId });
+    return api.post('/seats/release', { seatIds: [seatId], showtimeId });
   }
 };
 

@@ -1,3 +1,8 @@
+/* =========================================================
+   Các quy tắc CSS cho Thanh Chú giải các loại trạng thái Ghế ngồi (SeatLegend)
+   ========================================================= */
+
+/* Thanh ngang bao ngoài các ghi chú */
 .seat-legend {
   display: flex;
   gap: 20px;
@@ -14,12 +19,14 @@
   color: var(--t2);
 }
 
+/* Ô vuông tròn biểu thị cho hình ảnh của một cái ghế */
 .seat-legend__dot {
   width: 14px;
   height: 14px;
   border-radius: 4px;
 }
 
+/* Định nghĩa 4 màu sắc chính tương ứng với ghế ngoài rạp */
 .seat-legend__dot--available {
   background: var(--bg3);
   border: 1px solid var(--border);

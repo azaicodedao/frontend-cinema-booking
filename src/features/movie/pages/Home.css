@@ -1,36 +1,77 @@
+/* ============================================================
+   HOME PAGE - HERO CAROUSEL BANNER
+   Banner chính trang chủ dạng Carousel (trượt tự động).
+   Hiển thị nhiều phim nổi bật (isFeatured = true) với hiệu ứng Fade.
+   ============================================================ */
+
+/* --- Container chính của Hero Banner --- */
 .home-page__hero {
   width: calc(100% + 80px);
   margin: -28px -40px 0;
-  height: 390px;
+  height: 420px;
   position: relative;
   overflow: hidden;
   background: var(--bg1);
-  display: flex;
-  align-items: flex-end;
 }
 
+/* --- Mỗi Slide trong Carousel --- */
+.home-page__slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  pointer-events: none; /* Chặn tương tác khi slide ẩn */
+}
+
+/* Slide đang hiển thị (Active) */
+.home-page__slide--active {
+  opacity: 1;
+  pointer-events: auto; /* Cho phép bấm nút khi slide đang hiển thị */
+}
+
+/* --- Ảnh nền poster phim --- */
 .home-page__hero-bg {
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
   width: 70%;
-  background: linear-gradient(135deg, #1a1030 0%, #0e1428 45%, #1c1018 100%);
+  background-color: var(--bg2);
+  background-image: linear-gradient(135deg, #1a1030 0%, #0e1428 45%, #1c1018 100%);
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  transition: background-image 0.5s ease;
 }
 
+/* --- Lớp phủ gradient tối giúp chữ dễ đọc --- */
 .home-page__hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to right, rgba(9, 9, 15, 0.97) 28%, rgba(9, 9, 15, 0.3) 65%, rgba(9, 9, 15, 0.75) 100%);
 }
 
+/* --- Vùng chứa nội dung chữ trên mỗi slide --- */
 .home-page__hero-content {
   position: relative;
   z-index: 2;
-  padding: 0 40px 40px;
+  padding: 0 40px 50px;
   max-width: 500px;
+  /* Hiệu ứng trượt nhẹ khi nội dung xuất hiện */
+  transform: translateY(15px);
+  opacity: 0;
+  transition: transform 0.6s ease 0.2s, opacity 0.6s ease 0.2s;
 }
 
+/* Khi slide active, nội dung trượt lên và hiện ra */
+.home-page__slide--active .home-page__hero-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* --- Nhãn nhỏ "Phim nổi bật tuần này" --- */
 .home-page__hero-eyebrow {
   font-size: 10px;
   font-weight: 700;
@@ -40,6 +81,7 @@
   margin-bottom: 9px;
 }
 
+/* --- Tên phim lớn --- */
 .home-page__hero-title {
   font-family: var(--fh);
   font-size: 40px;
@@ -49,6 +91,7 @@
   letter-spacing: -0.01em;
 }
 
+/* --- Thông tin phụ (thể loại, thời lượng, giới hạn tuổi) --- */
 .home-page__hero-meta {
   font-size: 13px;
   color: var(--t2);
@@ -58,6 +101,7 @@
   align-items: center;
 }
 
+/* Dấu chấm tròn ngăn cách giữa các item meta */
 .home-page__hero-sep {
   width: 3px;
   height: 3px;
@@ -65,11 +109,70 @@
   background: var(--t3);
 }
 
+/* --- Nhóm nút hành động (Đặt vé, Xem trailer) --- */
 .home-page__hero-btns {
   display: flex;
   gap: 10px;
 }
 
+/* ============================================================
+   CAROUSEL DOTS - Các chấm điều hướng
+   Hiển thị ở góc dưới phải banner, cho phép bấm chọn slide.
+   ============================================================ */
+.home-page__carousel-dots {
+  position: absolute;
+  bottom: 20px;
+  right: 40px;
+  z-index: 5;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Mỗi chấm tròn */
+.home-page__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.home-page__dot:hover {
+  border-color: var(--gold);
+  background: rgba(255, 200, 55, 0.2);
+}
+
+/* Chấm đang active — sáng vàng và to hơn */
+.home-page__dot--active {
+  background: var(--gold);
+  border-color: var(--gold);
+  width: 28px;
+  border-radius: 5px;
+  box-shadow: 0 0 8px rgba(255, 200, 55, 0.4);
+}
+
+/* Thanh tiến trình bên trong dot active, thể hiện thời gian còn lại */
+.home-page__dot--active::after {
+  content: '';
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.35);
+  animation: dotProgress 5s linear forwards;
+}
+
+@keyframes dotProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+/* ============================================================
+   FILTERS - Thanh lọc phim (Search + Genre)
+   ============================================================ */
 .home-page__filters {
   display: flex;
   align-items: center;

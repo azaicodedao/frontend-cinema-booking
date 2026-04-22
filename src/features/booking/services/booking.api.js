@@ -1,10 +1,10 @@
 import api from '../../../services/apiClient';
 
-const BOOKING_URL = 'bookings/';
+const BOOKING_URL = 'bookings';
 
 class BookingService {
-    createBooking(showtimeId, seatIds) {
-        return api.post(BOOKING_URL, { showtimeId, seatIds });
+    createBooking(showtimeId, seatIds, totalPrice) {
+        return api.post(BOOKING_URL, { showtimeId, seatIds, totalPrice });
     }
 
     payBooking(bookingId) {

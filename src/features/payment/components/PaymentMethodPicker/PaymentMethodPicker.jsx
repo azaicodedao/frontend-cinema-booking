@@ -1,28 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './PaymentMethodPicker.css';
 
+/**
+ * Component lựa chọn phương thức thanh toán.
+ * Cho phép người dùng chọn giữa VNPay, MoMo và Thẻ ngân hàng.
+ */
+
 const METHODS = [
-  { id: 'credit_card', label: 'Credit Card', icon: '💳' },
-  { id: 'paypal', label: 'PayPal', icon: '🅿️' },
-  { id: 'momo', label: 'MoMo', icon: '📱' },
+  { id: 'vnpay', name: 'VNPay', desc: 'Quét QR hoặc OTP' },
+  { id: 'momo', name: 'MoMo', desc: 'Ví điện tử MoMo' },
+  { id: 'bank', name: 'Thẻ ngân hàng', desc: 'Visa / Mastercard / JCB' },
 ];
 
 const PaymentMethodPicker = ({ selected, onSelect }) => {
   return (
-    <div className="payment-methods">
-      <h3 className="payment-methods__title">Payment Method</h3>
-      <div className="payment-methods__grid">
-        {METHODS.map((method) => (
-          <button
-            key={method.id}
-            className={`payment-methods__item ${selected === method.id ? 'payment-methods__item--active' : ''}`}
-            onClick={() => onSelect(method.id)}
-          >
-            <span className="payment-methods__icon">{method.icon}</span>
-            <span className="payment-methods__label">{method.label}</span>
-          </button>
-        ))}
-      </div>
+    <div className="pmcard">
+      <div className="pmlbl">Phương thức thanh toán</div>
+      {METHODS.map((method) => (
+        <div
+          key={method.id}
+          className={`pmit ${selected === method.id ? 'on' : ''}`}
+          onClick={() => onSelect(method.id)}
+        >
+          <div className="pmr"></div>
+          <div>
+            <div className="pmname">{method.name}</div>
+            <div className="pmdesc">{method.desc}</div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

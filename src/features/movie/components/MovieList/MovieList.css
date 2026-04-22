@@ -50,3 +50,20 @@
   color: var(--t3);
   padding: 16px 0 28px;
 }
+
+.movie-list__see-all {
+  font-size: 12px;
+  color: var(--gold);
+  cursor: pointer;
+  font-weight: 500;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--fb);
+  transition: opacity 0.14s;
+}
+
+.movie-list__see-all:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}

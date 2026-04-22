@@ -1,8 +1,14 @@
+/* =========================================================
+   Các quy tắc CSS cho Component đánh giá Ngôi sao (StarRating)
+   ========================================================= */
+
+/* Bao ngoài các ngôi sao, xếp hàng ngang */
 .star-rating {
   display: flex;
   gap: 6px;
 }
 
+/* Mặc định màu sắc ngôi sao (màu xám tối) */
 .star-rating__star {
   font-size: 28px;
   cursor: pointer;
@@ -13,7 +19,8 @@
   user-select: none;
 }
 
-.star-rating__star--lit {
+/* Trạng thái được chọn (sáng vàng) */
+.star-rating__star--filled {
   color: var(--gold);
   filter: none;
 }

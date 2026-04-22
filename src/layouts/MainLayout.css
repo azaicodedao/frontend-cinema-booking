@@ -115,6 +115,13 @@
   font-weight: 700;
   color: var(--gold);
   cursor: pointer;
+  overflow: hidden; /* Đảm bảo ảnh không tràn ra ngoài vòng bo */
+}
+
+.nav-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .main-content {

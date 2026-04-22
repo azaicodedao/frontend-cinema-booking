@@ -13,8 +13,8 @@ import MovieDetails from '../../features/movie/pages/MovieDetails';
 import SeatSelection from '../../features/booking/pages/SeatSelection';
 import Booking from '../../features/booking/pages/Booking';
 import Pay from '../../features/payment/pages/Pay';
-import MyTickets from '../../features/user/pages/MyTickets';
 import TicketView from '../../features/user/pages/TicketView';
+import MovieReview from '../../features/user/pages/MovieReview';
 
 const AppRoutes = () => {
   return (
@@ -53,14 +53,6 @@ const AppRoutes = () => {
           }
         />
         <Route
-          path="/tickets"
-          element={
-            <PrivateRoute>
-              <MyTickets />
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="/tickets/:id"
           element={
             <PrivateRoute>
@@ -69,10 +61,29 @@ const AppRoutes = () => {
           }
         />
         <Route
+          path="/review/booking/:id"
+          element={
+            <PrivateRoute>
+              <MovieReview />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/profile"
           element={
             <PrivateRoute>
               <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute>
+              <div style={{ padding: '20px', color: 'white' }}>
+                <h1>Admin Dashboard</h1>
+                <p>Giao diện Admin đang được phát triển...</p>
+              </div>
             </PrivateRoute>
           }
         />

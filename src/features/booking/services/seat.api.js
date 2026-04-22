@@ -5,12 +5,22 @@ const SeatApi = {
     return api.get(`/seats/showtime/${showtimeId}`);
   },
 
-  holdSeat: (seatId, showtimeId) => {
-    return api.post('/seats/hold', { seatId, showtimeId });
+  /**
+   * Giữ một hoặc nhiều ghế.
+   * @param {number[]} seatIds 
+   * @param {number} showtimeId 
+   */
+  holdSeats: (seatIds, showtimeId) => {
+    return api.post('/seats/hold', { seatIds: Array.isArray(seatIds) ? seatIds : [seatIds], showtimeId });
   },
 
-  releaseSeat: (seatId, showtimeId) => {
-    return api.post('/seats/release', { seatId, showtimeId });
+  /**
+   * Giải phóng một hoặc nhiều ghế.
+   * @param {number[]} seatIds 
+   * @param {number} showtimeId 
+   */
+  releaseSeats: (seatIds, showtimeId) => {
+    return api.post('/seats/release', { seatIds: Array.isArray(seatIds) ? seatIds : [seatIds], showtimeId });
   }
 };
 

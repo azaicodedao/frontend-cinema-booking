@@ -1,5 +1,10 @@
-.profile-form { /* Inherits from auth-page card style */ }
+/* =========================================================
+   Các quy tắc CSS định dạng Form Hồ sơ (ProfileForm)
+   ========================================================= */
 
+.profile-form { /* Kế thừa viền, nền từ chuẩn card chung ở trang auth-page */ }
+
+/* Khối bố cục ngang chứa Avatar (ảnh đại diện) và thông tin ngắn gọn */
 .profile-form__avatar-row {
   display: flex;
   align-items: center;
@@ -21,6 +26,7 @@
   border: 2px solid rgba(232, 160, 32, 0.28);
 }
 
+/* Khối thông tin văn bản bên cạnh Avatar */
 .profile-form__user-info {
   display: flex;
   flex-direction: column;

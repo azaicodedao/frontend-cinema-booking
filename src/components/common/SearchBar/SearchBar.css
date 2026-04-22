@@ -1,9 +1,15 @@
+/* =========================================================
+   Các quy tắc CSS định dạng Thanh Tìm kiếm (Search Bar)
+   ========================================================= */
+
+/* Bao ngoài để đặt các icon con theo kiểu vị trí tương đối (relative) */
 .search-bar {
   position: relative;
   flex: 1;
   max-width: 360px;
 }
 
+/* Icon kính lúp mặc định nằm lùi về bên trái */
 .search-bar__icon {
   position: absolute;
   left: 12px;
@@ -14,6 +20,7 @@
   pointer-events: none;
 }
 
+/* Định dạng thanh nhập text */
 .search-bar__input {
   width: 100%;
   background: var(--bg2);
@@ -31,6 +38,7 @@
   border-color: rgba(232, 160, 32, 0.45);
 }
 
+/* Nút [X] dùng để xoá nhanh text đã nhập, nằm đè lên góc phải */
 .search-bar__clear {
   position: absolute;
   right: 10px;

@@ -2,9 +2,16 @@ import api from '../../../services/apiClient';
 
 const MOVIE_URL = 'movies';
 
+/** Dịch vụ giao tiếp với Backend cho các tính năng liên quan đến Phim và Lịch Chiếu */
 class MovieService {
+    /** Lấy toàn bộ danh sách phim */
     getAllMovies() {
         return api.get(MOVIE_URL).then(res => res.data.data);
+    }
+
+    /** Lấy danh sách phim nổi bật để hiển thị lên Banner cỡ lớn */
+    getFeaturedMovies() {
+        return api.get(`${MOVIE_URL}/featured`).then(res => res.data.data);
     }
 
     getMovieById(id) {
@@ -15,6 +22,11 @@ class MovieService {
         return api.get(`movies/${id}/detail`).then(res => res.data.data);
     }
 
+    /** 
+     * Lấy danh sách lịch các bộ phim có suất chiếu theo một ngày nhất định.
+     * Dùng cho trang Movies `/movies`
+     * @param {string} date - Ngày (YYYY-MM-DD)
+     */
     getSchedule(date) {
         const url = 'showtimes/schedule' + (date ? `?date=${date}` : '');
         return api.get(url).then(res => res.data.data);

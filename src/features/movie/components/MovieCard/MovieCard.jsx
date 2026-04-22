@@ -2,6 +2,14 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MovieCard.css';
 
+/**
+ * Component Hiển thị Thẻ ảnh bìa Phim (Movie Card).
+ * Thành phần nhỏ bé nhất cấu tạo nên Lưới danh sách phim. Bấm vào sẽ đưa tới trang chi tiết.
+ *
+ * @param {Object} props - Dữ liệu truyền vào thẻ.
+ * @param {Object} props.movie - Đối tượng chứa thông tin phim (posterUrl, title, rating...).
+ * @returns {JSX.Element} Một khối card phim dọc.
+ */
 const MovieCard = ({ movie }) => {
   const navigate = useNavigate();
   const genres = movie.genres || movie.categories || [];

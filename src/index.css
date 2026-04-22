@@ -56,6 +56,39 @@ button:hover {
   box-shadow: none;
 }
 
+.btn-cta {
+  background: var(--gold);
+  color: #000;
+  font-family: var(--fh);
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: var(--rsm);
+  box-shadow: 0 4px 15px var(--gold-glow);
+  transition: all 0.2s;
+}
+
+.btn-cta:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232, 160, 32, 0.3);
+}
+
+.btn-sec {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--t1);
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  border-radius: var(--rsm);
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-sec:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border-h);
+  transform: translateY(-2px);
+}
+
 a {
   text-decoration: none;
   color: inherit;
@@ -64,4 +97,66 @@ a {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: none; }
+}
+
+.screen {
+  padding: 60px 20px;
+  min-height: calc(100vh - 160px);
+  animation: fadeIn 0.4s ease-out;
+}
+
+.inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.gap10 {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* CineBook Form Patterns */
+.ff {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fl {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--t2);
+  letter-spacing: 0.02em;
+}
+
+.fi {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--t1);
+  padding: 12px 16px;
+  border-radius: var(--rsm);
+  font-size: 15px;
+  font-family: var(--fb);
+  transition: all 0.2s;
+  outline: none;
+}
+
+.fi:focus {
+  border-color: var(--gold);
+  background: var(--bg3);
+  box-shadow: 0 0 0 4px var(--gold-glow);
+}
+
+.fi:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--bg1);
+}
+
+.fhint {
+  font-size: 11px;
+  color: var(--t3);
+  margin-top: 4px;
 }

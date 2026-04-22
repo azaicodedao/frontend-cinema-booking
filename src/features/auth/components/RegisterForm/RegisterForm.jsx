@@ -3,6 +3,15 @@ import Input from '../../../../components/common/Input/Input';
 import Button from '../../../../components/common/Button/Button';
 import './RegisterForm.css';
 
+/**
+ * Component Hiển thị Biểu mẫu Đăng ký Tài khoản (Register Form).
+ *
+ * @param {Object} props - Dữ kiện truyền từ component bọc (cha).
+ * @param {Function} props.onSubmit - Nơi xử lý gửi thông tin lên backend.
+ * @param {boolean} [props.loading=false] - Trạng thái tải của API.
+ * @param {string} [props.error=''] - Lỗi hệ thống nếu có.
+ * @returns {JSX.Element} Khung html đăng ký.
+ */
 const RegisterForm = ({ onSubmit, loading = false, error = '' }) => {
   const [form, setForm] = useState({
     fullName: '',
@@ -12,10 +21,15 @@ const RegisterForm = ({ onSubmit, loading = false, error = '' }) => {
   });
   const [errors, setErrors] = useState({});
 
+  /** Lắng nghe việc người dùng gõ vào bàn phím */
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  /**
+   * Validate dữ liệu đầu vào.
+   * Ghi chú: Chứa logic password cực khắt khe (chữ hoa, chữ thường, số, độ dài min 8).
+   */
   const validate = () => {
     const newErrors = {};
     if (!form.fullName.trim()) newErrors.fullName = 'Full name is required';
@@ -39,6 +53,7 @@ const RegisterForm = ({ onSubmit, loading = false, error = '' }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  /** Chuẩn bị dữ liệu và truyền cho Callback nếu kiểm duyệt thành công */
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
