@@ -2,13 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import * as adminApi from '../services/admin.api';
 import '../../../layouts/AdminLayout.css';
 
-const STATUS_LABELS = { SCHEDULED: 'Lên lịch', ONGOING: 'Đang chiếu', FINISHED: 'Đã chiếu', CANCELLED: 'Hủy' };
-const STATUS_BADGE = { SCHEDULED: 'badge-coming', ONGOING: 'badge-showing', FINISHED: 'badge-ended', CANCELLED: 'badge-locked' };
+const STATUS_LABELS = { SCHEDULED: 'Lên lịch', ONGOING: 'Đang chiếu', FINISHED: 'Đã chiếu', CANCELLED: 'Hủy', OPEN: 'Mở bán', CLOSED: 'Đã đóng/Xoá' };
+const STATUS_BADGE = { SCHEDULED: 'badge-coming', ONGOING: 'badge-showing', FINISHED: 'badge-ended', CANCELLED: 'badge-locked', OPEN: 'badge-coming', CLOSED: 'badge-locked' };
 
 const EMPTY_FORM = { movieId: '', roomId: '', startTime: '', price: '' };
 
 const ShowtimesPage = () => {
   const [showtimes, setShowtimes] = useState([]);
+  const [page, setPage] = useState(0);
+  const SIZE = 10;
   const [movies, setMovies] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,6 +37,7 @@ const ShowtimesPage = () => {
       let data = res.data.data || [];
       if (movieFilter) data = data.filter(s => String(s.movieId) === String(movieFilter));
       setShowtimes(data);
+      setPage(0);
     } catch (e) {
       setError('Không thể tải danh sách suất chiếu');
     } finally {
@@ -45,8 +48,8 @@ const ShowtimesPage = () => {
   useEffect(() => { fetchShowtimes(); }, [fetchShowtimes]);
 
   useEffect(() => {
-    adminApi.getMovies({}).then(r => setMovies(r.data.data || [])).catch(() => {});
-    adminApi.getRooms().then(r => setRooms(r.data.data || [])).catch(() => {});
+    adminApi.getMovies({}).then(r => setMovies(r.data.data || [])).catch(() => { });
+    adminApi.getRooms().then(r => setRooms(r.data.data || [])).catch(() => { });
   }, []);
 
   const showSuccess = (msg) => { setSuccess(msg); setTimeout(() => setSuccess(''), 3000); };
@@ -112,6 +115,9 @@ const ShowtimesPage = () => {
     return d.toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   };
 
+  const paginatedShowtimes = showtimes.slice(page * SIZE, (page + 1) * SIZE);
+  const totalPages = Math.ceil(showtimes.length / SIZE);
+
   return (
     <div>
       <div className="admin-page-header">
@@ -153,9 +159,9 @@ const ShowtimesPage = () => {
           <tbody>
             {loading ? (
               <tr><td colSpan={10}><div className="admin-loading"><div className="admin-spinner" /></div></td></tr>
-            ) : showtimes.length === 0 ? (
+            ) : paginatedShowtimes.length === 0 ? (
               <tr><td colSpan={10}><div className="admin-empty">Không có suất chiếu nào</div></td></tr>
-            ) : showtimes.map(s => (
+            ) : paginatedShowtimes.map(s => (
               <tr key={s.id}>
                 <td style={{ color: 'var(--t3)', fontSize: 12 }}>#{s.id}</td>
                 <td style={{ fontWeight: 600, maxWidth: 180 }}>{s.movieTitle}</td>
@@ -185,6 +191,17 @@ const ShowtimesPage = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="admin-pagination">
+          <button className="admin-page-btn" disabled={page === 0} onClick={() => setPage(p => p - 1)}>‹</button>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button key={i} className={`admin-page-btn ${i === page ? 'active' : ''}`} onClick={() => setPage(i)}>{i + 1}</button>
+          ))}
+          <button className="admin-page-btn" disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)}>›</button>
+        </div>
+      )}
 
       {/* Create/Edit Modal */}
       {showModal && (

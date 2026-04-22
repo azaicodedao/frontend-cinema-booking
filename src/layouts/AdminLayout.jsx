@@ -17,7 +17,7 @@ const AdminLayout = () => {
     const navItems = [
         {
             key: 'users',
-            label: 'Quản lý Tài khoản',
+            label: 'Quản lý Người dùng',
             icon: (
                 <svg viewBox="0 0 20 20" fill="none">
                     <circle cx="10" cy="6" r="3.5" stroke="currentColor" strokeWidth="1.5" />

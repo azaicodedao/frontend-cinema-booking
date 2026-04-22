@@ -12,7 +12,7 @@ const cards = [
         <path d="M4 21c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
       </svg>
     ),
-    title: 'Quản lý Tài khoản',
+    title: 'Quản lý Người dùng',
     desc: 'Tra cứu, phân quyền, khóa/mở tài khoản người dùng',
     color: 'var(--blue)',
     bg: 'rgba(78,143,255,0.1)',

@@ -129,7 +129,6 @@ const MoviesPage = () => {
       setDeleteConfirm(null);
       fetchMovies();
     } catch (e) {
-      // setError(e.response?.data?.message || 'Không thể xóa phim. Phim có thể đang có suất chiếu trong tương lai.');
       showError(e.response?.data?.message || 'Không thể xóa phim. Phim có thể đang có suất chiếu trong tương lai.');
       setDeleteConfirm(null);
     }
@@ -283,7 +282,7 @@ const MoviesPage = () => {
               <div className="admin-modal-footer">
                 <button type="button" className="btn-admin-secondary" onClick={closeModal}>Hủy</button>
                 <button type="submit" className="btn-admin-primary" disabled={formLoading}>
-                  {formLoading ? 'Đang lưu...' : editMovie ? 'Cập nhật' : 'Thêm mới'}
+                  {formLoading ? 'Đang lưu...' : editMovie ? 'Cập nhật' : 'Lưu'}
                 </button>
               </div>
             </form>

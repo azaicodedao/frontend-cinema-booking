@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import * as adminApi from '../services/admin.api';
 import '../../../layouts/AdminLayout.css';
 
@@ -12,6 +12,8 @@ const UsersPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const errorTimeoutRef = useRef(null);
+  const successTimeoutRef = useRef(null);
 
   const [keyword, setKeyword] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
@@ -22,6 +24,28 @@ const UsersPage = () => {
   const [roleModal, setRoleModal] = useState(null); // { user, newRole }
 
   const SIZE = 10;
+
+  const showSuccess = (msg) => {
+    if (successTimeoutRef.current) {
+      clearTimeout(successTimeoutRef.current);
+    }
+    setSuccess(msg);
+    successTimeoutRef.current = setTimeout(() => {
+      setSuccess('');
+      successTimeoutRef.current = null;
+    }, 3000);
+  };
+
+  const showError = (msg) => {
+    if (errorTimeoutRef.current) {
+      clearTimeout(errorTimeoutRef.current);
+    }
+    setError(msg);
+    errorTimeoutRef.current = setTimeout(() => {
+      setError('');
+      errorTimeoutRef.current = null;
+    }, 3000);
+  };
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -36,7 +60,7 @@ const UsersPage = () => {
       setUsers(data.content || []);
       setTotal(data.totalElements || 0);
     } catch (e) {
-      setError(e.response?.data?.message || 'Không thể tải danh sách người dùng');
+      showError(e.response?.data?.message || 'Không thể tải danh sách người dùng');
     } finally {
       setLoading(false);
     }
@@ -44,22 +68,17 @@ const UsersPage = () => {
 
   useEffect(() => { fetchUsers(); }, [fetchUsers]);
 
-  const showSuccess = (msg) => {
-    setSuccess(msg);
-    setTimeout(() => setSuccess(''), 3000);
-  };
-
   const handleSearch = (e) => { e.preventDefault(); setPage(0); fetchUsers(); };
 
   const handleChangeRole = async () => {
     if (!roleModal) return;
     try {
       await adminApi.changeUserRole(roleModal.user.id, roleModal.newRole);
-      showSuccess('Đã thay đổi quyền thành công');
+      showSuccess('Cập nhật quyền thành công');
       setRoleModal(null);
       fetchUsers();
     } catch (e) {
-      setError(e.response?.data?.message || 'Lỗi khi thay đổi quyền');
+      showError(e.response?.data?.message || 'Lỗi khi thay đổi quyền');
     }
   };
 
@@ -68,15 +87,15 @@ const UsersPage = () => {
     try {
       if (confirmModal.type === 'lock') {
         await adminApi.lockUser(confirmModal.user.id);
-        showSuccess('Đã khóa tài khoản');
+        showSuccess('Khoá tài khoản thành công');
       } else {
         await adminApi.unlockUser(confirmModal.user.id);
-        showSuccess('Đã mở khóa tài khoản');
+        showSuccess('Mở khóa tài khoản thành công');
       }
       setConfirmModal(null);
       fetchUsers();
     } catch (e) {
-      setError(e.response?.data?.message || 'Lỗi thao tác');
+      showError(e.response?.data?.message || 'Lỗi thao tác');
     }
   };
 
@@ -85,7 +104,7 @@ const UsersPage = () => {
   return (
     <div>
       <div className="admin-page-header">
-        <h1 className="admin-page-title">Quản lý Tài khoản <span>{total} người dùng</span></h1>
+        <h1 className="admin-page-title">Quản lý Người dùng <span>{total} người dùng</span></h1>
       </div>
 
       {error && <div className="admin-alert admin-alert-error">{error}</div>}
@@ -155,10 +174,10 @@ const UsersPage = () => {
                       className="btn-admin-secondary"
                       onClick={() => setRoleModal({ user: u, newRole: u.role === 'ADMIN' ? 'CUSTOMER' : 'ADMIN' })}
                     >
-                      Đổi quyền
+                      Cập nhật quyền
                     </button>
                     {u.status === 'ACTIVE' ? (
-                      <button className="btn-admin-danger" onClick={() => setConfirmModal({ type: 'lock', user: u })}>Khóa</button>
+                      <button className="btn-admin-danger" onClick={() => setConfirmModal({ type: 'lock', user: u })}>Khóa tài khoản</button>
                     ) : (
                       <button className="btn-admin-success" onClick={() => setConfirmModal({ type: 'unlock', user: u })}>Mở khóa</button>
                     )}
@@ -198,6 +217,7 @@ const UsersPage = () => {
                 ['Quyền hạn', detailUser.role],
                 ['Trạng thái', detailUser.status],
                 ['Ngày tạo', detailUser.createdAt ? new Date(detailUser.createdAt).toLocaleString('vi-VN') : '—'],
+                ['Lần đăng nhập gần nhất', detailUser.lastLoginAt ? new Date(detailUser.lastLoginAt).toLocaleString('vi-VN') : 'Chưa đăng nhập'],
               ].map(([label, val]) => (
                 <div key={label} style={{ display: 'flex', gap: 12 }}>
                   <span style={{ minWidth: 130, color: 'var(--t3)', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', paddingTop: 2 }}>{label}</span>

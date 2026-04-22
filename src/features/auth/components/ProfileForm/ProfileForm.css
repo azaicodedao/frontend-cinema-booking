@@ -1,4 +1,13 @@
-.profile-form { /* Inherits from auth-page card style */ }
+.profile-form { 
+  display : flex;
+  flex-direction: column;
+  gap : 20px;
+}
+
+.profile-form button {
+    margin-top: 10px; 
+    align-self: flex-start; 
+}
 
 .profile-form__avatar-row {
   display: flex;

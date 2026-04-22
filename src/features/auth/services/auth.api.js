@@ -16,7 +16,7 @@ class AuthService {
                         refreshToken: data.refreshToken,
                         ...data.user,  // id, fullName, email, avatarUrl, role
                     };
-                    localStorage.setItem('user', JSON.stringify(userToStore));
+                    sessionStorage.setItem('user', JSON.stringify(userToStore));
                     return userToStore;
                 }
                 return data;
@@ -24,7 +24,7 @@ class AuthService {
     }
 
     logout() {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
     }
 
     register(fullName, email, password) {
@@ -32,7 +32,7 @@ class AuthService {
     }
 
     getCurrentUser() {
-        return JSON.parse(localStorage.getItem('user'));
+        return JSON.parse(sessionStorage.getItem('user'));
     }
 }
 

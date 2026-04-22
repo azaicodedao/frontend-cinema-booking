@@ -37,19 +37,20 @@ const RoomsPage = () => {
   useEffect(() => { fetchRooms(); }, []);
 
   const showSuccess = (msg) => { setSuccess(msg); setTimeout(() => setSuccess(''), 3000); };
+  const showError = (msg) => { setError(msg); setTimeout(() => setError(''), 3000); };
 
   const openCreate = () => { setEditRoom(null); setForm(EMPTY_FORM); setShowModal(true); };
-  
+
   // SỬA: Thêm fallback r.type đề phòng backend trả về field type thay vì roomType
-  const openEdit = (r) => { 
-    setEditRoom(r); 
-    setForm({ 
-      name: r.name, 
-      totalRows: r.totalRows || '', 
-      totalCols: r.totalCols || '', 
+  const openEdit = (r) => {
+    setEditRoom(r);
+    setForm({
+      name: r.name,
+      totalRows: r.totalRows || '',
+      totalCols: r.totalCols || '',
       type: r.type || 'BASIC'  // Đổi thành r.type
-    }); 
-    setShowModal(true); 
+    });
+    setShowModal(true);
   };
   const closeModal = () => { setShowModal(false); setEditRoom(null); setForm(EMPTY_FORM); };
 
@@ -93,7 +94,7 @@ const RoomsPage = () => {
       setDeleteConfirm(null);
       fetchRooms();
     } catch (e) {
-      setError(e.response?.data?.message || 'Không thể xóa phòng chiếu. Phòng có thể đang có suất chiếu được lên lịch.');
+      showError(e.response?.data?.message || 'Không thể xóa phòng chiếu. Vì phòng có suất chiếu đã và đang được lên lịch');
       setDeleteConfirm(null);
     }
   };
@@ -133,32 +134,33 @@ const RoomsPage = () => {
             ) : rooms.map(r => {
               // SỬA: Đặt biến tạm để lấy đúng loại phòng
               const currentRoomType = r.roomType || r.type;
-              
+
               return (
-              <tr key={r.id}>
-                <td style={{ color: 'var(--t3)', fontSize: 12 }}>#{r.id}</td>
-                <td style={{ fontWeight: 600 }}>{r.name}</td>
-                <td>
-                  {/* SỬA: Hiển thị loại phòng an toàn */}
-                  <span className="badge badge-customer">
-                    {ROOM_TYPE_LABELS[currentRoomType] || currentRoomType || 'N/A'}
-                  </span>
-                </td>
-                <td style={{ color: 'var(--t2)' }}>{r.totalRows} × {r.totalCols}</td>
-                
-                {/* SỬA: Tự động tính tổng ghế */}
-                <td style={{ color: 'var(--t2)' }}>
-                  {r.totalRows && r.totalCols ? (r.totalRows * r.totalCols) : 0} ghế
-                </td>
-                
-                <td>
-                  <div className="admin-actions-group">
-                    <button className="btn-admin-secondary" onClick={() => openEdit(r)}>Sửa</button>
-                    <button className="btn-admin-danger" onClick={() => setDeleteConfirm(r)}>Xóa</button>
-                  </div>
-                </td>
-              </tr>
-            )})}
+                <tr key={r.id}>
+                  <td style={{ color: 'var(--t3)', fontSize: 12 }}>#{r.id}</td>
+                  <td style={{ fontWeight: 600 }}>{r.name}</td>
+                  <td>
+                    {/* SỬA: Hiển thị loại phòng an toàn */}
+                    <span className="badge badge-customer">
+                      {ROOM_TYPE_LABELS[currentRoomType] || currentRoomType || 'N/A'}
+                    </span>
+                  </td>
+                  <td style={{ color: 'var(--t2)' }}>{r.totalRows} × {r.totalCols}</td>
+
+                  {/* SỬA: Tự động tính tổng ghế */}
+                  <td style={{ color: 'var(--t2)' }}>
+                    {r.totalRows && r.totalCols ? (r.totalRows * r.totalCols) : 0} ghế
+                  </td>
+
+                  <td>
+                    <div className="admin-actions-group">
+                      <button className="btn-admin-secondary" onClick={() => openEdit(r)}>Sửa</button>
+                      <button className="btn-admin-danger" onClick={() => setDeleteConfirm(r)}>Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>
@@ -171,7 +173,7 @@ const RoomsPage = () => {
             <h2 className="admin-modal-title">{editRoom ? 'Sửa phòng chiếu' : 'Thêm phòng chiếu mới'}</h2>
             {!editRoom && (
               <div className="admin-alert" style={{ background: 'var(--gold-dim)', color: 'var(--gold)', border: '1px solid rgba(232,160,32,0.3)', marginBottom: 16, fontSize: 12 }}>
-                ✦ Sơ đồ ghế sẽ được tạo tự động dựa trên số hàng × số cột bạn nhập.
+                Sơ đồ ghế sẽ được tạo tự động dựa trên số hàng × số cột đã nhập.
               </div>
             )}
             <form onSubmit={handleSubmit}>
@@ -195,7 +197,7 @@ const RoomsPage = () => {
                   <input className="admin-form-input" name="totalCols" type="number" min="1" max="30" value={form.totalCols} onChange={handleFormChange} required placeholder="VD: 12" disabled={!!editRoom} />
                 </div>
               </div>
-              
+
               {/* Note: Vô hiệu hóa đổi hàng/cột khi đang Edit vì cấu trúc ghế đã được tạo trong DB */}
               {editRoom && (
                 <div style={{ fontSize: 11, color: 'var(--t3)', marginTop: -8, marginBottom: 12 }}>

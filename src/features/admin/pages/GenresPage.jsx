@@ -29,11 +29,15 @@ const GenresPage = () => {
 
   useEffect(() => { fetchGenres(); }, []);
 
-  const showSuccess = (msg) => { setSuccess(msg); setTimeout(() => setSuccess(''), 3000); };
+  const showSuccess = (msg) => { 
+    setSuccess(msg); 
+    setTimeout(() => setSuccess(''), 3000); 
+  };
   const showError = (msg) => { 
     setError(msg); 
-    setTimeout(() => setError(''), 3000); // Tự đóng sau 3s (3000ms)
+    setTimeout(() => setError(''), 3000); 
   };
+
   const openCreate = () => { setEditGenre(null); setFormName(''); setShowModal(true); };
   const openEdit = (g) => { setEditGenre(g); setFormName(g.name); setShowModal(true); };
   const closeModal = () => { setShowModal(false); setEditGenre(null); setFormName(''); };
@@ -54,7 +58,7 @@ const GenresPage = () => {
       closeModal();
       fetchGenres();
     } catch (e) {
-      setError(e.response?.data?.message || 'Lỗi khi lưu thể loại');
+      showError(e.response?.data?.message || 'Lỗi khi lưu thể loại');
     } finally {
       setFormLoading(false);
     }
@@ -64,11 +68,11 @@ const GenresPage = () => {
     if (!deleteConfirm) return;
     try {
       await adminApi.deleteGenre(deleteConfirm.id);
-      showSuccess('Đã xóa thể loại');
+      showSuccess('Đã xóa thể loại thành công');
       setDeleteConfirm(null);
       fetchGenres();
     } catch (e) {
-      const emsg = e.response?.data?.message || 'Không thể xóa thể loại. Vì đang có phim thuộc thể loại này';
+      const emsg = e.response?.data?.message || 'Không thể xoá thể loại đang được sử dụng. Vui lòng gỡ khỏi các phim liên quan trước.';
       showError(emsg);
       setDeleteConfirm(null);
     }
