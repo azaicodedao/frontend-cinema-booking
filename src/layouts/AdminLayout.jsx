@@ -68,7 +68,7 @@ const AdminLayout = () => {
                 </svg>
             ),
             links: [
-                { to: '/admin/stats/bookings', label: 'Thống kê Lượt đặt vé' },
+                { to: '/admin/stats/bookings', label: 'Thống kê Lượt đặt vé & Doanh thu' },
                 { to: '/admin/stats/showtimes', label: 'Thống kê Suất chiếu' },
             ],
         },

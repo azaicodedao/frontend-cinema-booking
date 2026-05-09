@@ -69,7 +69,18 @@ const cards = [
     title: 'Quản lý Suất chiếu',
     desc: 'Lên lịch suất chiếu mới, chỉnh sửa, hủy suất chiếu',
     color: '#ff8f4e',
-    bg: 'rgba(255,143,78,0.1)',
+  },
+  {
+    to: '/admin/stats/bookings',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    title: 'Thống kê Lượt đặt vé & Doanh thu',
+    desc: 'Xem báo cáo doanh thu và số lượng vé bán ra theo thời gian và từng bộ phim',
+    color: '#ff4e8f',
+    bg: 'rgba(255,78,143,0.1)',
   },
 ];
 

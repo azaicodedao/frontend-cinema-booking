@@ -34,3 +34,6 @@ export const getShowtimesByMovie = (movieId) => api.get(`/showtimes/movie/${movi
 export const createShowtime = (data) => api.post('/showtimes', data);
 export const updateShowtime = (id, data) => api.put(`/showtimes/${id}`, data);
 export const deleteShowtime = (id) => api.delete(`/showtimes/${id}`);
+
+// ── Statistics Management ────────────────────────────────────────
+export const getMovieBookingStats = (params) => api.get('/statistics/movies/bookings', { params });
