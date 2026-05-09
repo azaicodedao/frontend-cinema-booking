@@ -27,11 +27,12 @@ const ProfileForm = ({ user, onSubmit, onResetMessages, loading = false }) => {
    */
   useEffect(() => {
     if (user) {
+      const actualUser = user.user || user;
       setFormData({
-        fullName: user.fullName || '',
-        phone: user.phone || '',
-        gender: user.gender || 'Male',
-        address: user.address || ''
+        fullName: actualUser.fullName || '',
+        phone: actualUser.phone || '',
+        gender: actualUser.gender || 'Male',
+        address: actualUser.address || ''
       });
     }
   }, [user]);
@@ -57,6 +58,8 @@ const ProfileForm = ({ user, onSubmit, onResetMessages, loading = false }) => {
     onSubmit(formData);
   };
 
+  const displayEmail = user?.email || user?.user?.email || '';
+
   return (
     <form className="profile-form" onSubmit={handleSubmit}>
       <div className="ff">
@@ -64,7 +67,7 @@ const ProfileForm = ({ user, onSubmit, onResetMessages, loading = false }) => {
         <input 
           className="fi" 
           type="email" 
-          value={user?.email || ''} 
+          value={displayEmail} 
           disabled 
         />
         <div className="fhint">Email không thể thay đổi</div>

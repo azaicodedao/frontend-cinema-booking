@@ -33,6 +33,26 @@
   height: 22px;
 }
 
+.nav-contact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-right: 32px;
+  font-family: var(--fb);
+  background: rgba(232, 160, 32, 0.08);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(232, 160, 32, 0.2);
+}
+
+.nav-contact svg {
+  width: 15px;
+  height: 15px;
+}
+
 .nav-links {
   display: flex;
   align-items: center;

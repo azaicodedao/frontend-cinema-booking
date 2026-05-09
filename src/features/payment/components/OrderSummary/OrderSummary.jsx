@@ -29,7 +29,7 @@ const OrderSummary = ({ booking }) => {
       </div>
       <div className="orow">
         <span className="c2">Phòng</span>
-        <span>{booking.roomName}</span>
+        <span>{booking.roomName} <span style={{fontWeight: 400, color: 'var(--t2)', fontSize: '13px'}}>({booking.roomType})</span></span>
       </div>
       <div className="orow">
         <span className="c2">Ghế đã chọn</span>

@@ -157,15 +157,15 @@ const Profile = () => {
                             <div className="psec full">
                                 <div className="pavrow">
                                     <div className="pav" style={{ overflow: 'hidden' }}>
-                                        {currentUser?.avatarUrl ? (
-                                            <img src={currentUser.avatarUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        {(currentUser?.avatarUrl || currentUser?.user?.avatarUrl) ? (
+                                            <img src={currentUser?.avatarUrl || currentUser?.user?.avatarUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         ) : (
-                                            currentUser?.fullName?.charAt(0)?.toUpperCase() || 'U'
+                                            (currentUser?.fullName || currentUser?.user?.fullName)?.charAt(0)?.toUpperCase() || 'U'
                                         )}
                                     </div>
                                     <div>
-                                        <div className="pname">{currentUser?.fullName}</div>
-                                        <div className="pmeta">Customer · Thành viên từ {new Date(currentUser?.createdAt || Date.now()).toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' })}</div>
+                                        <div className="pname">{currentUser?.fullName || currentUser?.user?.fullName}</div>
+                                        <div className="pmeta">Customer · Thành viên từ {new Date((currentUser?.createdAt || currentUser?.user?.createdAt) || Date.now()).toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' })}</div>
                                     </div>
                                 </div>
                                 <div style={{ maxWidth: '600px' }}>

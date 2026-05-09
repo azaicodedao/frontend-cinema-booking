@@ -89,6 +89,10 @@ const TicketView = () => {
                     <span>{formatDate(booking.showtimeStart)} · {formatTime(booking.showtimeStart)}</span>
                 </div>
                 <div className="orow">
+                    <span className="c2">Phòng chiếu</span>
+                    <span style={{ fontWeight: 600 }}>{booking.roomName} <span style={{fontWeight: 400, color: 'var(--t2)', fontSize: '13px'}}>({booking.roomType})</span></span>
+                </div>
+                <div className="orow">
                     <span className="c2">Ghế</span>
                     <span>{booking.seatLabels?.join(', ')}</span>
                 </div>
