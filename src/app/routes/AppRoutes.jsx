@@ -27,6 +27,8 @@ import MoviesPage from '../../features/admin/pages/MoviesPage';
 import RoomsPage from '../../features/admin/pages/RoomsPage';
 import ShowtimesPage from '../../features/admin/pages/ShowtimesPage';
 import AdminProfilePage from '../../features/admin/pages/AdminProfilePage';
+import BookingStatsPage from '../../features/admin/pages/BookingStatsPage';
+import ShowtimeStatsPage from '../../features/admin/pages/ShowtimeStatsPage';
 
 const AppRoutes = () => {
   return (
@@ -55,6 +57,8 @@ const AppRoutes = () => {
         <Route path="rooms" element={<RoomsPage />} />
         <Route path="showtimes" element={<ShowtimesPage />} />
         <Route path="profile" element={<AdminProfilePage />} />
+        <Route path="stats/bookings" element={<BookingStatsPage />} />
+        <Route path="stats/showtimes" element={<ShowtimeStatsPage />} />
       </Route>
     </Routes>
   );

@@ -23,6 +23,7 @@ export const deleteMovie = (id) => api.delete(`/movies/${id}`);
 // ── Room Management ──────────────────────────────────────────────
 export const getRooms = () => api.get('/rooms');
 export const getRoomSeats = (id) => api.get(`/rooms/${id}/seats`);
+export const updateRoomSeats = (id, data) => api.put(`/rooms/${id}/seats`, data);
 export const createRoom = (data) => api.post('/rooms', data);
 export const updateRoom = (id, data) => api.put(`/rooms/${id}`, data);
 export const deleteRoom = (id) => api.delete(`/rooms/${id}`);
