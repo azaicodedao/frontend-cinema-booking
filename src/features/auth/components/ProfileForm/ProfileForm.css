@@ -1,8 +1,13 @@
-/* =========================================================
-   Các quy tắc CSS định dạng Form Hồ sơ (ProfileForm)
-   ========================================================= */
+.profile-form { 
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-.profile-form { /* Kế thừa viền, nền từ chuẩn card chung ở trang auth-page */ }
+.profile-form button {
+    margin-top: 10px; 
+    align-self: flex-start; 
+}
 
 /* Khối bố cục ngang chứa Avatar (ảnh đại diện) và thông tin ngắn gọn */
 .profile-form__avatar-row {

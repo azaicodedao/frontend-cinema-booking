@@ -6,9 +6,6 @@ import './Login.css';
 /**
  * Component trang đăng nhập (Login Page).
  * Cho phép người dùng điền thông tin email và mật khẩu để xác thực tài khoản.
- * Sẽ sử dụng `AuthContext` để gọi API và quản lý trạng thái đăng nhập.
- *
- * @returns {JSX.Element} Giao diện toàn trang đăng nhập.
  */
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -18,14 +15,10 @@ const Login = () => {
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
+    
+    // Lấy đường dẫn trước đó người dùng định truy cập, mặc định là trang chủ
     const from = location.state?.from || '/';
 
-    /**
-     * Hàm xử lý khi người dùng nhấn nút Đăng nhập.
-     * Kiểm tra rỗng, gọi API và điều hướng trang dựa trên phân quyền (Role).
-     * 
-     * @param {React.FormEvent} e - Sự kiện submit form
-     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email || !password) {
@@ -35,8 +28,11 @@ const Login = () => {
         setLoading(true);
         setError('');
         try {
-            const data = await login(email, password);
-            if (data?.user?.role === 'ADMIN') {
+            const userData = await login(email, password);
+            
+            // Ép Admin vào Dashboard, các role khác về trang trước đó
+            const role = userData?.role || userData?.user?.role;
+            if (role === 'ADMIN') {
                 navigate('/admin', { replace: true });
             } else {
                 navigate(from, { replace: true });

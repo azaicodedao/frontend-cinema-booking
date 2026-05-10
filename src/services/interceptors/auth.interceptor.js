@@ -8,8 +8,11 @@ export const authInterceptor = (config) => {
     }
 
     const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.accessToken) {
-        config.headers['Authorization'] = 'Bearer ' + user.accessToken;
+    // Hỗ trợ cả .accessToken (chuẩn mới) và .token (phòng hờ dữ liệu cũ)
+    const token = user?.accessToken || user?.token;
+    
+    if (token) {
+        config.headers['Authorization'] = 'Bearer ' + token;
     }
     return config;
 };
@@ -49,7 +52,6 @@ export const errorInterceptor = async (error) => {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user && user.refreshToken) {
             try {
-                // Dùng axios cơ bản để tránh block bởi interceptor
                 const rs = await axios.post(`${API_URL}auth/refreshtoken`, {
                     refreshToken: user.refreshToken
                 });
@@ -61,14 +63,12 @@ export const errorInterceptor = async (error) => {
                 }
                 localStorage.setItem('user', JSON.stringify(user));
                 
-                // Cập nhật header cho request hiện tại
                 originalRequest.headers['Authorization'] = 'Bearer ' + accessToken;
                 processQueue(null, accessToken);
                 
                 return axios(originalRequest);
             } catch (_error) {
                 processQueue(_error, null);
-                // Refresh token hết hạn hoặc không hợp lệ -> Đăng xuất
                 localStorage.removeItem('user');
                 if (window.location.pathname !== '/login') {
                     window.location.href = '/login';
@@ -78,7 +78,6 @@ export const errorInterceptor = async (error) => {
                 isRefreshing = false;
             }
         } else {
-            // Không có refresh token -> Đăng xuất
             localStorage.removeItem('user');
             if (window.location.pathname !== '/login') {
                 window.location.href = '/login';
