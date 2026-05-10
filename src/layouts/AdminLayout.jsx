@@ -56,6 +56,22 @@ const AdminLayout = () => {
                 { to: '/admin/showtimes', label: 'Quản lý Suất chiếu' },
             ],
         },
+        {
+            key: 'stats',
+            label: 'Thống kê',
+            icon: (
+                <svg viewBox="0 0 20 20" fill="none">
+                    <path d="M3 17h14M5 13l3-3 3 3 4-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <rect x="13" y="4" width="4" height="9" rx="1" stroke="currentColor" strokeWidth="1.5" />
+                    <rect x="8" y="8" width="4" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
+                    <rect x="3" y="11" width="4" height="2" rx="1" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+            ),
+            links: [
+                { to: '/admin/stats/bookings', label: 'Thống kê Lượt đặt vé & Doanh thu' },
+                { to: '/admin/stats/showtimes', label: 'Thống kê Suất chiếu' },
+            ],
+        },
     ];
 
     const toggleMenu = (key) => setOpenMenu(openMenu === key ? null : key);

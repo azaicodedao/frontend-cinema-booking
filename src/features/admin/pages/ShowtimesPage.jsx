@@ -5,7 +5,7 @@ import '../../../layouts/AdminLayout.css';
 const STATUS_LABELS = { SCHEDULED: 'Lên lịch', ONGOING: 'Đang chiếu', FINISHED: 'Đã chiếu', CANCELLED: 'Hủy', OPEN: 'Mở bán', CLOSED: 'Đã đóng/Xoá' };
 const STATUS_BADGE = { SCHEDULED: 'badge-coming', ONGOING: 'badge-showing', FINISHED: 'badge-ended', CANCELLED: 'badge-locked', OPEN: 'badge-coming', CLOSED: 'badge-locked' };
 
-const EMPTY_FORM = { movieId: '', roomId: '', startTime: '', price: '' };
+const EMPTY_FORM = { movieId: '', roomId: '', startTime: '', basePrice: '' };
 
 const ShowtimesPage = () => {
   const [showtimes, setShowtimes] = useState([]);
@@ -30,7 +30,7 @@ const ShowtimesPage = () => {
     try {
       let res;
       if (movieFilter) {
-        res = await adminApi.getShowtimesByMovie ? adminApi.getShowtimesByMovie(movieFilter) : await adminApi.getShowtimes();
+        res = await adminApi.getShowtimesByMovie(movieFilter);
       } else {
         res = await adminApi.getShowtimes();
       }
@@ -39,7 +39,7 @@ const ShowtimesPage = () => {
       setShowtimes(data);
       setPage(0);
     } catch (e) {
-      setError('Không thể tải danh sách suất chiếu');
+      showError('Không thể tải danh sách suất chiếu');
     } finally {
       setLoading(false);
     }
@@ -53,13 +53,14 @@ const ShowtimesPage = () => {
   }, []);
 
   const showSuccess = (msg) => { setSuccess(msg); setTimeout(() => setSuccess(''), 3000); };
+  const showError = (msg) => { setError(msg); setTimeout(() => setError(''), 3000); };
 
   const openCreate = () => { setEditShowtime(null); setForm(EMPTY_FORM); setShowModal(true); };
   const openEdit = (s) => {
     setEditShowtime(s);
     const dt = s.startTime ? new Date(s.startTime) : null;
     const local = dt ? new Date(dt.getTime() - dt.getTimezoneOffset() * 60000).toISOString().slice(0, 16) : '';
-    setForm({ movieId: s.movieId || '', roomId: s.roomId || '', startTime: local, price: s.price || '' });
+    setForm({ movieId: s.movieId || '', roomId: s.roomId || '', startTime: local, basePrice: s.basePrice || '' });
     setShowModal(true);
   };
   const closeModal = () => { setShowModal(false); setEditShowtime(null); setForm(EMPTY_FORM); };
@@ -78,7 +79,7 @@ const ShowtimesPage = () => {
         movieId: parseInt(form.movieId),
         roomId: parseInt(form.roomId),
         startTime: form.startTime,
-        price: parseFloat(form.price),
+        basePrice: parseFloat(form.basePrice),
       };
       if (editShowtime) {
         await adminApi.updateShowtime(editShowtime.id, payload);
@@ -150,7 +151,7 @@ const ShowtimesPage = () => {
               <th>Ngày chiếu</th>
               <th>Giờ bắt đầu</th>
               <th>Giờ kết thúc</th>
-              <th>Giá vé</th>
+              <th>Giá vé gốc</th>
               <th>Ghế còn</th>
               <th>Trạng thái</th>
               <th>Thao tác</th>
@@ -172,7 +173,7 @@ const ShowtimesPage = () => {
                 <td style={{ whiteSpace: 'nowrap' }}>{formatDT(s.startTime)}</td>
                 <td style={{ color: 'var(--t2)', whiteSpace: 'nowrap' }}>{formatDT(s.endTime)}</td>
                 <td style={{ color: 'var(--gold)', fontWeight: 600 }}>
-                  {s.price ? `${Number(s.price).toLocaleString('vi-VN')}đ` : '—'}
+                  {s.basePrice ? `${Number(s.basePrice).toLocaleString('vi-VN')}đ` : '—'}
                 </td>
                 <td style={{ color: 'var(--t2)' }}>{s.availableSeats ?? '—'}</td>
                 <td>
@@ -229,8 +230,8 @@ const ShowtimesPage = () => {
                 <input className="admin-form-input" name="startTime" type="datetime-local" value={form.startTime} onChange={handleFormChange} required />
               </div>
               <div className="admin-form-group">
-                <label className="admin-form-label">Giá vé (VNĐ) *</label>
-                <input className="admin-form-input" name="price" type="number" min="0" step="1000" value={form.price} onChange={handleFormChange} required placeholder="VD: 75000" />
+                <label className="admin-form-label">Giá vé gốc (VNĐ) *</label>
+                <input className="admin-form-input" name="basePrice" type="number" min="0" step="1000" value={form.basePrice} onChange={handleFormChange} required placeholder="VD: 75000" />
               </div>
               <div className="admin-modal-footer">
                 <button type="button" className="btn-admin-secondary" onClick={closeModal}>Hủy</button>

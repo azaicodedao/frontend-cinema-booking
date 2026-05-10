@@ -23,6 +23,7 @@ export const deleteMovie = (id) => api.delete(`/movies/${id}`);
 // ── Room Management ──────────────────────────────────────────────
 export const getRooms = () => api.get('/rooms');
 export const getRoomSeats = (id) => api.get(`/rooms/${id}/seats`);
+export const updateRoomSeats = (id, data) => api.put(`/rooms/${id}/seats`, data);
 export const createRoom = (data) => api.post('/rooms', data);
 export const updateRoom = (id, data) => api.put(`/rooms/${id}`, data);
 export const deleteRoom = (id) => api.delete(`/rooms/${id}`);
@@ -33,3 +34,8 @@ export const getShowtimesByMovie = (movieId) => api.get(`/showtimes/movie/${movi
 export const createShowtime = (data) => api.post('/showtimes', data);
 export const updateShowtime = (id, data) => api.put(`/showtimes/${id}`, data);
 export const deleteShowtime = (id) => api.delete(`/showtimes/${id}`);
+
+// ── Statistics Management ────────────────────────────────────────
+export const getMovieBookingStats = (params) => api.get('/statistics/movies/bookings', { params });
+export const getShowtimeStats = (params) => api.get('/statistics/showtimes', { params });
+export const getShowtimeSeatStats = (id) => api.get(`/statistics/showtimes/${id}/seats`);

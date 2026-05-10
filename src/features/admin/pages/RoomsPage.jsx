@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import * as adminApi from '../services/admin.api';
 import '../../../layouts/AdminLayout.css';
 
-const ROOM_TYPES = ['BASIC', 'PREMIUM', 'IMAX', '_2D', '_3D', '_4DX'];
-const ROOM_TYPE_LABELS = { BASIC: 'Basic', PREMIUM: 'Premium', IMAX: 'IMAX', _2D: '2D', _3D: '3D', _4DX: '4DX' };
+const ROOM_TYPES = ['IMAX', '2D', '3D'];
+const ROOM_TYPE_LABELS = { IMAX: 'IMAX', '2D': '2D', '3D': '3D' };
 
-const EMPTY_FORM = { name: '', totalRows: '', totalCols: '', type: 'BASIC' };
+const EMPTY_FORM = { name: '', totalRows: '', totalCols: '', type: 'IMAX' };
 
 const RoomsPage = () => {
   const [rooms, setRooms] = useState([]);
@@ -21,6 +21,8 @@ const RoomsPage = () => {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [seatModal, setSeatModal] = useState(null);
   const [seatsLoading, setSeatsLoading] = useState(false);
+  const [roomSeats, setRoomSeats] = useState([]);
+  const [seatSaveLoading, setSeatSaveLoading] = useState(false);
 
   const fetchRooms = async () => {
     setLoading(true);
@@ -48,7 +50,7 @@ const RoomsPage = () => {
       name: r.name,
       totalRows: r.totalRows || '',
       totalCols: r.totalCols || '',
-      type: r.type || 'BASIC'  // Đổi thành r.type
+      type: r.type || 'IMAX'  // Đổi thành r.type
     });
     setShowModal(true);
   };
@@ -90,12 +92,58 @@ const RoomsPage = () => {
     if (!deleteConfirm) return;
     try {
       await adminApi.deleteRoom(deleteConfirm.id);
-      showSuccess('Đã xóa phòng chiếu');
+      showSuccess('Xoá phòng thành công');
       setDeleteConfirm(null);
       fetchRooms();
     } catch (e) {
-      showError(e.response?.data?.message || 'Không thể xóa phòng chiếu. Vì phòng có suất chiếu đã và đang được lên lịch');
+      showError(e.response?.data?.message || 'Không thể xoá phòng chiếu.Vì phòng có suất chiếu đã và đang được lên lịch.Vui lòng xoá suất chiếu trước.');
       setDeleteConfirm(null);
+    }
+  };
+
+  const openSeatModal = async (r) => {
+    setSeatModal(r);
+    setSeatsLoading(true);
+    setRoomSeats([]);
+    try {
+      const res = await adminApi.getRoomSeats(r.id);
+      setRoomSeats(res.data.data || []);
+    } catch (e) {
+      showError('Không thể tải danh sách ghế');
+    } finally {
+      setSeatsLoading(false);
+    }
+  };
+
+  const closeSeatModal = () => {
+    setSeatModal(null);
+    setRoomSeats([]);
+  };
+
+  const handleSeatToggle = (index) => {
+    setRoomSeats(prev => {
+      const newSeats = [...prev];
+      const seat = newSeats[index];
+      const currentType = seat.typeName || 'NORMAL';
+      newSeats[index] = {
+        ...seat,
+        typeName: currentType === 'NORMAL' ? 'VIP' : 'NORMAL'
+      };
+      return newSeats;
+    });
+  };
+
+  const handleSeatSave = async () => {
+    if (!seatModal) return;
+    setSeatSaveLoading(true);
+    try {
+      await adminApi.updateRoomSeats(seatModal.id, roomSeats);
+      showSuccess('Đã cập nhật sơ đồ ghế');
+      closeSeatModal();
+    } catch (e) {
+      showError('Lỗi khi lưu sơ đồ ghế');
+    } finally {
+      setSeatSaveLoading(false);
     }
   };
 
@@ -155,6 +203,7 @@ const RoomsPage = () => {
                   <td>
                     <div className="admin-actions-group">
                       <button className="btn-admin-secondary" onClick={() => openEdit(r)}>Sửa</button>
+                      <button className="btn-admin-primary" style={{ backgroundColor: 'var(--gold)', borderColor: 'var(--gold)', color: '#000' }} onClick={() => openSeatModal(r)}>Sơ đồ ghế</button>
                       <button className="btn-admin-danger" onClick={() => setDeleteConfirm(r)}>Xóa</button>
                     </div>
                   </td>
@@ -190,20 +239,14 @@ const RoomsPage = () => {
               <div className="admin-form-row">
                 <div className="admin-form-group">
                   <label className="admin-form-label">Số hàng *</label>
-                  <input className="admin-form-input" name="totalRows" type="number" min="1" max="30" value={form.totalRows} onChange={handleFormChange} required placeholder="VD: 8" disabled={!!editRoom} />
+                  <input className="admin-form-input" name="totalRows" type="number" min="1" max="30" value={form.totalRows} onChange={handleFormChange} required placeholder />
                 </div>
                 <div className="admin-form-group">
                   <label className="admin-form-label">Số cột *</label>
-                  <input className="admin-form-input" name="totalCols" type="number" min="1" max="30" value={form.totalCols} onChange={handleFormChange} required placeholder="VD: 12" disabled={!!editRoom} />
+                  <input className="admin-form-input" name="totalCols" type="number" min="1" max="20" value={form.totalCols} onChange={handleFormChange} required placeholder />
                 </div>
               </div>
 
-              {/* Note: Vô hiệu hóa đổi hàng/cột khi đang Edit vì cấu trúc ghế đã được tạo trong DB */}
-              {editRoom && (
-                <div style={{ fontSize: 11, color: 'var(--t3)', marginTop: -8, marginBottom: 12 }}>
-                  * Không thể thay đổi số hàng/cột sau khi phòng đã được tạo.
-                </div>
-              )}
 
               {form.totalRows && form.totalCols && (
                 <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px', marginBottom: 8, fontSize: 13, color: 'var(--t2)' }}>
@@ -228,12 +271,78 @@ const RoomsPage = () => {
             <button className="admin-modal-close" onClick={() => setDeleteConfirm(null)}>×</button>
             <h2 className="admin-modal-title">Xóa phòng chiếu</h2>
             <p className="admin-confirm-text">
-              Bạn có chắc muốn xóa phòng <strong>"{deleteConfirm.name}"</strong> cùng toàn bộ sơ đồ ghế?
-              Phòng chỉ có thể xóa nếu không có suất chiếu nào được lên lịch.
+              Bạn có chắc muốn xóa <strong>{deleteConfirm.name}</strong> này?
+              Toàn bộ ghế trong phòng cũng sẽ bị xoá.
             </p>
             <div className="admin-modal-footer">
               <button className="btn-admin-secondary" onClick={() => setDeleteConfirm(null)}>Hủy</button>
               <button className="btn-admin-danger" onClick={handleDelete}>Xóa phòng</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Seat Management Modal */}
+      {seatModal && (
+        <div className="admin-modal-overlay" onClick={closeSeatModal}>
+          <div className="admin-modal" style={{ maxWidth: 800, width: '90%' }} onClick={e => e.stopPropagation()}>
+            <button className="admin-modal-close" onClick={closeSeatModal}>×</button>
+            <h2 className="admin-modal-title">Sơ đồ ghế: {seatModal.name}</h2>
+
+            <div className="seat-map-container" style={{ minHeight: 200, padding: 20, background: 'var(--bg2)', borderRadius: 8, overflowX: 'auto' }}>
+              {seatsLoading ? (
+                <div className="admin-loading"><div className="admin-spinner" /></div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center', minWidth: 'max-content' }}>
+                  <div style={{ width: '80%', height: 30, background: 'var(--border)', borderRadius: '20px 20px 0 0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 30, color: 'var(--t2)', fontSize: 12, fontWeight: 600 }}>MÀN HÌNH</div>
+
+                  <div style={{ display: 'flex', gap: 16, marginBottom: 24, fontSize: 13, color: 'var(--t2)', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ width: 16, height: 16, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 4 }} /> Ghế Thường
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ width: 16, height: 16, background: 'var(--gold)', border: '1px solid var(--gold)', borderRadius: 4 }} /> Ghế VIP
+                    </div>
+                  </div>
+
+                  {/* Group seats by row */}
+                  {Object.entries(roomSeats.reduce((acc, seat, i) => {
+                    if (!acc[seat.rowLetter]) acc[seat.rowLetter] = [];
+                    acc[seat.rowLetter].push({ ...seat, originalIndex: i });
+                    return acc;
+                  }, {})).map(([row, seats]) => (
+                    <div key={row} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                      <div style={{ width: 24, fontWeight: 600, color: 'var(--t2)' }}>{row}</div>
+                      {seats.sort((a, b) => a.seatNumber - b.seatNumber).map(seat => (
+                        <div
+                          key={seat.id}
+                          onClick={() => handleSeatToggle(seat.originalIndex)}
+                          style={{
+                            width: 32, height: 32,
+                            borderRadius: '4px 4px 8px 8px',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: 11, fontWeight: 600, cursor: 'pointer',
+                            userSelect: 'none',
+                            background: (!seat.typeName || seat.typeName === 'NORMAL') ? 'var(--bg3)' : 'var(--gold)',
+                            color: (!seat.typeName || seat.typeName === 'NORMAL') ? 'var(--t2)' : '#000',
+                            border: `1px solid ${(!seat.typeName || seat.typeName === 'NORMAL') ? 'var(--border)' : 'var(--gold)'}`
+                          }}
+                          title={`Ghế ${row}${seat.seatNumber} - ${seat.typeName || 'NORMAL'}`}
+                        >
+                          {seat.seatNumber}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="admin-modal-footer" style={{ marginTop: 24 }}>
+              <button type="button" className="btn-admin-secondary" onClick={closeSeatModal}>Hủy</button>
+              <button type="button" className="btn-admin-primary" onClick={handleSeatSave} disabled={seatSaveLoading || seatsLoading}>
+                {seatSaveLoading ? 'Đang lưu...' : 'Lưu sơ đồ ghế'}
+              </button>
             </div>
           </div>
         </div>

@@ -103,9 +103,9 @@ const Booking = () => {
           <span className="booking-page__total-label">
             {selectedSeats.length} seat{selectedSeats.length !== 1 ? 's' : ''} selected
           </span>
-          {showtime?.price && (
+          {showtime?.basePrice && (
             <span className="booking-page__total-price">
-              Total: ${showtime.price * selectedSeats.length}
+              Total: ${showtime.basePrice * selectedSeats.length}
             </span>
           )}
         </div>
