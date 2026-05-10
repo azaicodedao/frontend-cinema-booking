@@ -296,6 +296,15 @@ const RoomsPage = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center', minWidth: 'max-content' }}>
                   <div style={{ width: '80%', height: 30, background: 'var(--border)', borderRadius: '20px 20px 0 0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 30, color: 'var(--t2)', fontSize: 12, fontWeight: 600 }}>MÀN HÌNH</div>
 
+                  <div style={{ display: 'flex', gap: 16, marginBottom: 24, fontSize: 13, color: 'var(--t2)', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ width: 16, height: 16, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 4 }} /> Ghế Thường
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ width: 16, height: 16, background: 'var(--gold)', border: '1px solid var(--gold)', borderRadius: 4 }} /> Ghế VIP
+                    </div>
+                  </div>
+
                   {/* Group seats by row */}
                   {Object.entries(roomSeats.reduce((acc, seat, i) => {
                     if (!acc[seat.rowLetter]) acc[seat.rowLetter] = [];

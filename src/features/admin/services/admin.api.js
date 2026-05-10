@@ -37,3 +37,5 @@ export const deleteShowtime = (id) => api.delete(`/showtimes/${id}`);
 
 // ── Statistics Management ────────────────────────────────────────
 export const getMovieBookingStats = (params) => api.get('/statistics/movies/bookings', { params });
+export const getShowtimeStats = (params) => api.get('/statistics/showtimes', { params });
+export const getShowtimeSeatStats = (id) => api.get(`/statistics/showtimes/${id}/seats`);

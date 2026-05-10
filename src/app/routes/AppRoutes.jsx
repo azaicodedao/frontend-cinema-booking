@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import MainLayout from '../../layouts/MainLayout';
 import AdminLayout from '../../layouts/AdminLayout';
@@ -20,7 +20,6 @@ import MyTickets from '../../features/user/pages/MyTickets';
 import TicketView from '../../features/user/pages/TicketView';
 
 // Admin pages
-import AdminDashboard from '../../features/admin/pages/AdminDashboard';
 import UsersPage from '../../features/admin/pages/UsersPage';
 import GenresPage from '../../features/admin/pages/GenresPage';
 import MoviesPage from '../../features/admin/pages/MoviesPage';
@@ -50,7 +49,7 @@ const AppRoutes = () => {
 
       {/* Admin routes */}
       <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
-        <Route index element={<AdminDashboard />} />
+        <Route index element={<Navigate to="stats/bookings" replace />} />
         <Route path="users" element={<UsersPage />} />
         <Route path="genres" element={<GenresPage />} />
         <Route path="movies" element={<MoviesPage />} />

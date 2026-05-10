@@ -78,14 +78,8 @@ import AuthContext from '../../context/AuthContext';
 import AuthService from '../../features/auth/services/auth.api';
 
 const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setCurrentUser(user);
-    }
-  }, []);
+  // Initialize state synchronously from sessionStorage to prevent flash of unauthenticated state on reload
+  const [currentUser, setCurrentUser] = useState(() => AuthService.getCurrentUser());
 
   const login = useCallback(async (email, password) => {
     const userData = await AuthService.login(email, password);
