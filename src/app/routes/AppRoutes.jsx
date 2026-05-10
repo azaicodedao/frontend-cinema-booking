@@ -5,6 +5,7 @@ import MainLayout from '../../layouts/MainLayout';
 import AdminLayout from '../../layouts/AdminLayout';
 import PrivateRoute from '../guards/PrivateRoute';
 import AdminRoute from '../guards/AdminRoute';
+import AdminRedirectGuard from '../guards/AdminRedirectGuard';
 
 // Loading component
 const LoadingScreen = () => (
@@ -40,7 +41,7 @@ const AppRoutes = () => {
     <Suspense fallback={<LoadingScreen />}>
       <Routes>
         {/* Customer / Public routes */}
-        <Route element={<MainLayout />}>
+        <Route element={<AdminRedirectGuard><MainLayout /></AdminRedirectGuard>}>
           <Route path="/" element={<Home />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/login" element={<Login />} />

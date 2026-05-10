@@ -11,7 +11,7 @@ const AdminLayout = () => {
 
     const handleLogout = () => {
         logout();
-        navigate('/login');
+        navigate('/', { replace: true });
     };
 
     const navItems = [
@@ -107,16 +107,12 @@ const AdminLayout = () => {
                 <div className="admin-nav-flex" />
 
                 <div className="admin-nav-actions">
-                    <Link to="/" className="admin-nav-link" title="Về trang khách hàng">
-                        <svg viewBox="0 0 20 20" fill="none" style={{ width: 16, height: 16 }}>
-                            <path d="M10 2L2 9h2v9h5v-5h2v5h5V9h2L10 2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-                        </svg>
-                        Trang khách
-                    </Link>
-                    <Link to="/admin/profile" className="admin-nav-link">Hồ sơ</Link>
-                    <div className="admin-nav-avatar" onClick={handleLogout} title="Đăng xuất">
+                    <button onClick={handleLogout} className="admin-nav-link" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                        Đăng xuất
+                    </button>
+                    <Link to="/admin/profile" className="admin-nav-avatar" title="Xem hồ sơ">
                         {currentUser?.fullName?.charAt(0)?.toUpperCase() || 'A'}
-                    </div>
+                    </Link>
                 </div>
             </nav>
 

@@ -46,11 +46,14 @@ export const errorInterceptor = async (error) => {
             });
         }
 
-        originalRequest._retry = true;
-        isRefreshing = true;
-
         const user = JSON.parse(localStorage.getItem('user'));
-        if (user && user.refreshToken) {
+        // Nếu là yêu cầu login hoặc không có refresh token, không thực hiện refresh
+        const isAuthRequest = originalRequest.url.includes('/auth/signin') || originalRequest.url.includes('/auth/signup');
+        
+        if (user && user.refreshToken && !isAuthRequest) {
+            originalRequest._retry = true;
+            isRefreshing = true;
+
             try {
                 const rs = await axios.post(`${API_URL}auth/refreshtoken`, {
                     refreshToken: user.refreshToken
@@ -82,6 +85,7 @@ export const errorInterceptor = async (error) => {
             if (window.location.pathname !== '/login') {
                 window.location.href = '/login';
             }
+            return Promise.reject(error); // Trả lỗi ngay lập tức mà không chặn các request sau
         }
     }
     

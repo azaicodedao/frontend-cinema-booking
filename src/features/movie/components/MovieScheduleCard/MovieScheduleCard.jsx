@@ -35,8 +35,8 @@ const MovieScheduleCard = ({ movie }) => {
             <div className="mst-info">
                 <div className="mst-title">{movie.title}</div>
                 <div className="mst-meta">
-                    <span className="tag g">{movie.genres}</span>
-                    <span className="tag">{movie.duration} phút</span>
+                    {movie.genres && <span className="tag g">{movie.genres}</span>}
+                    {movie.duration && <span className="tag">{movie.duration} phút</span>}
                     <span className="cg">★ {movie.rating || 'N/A'}</span>
                 </div>
                 

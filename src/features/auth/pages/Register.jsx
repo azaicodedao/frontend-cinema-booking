@@ -52,6 +52,7 @@ const Register = () => {
     return (
         <div className="awrap">
             <div className="acard">
+                <button className="aclose" onClick={() => navigate(-1)} title="Đóng">×</button>
                 <h1 className="ahead">Tạo tài khoản mới</h1>
                 <p className="asub">Đăng ký để bắt đầu đặt vé điện tử</p>
 

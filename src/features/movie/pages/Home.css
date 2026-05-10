@@ -73,46 +73,106 @@
 
 /* --- Nhãn nhỏ "Phim nổi bật tuần này" --- */
 .home-page__hero-eyebrow {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold);
-  margin-bottom: 9px;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 /* --- Tên phim lớn --- */
 .home-page__hero-title {
   font-family: var(--fh);
-  font-size: 40px;
-  font-weight: 800;
-  line-height: 1.08;
-  margin-bottom: 10px;
-  letter-spacing: -0.01em;
+  font-size: 48px;
+  font-weight: 850;
+  line-height: 1.05;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 /* --- Thông tin phụ (thể loại, thời lượng, giới hạn tuổi) --- */
 .home-page__hero-meta {
-  font-size: 13px;
-  color: var(--t2);
-  margin-bottom: 20px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 24px;
   display: flex;
-  gap: 12px;
+  gap: 14px;
   align-items: center;
+  font-weight: 500;
 }
 
 /* Dấu chấm tròn ngăn cách giữa các item meta */
 .home-page__hero-sep {
-  width: 3px;
-  height: 3px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  background: var(--t3);
+  background: var(--gold);
+  opacity: 0.6;
 }
 
 /* --- Nhóm nút hành động (Đặt vé, Xem trailer) --- */
 .home-page__hero-btns {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 5px;
+}
+
+/* Base button style */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--rsm);
+  font-family: var(--fh);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  border: none;
+  white-space: nowrap;
+}
+
+.btn--large {
+  padding: 11px 24px;
+  font-size: 14px;
+}
+
+/* Nút Đặt vé ngay - Primary Gradient */
+.btn--primary {
+  background: linear-gradient(135deg, var(--gold) 0%, #d4a017 100%);
+  color: #08080d;
+  box-shadow: 0 4px 12px rgba(255, 200, 55, 0.2);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 200, 55, 0.35);
+  filter: brightness(1.1);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+}
+
+/* Nút Xem trailer - Ghost style */
+.btn--ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+}
+
+.btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn--ghost:active {
+  transform: translateY(0);
 }
 
 /* ============================================================

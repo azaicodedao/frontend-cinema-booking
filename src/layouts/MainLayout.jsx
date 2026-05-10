@@ -1,10 +1,16 @@
 import React, { useContext } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import './MainLayout.css';
 
 const MainLayout = () => {
     const { currentUser, logout, isAuthenticated } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+      logout();
+      navigate('/', { replace: true });
+    };
 
   return (
     <div className="app-container">
@@ -34,7 +40,7 @@ const MainLayout = () => {
 
         {isAuthenticated ? (
           <div className="nav-actions">
-            <div className="nav-link" onClick={logout} style={{ cursor: 'pointer' }}>Đăng xuất</div>
+            <div className="nav-link" onClick={handleLogout} style={{ cursor: 'pointer' }}>Đăng xuất</div>
             <Link to="/profile" className="nav-avatar-link" title="Hồ sơ">
               <div className="nav-avatar">
                 {(currentUser?.avatarUrl || currentUser?.user?.avatarUrl) ? (

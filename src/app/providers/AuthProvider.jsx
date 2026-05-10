@@ -31,8 +31,18 @@ const AuthProvider = ({ children }) => {
 
   const isAuthenticated = !!currentUser;
   
-  // Kiểm tra quyền Admin linh hoạt (hỗ trợ cả cấu trúc phẳng và cấu trúc lồng)
-  const isAdmin = currentUser?.role === 'ADMIN' || currentUser?.user?.role === 'ADMIN';
+  // Kiểm tra quyền Admin cực kỳ linh hoạt (hỗ trợ mọi định dạng: string, array, nested)
+  const isAdmin = 
+    currentUser?.role === 'ADMIN' || 
+    currentUser?.user?.role === 'ADMIN' ||
+    (Array.isArray(currentUser?.roles) && currentUser.roles.includes('ADMIN')) ||
+    (Array.isArray(currentUser?.user?.roles) && currentUser.user.roles.includes('ADMIN'));
+
+  // Log để debug (Bạn hãy mở F12 để xem cấu trúc thực tế)
+  if (currentUser) {
+    console.log('[AuthProvider] Current User Data:', currentUser);
+    console.log('[AuthProvider] Is Admin:', isAdmin);
+  }
 
   return (
     <AuthContext.Provider
