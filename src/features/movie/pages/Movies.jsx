@@ -3,6 +3,7 @@ import './Movies.css';
 import DateTabs from '../components/DateTabs/DateTabs';
 import MovieScheduleCard from '../components/MovieScheduleCard/MovieScheduleCard';
 import MovieService from '../services/movie.api';
+import { formatLocalDate, parseLocalDateString } from '../../../utils/date';
 
 /**
  * Trang Lịch Chiếu Phim Truyền thống (Movies Page).
@@ -12,7 +13,7 @@ import MovieService from '../services/movie.api';
  * @returns {JSX.Element} Giao diện hệ thống biểu diễn lịch chiếu toàn cục.
  */
 const Movies = () => {
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = formatLocalDate(new Date());
     const [selectedDate, setSelectedDate] = useState(todayStr);
     const [fullSchedule, setFullSchedule] = useState([]); // Chứa toàn bộ dữ liệu từ server
     const [loading, setLoading] = useState(true);
@@ -31,7 +32,7 @@ const Movies = () => {
         try {
             // Gọi API không truyền date để lấy toàn bộ lịch chiếu từ hôm nay trở đi
             const data = await MovieService.getSchedule();
-            setFullSchedule(data || []);
+            setFullSchedule(Array.isArray(data) ? data : []);
         } catch (err) {
             console.error('Error fetching full schedule:', err);
             setError('Không thể tải lịch chiếu. Vui lòng thử lại sau.');
@@ -50,8 +51,8 @@ const Movies = () => {
             .map(movie => ({
                 ...movie,
                 // Lọc các suất chiếu khớp với ngày đang chọn
-                showtimes: movie.showtimes.filter(st => {
-                    const stDate = st.startTime.split('T')[0];
+                showtimes: (Array.isArray(movie?.showtimes) ? movie.showtimes : []).filter(st => {
+                    const stDate = parseLocalDateString(st?.startTime);
                     return stDate === selectedDate;
                 })
             }))

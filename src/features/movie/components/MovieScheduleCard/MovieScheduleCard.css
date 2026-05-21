@@ -110,11 +110,15 @@
 }
 
 .stc {
+    appearance: none;
+    width: 100%;
     background: var(--bg3);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 10px;
     text-align: center;
+    font: inherit;
+    color: inherit;
     cursor: pointer;
     transition: all .2s ease;
 }
@@ -148,6 +152,10 @@
     opacity: .5;
     cursor: not-allowed;
     background: var(--bg4);
+}
+
+.stc:disabled {
+    cursor: not-allowed;
 }
 
 .stfull {

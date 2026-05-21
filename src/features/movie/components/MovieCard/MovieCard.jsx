@@ -29,11 +29,15 @@ const MovieCard = ({ movie }) => {
         <div className="movie-card__title">{movie.title}</div>
         <div className="movie-card__meta">
           {genreName && <span>{genreName}</span>}
-          {genreName && movie.ageLimit && <span>·</span>}
-          {movie.ageLimit && <span>T{movie.ageLimit}+</span>}
+          {movie.duration && (
+            <>
+              <span>·</span>
+              <span>{movie.duration} phút</span>
+            </>
+          )}
         </div>
         {movie.averageRating > 0 && (
-          <div className="movie-card__rating">★ {movie.averageRating?.toFixed(1) || '—'}</div>
+          <div className="movie-card__rating">★ {movie.averageRating?.toFixed(1)}</div>
         )}
       </div>
     </div>

@@ -12,12 +12,16 @@ const ShowtimesPage = () => {
   const [page, setPage] = useState(0);
   const SIZE = 10;
   const [movies, setMovies] = useState([]);
+  const [showingMovies, setShowingMovies] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   const [movieFilter, setMovieFilter] = useState('');
+  const [roomFilter, setRoomFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('OPEN');
+  const [dateFilter, setDateFilter] = useState('');
 
   const [showModal, setShowModal] = useState(false);
   const [editShowtime, setEditShowtime] = useState(null);
@@ -35,7 +39,34 @@ const ShowtimesPage = () => {
         res = await adminApi.getShowtimes();
       }
       let data = res.data.data || [];
-      if (movieFilter) data = data.filter(s => String(s.movieId) === String(movieFilter));
+
+      // Lọc theo phim
+      if (movieFilter) {
+        data = data.filter(s => String(s.movieId) === String(movieFilter));
+      }
+      // Lọc theo phòng chiếu
+      if (roomFilter) {
+        data = data.filter(s => String(s.roomId) === String(roomFilter));
+      }
+      // Lọc theo trạng thái
+      if (statusFilter) {
+        data = data.filter(s => String(s.status) === String(statusFilter));
+      }
+      // Lọc theo ngày chiếu
+      if (dateFilter) {
+        data = data.filter(s => {
+          const showDate = s.showDate || (s.startTime ? s.startTime.substring(0, 10) : '');
+          return showDate === dateFilter;
+        });
+      }
+
+      // Sắp xếp theo thời gian bắt đầu giảm dần (mới nhất lên đầu)
+      data.sort((a, b) => {
+        const dateA = new Date(a.startTime || 0);
+        const dateB = new Date(b.startTime || 0);
+        return dateB - dateA;
+      });
+
       setShowtimes(data);
       setPage(0);
     } catch (e) {
@@ -43,12 +74,13 @@ const ShowtimesPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [movieFilter]);
+  }, [movieFilter, roomFilter, statusFilter, dateFilter]);
 
   useEffect(() => { fetchShowtimes(); }, [fetchShowtimes]);
 
   useEffect(() => {
     adminApi.getMovies({}).then(r => setMovies(r.data.data || [])).catch(() => { });
+    adminApi.getMovies({ status: 'SHOWING', size: 1000 }).then(r => setShowingMovies(r.data.data || [])).catch(() => { });
     adminApi.getRooms().then(r => setRooms(r.data.data || [])).catch(() => { });
   }, []);
 
@@ -119,6 +151,13 @@ const ShowtimesPage = () => {
   const paginatedShowtimes = showtimes.slice(page * SIZE, (page + 1) * SIZE);
   const totalPages = Math.ceil(showtimes.length / SIZE);
 
+  // Tính danh sách phim cho dropdown modal (chỉ phim đang chiếu, nhưng khi sửa thì bao gồm cả phim hiện tại)
+  const dropdownMovies = editShowtime
+    ? (showingMovies.some(m => m.id === editShowtime.movieId)
+        ? showingMovies
+        : [...showingMovies, { id: editShowtime.movieId, title: editShowtime.movieTitle }])
+    : showingMovies;
+
   return (
     <div>
       <div className="admin-page-header">
@@ -134,11 +173,38 @@ const ShowtimesPage = () => {
       {error && <div className="admin-alert admin-alert-error">{error}</div>}
       {success && <div className="admin-alert admin-alert-success">{success}</div>}
 
-      <div className="admin-filters">
-        <select className="admin-select" value={movieFilter} onChange={e => setMovieFilter(e.target.value)} style={{ flex: 1, minWidth: 240 }}>
+      <div className="admin-filters" style={{ display: 'flex', gap: 16, marginBottom: 24, flexWrap: 'wrap' }}>
+        <select className="admin-select" value={movieFilter} onChange={e => setMovieFilter(e.target.value)} style={{ flex: 1, minWidth: 200 }}>
           <option value="">Tất cả phim</option>
           {movies.map(m => <option key={m.id} value={m.id}>{m.title}</option>)}
         </select>
+
+        <select className="admin-select" value={roomFilter} onChange={e => setRoomFilter(e.target.value)} style={{ flex: 1, minWidth: 200 }}>
+          <option value="">Tất cả phòng</option>
+          {rooms.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+        </select>
+
+        <select className="admin-select" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ flex: 1, minWidth: 200 }}>
+          <option value="">Tất cả trạng thái</option>
+          <option value="OPEN">Mở bán</option>
+          <option value="CLOSED">Đã đóng/Xoá</option>
+        </select>
+
+        <input
+          type="date"
+          className="admin-input"
+          value={dateFilter}
+          onChange={e => setDateFilter(e.target.value)}
+          style={{ flex: 1, minWidth: 160 }}
+        />
+
+        <button
+          className="btn-admin-secondary"
+          onClick={() => { setMovieFilter(''); setRoomFilter(''); setStatusFilter('OPEN'); setDateFilter(''); }}
+          style={{ whiteSpace: 'nowrap' }}
+        >
+          Xóa bộ lọc
+        </button>
       </div>
 
       <div className="admin-table-wrap">
@@ -152,16 +218,15 @@ const ShowtimesPage = () => {
               <th>Giờ bắt đầu</th>
               <th>Giờ kết thúc</th>
               <th>Giá vé gốc</th>
-              <th>Ghế còn</th>
               <th>Trạng thái</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={10}><div className="admin-loading"><div className="admin-spinner" /></div></td></tr>
+              <tr><td colSpan={9}><div className="admin-loading"><div className="admin-spinner" /></div></td></tr>
             ) : paginatedShowtimes.length === 0 ? (
-              <tr><td colSpan={10}><div className="admin-empty">Không có suất chiếu nào</div></td></tr>
+              <tr><td colSpan={9}><div className="admin-empty">Không có suất chiếu nào</div></td></tr>
             ) : paginatedShowtimes.map(s => (
               <tr key={s.id}>
                 <td style={{ color: 'var(--t3)', fontSize: 12 }}>#{s.id}</td>
@@ -175,7 +240,6 @@ const ShowtimesPage = () => {
                 <td style={{ color: 'var(--gold)', fontWeight: 600 }}>
                   {s.basePrice ? `${Number(s.basePrice).toLocaleString('vi-VN')}đ` : '—'}
                 </td>
-                <td style={{ color: 'var(--t2)' }}>{s.availableSeats ?? '—'}</td>
                 <td>
                   <span className={`badge ${STATUS_BADGE[s.status] || 'badge-ended'}`}>
                     {STATUS_LABELS[s.status] || s.status || '—'}
@@ -215,7 +279,7 @@ const ShowtimesPage = () => {
                 <label className="admin-form-label">Phim *</label>
                 <select className="admin-form-select" name="movieId" value={form.movieId} onChange={handleFormChange} required>
                   <option value="">-- Chọn phim --</option>
-                  {movies.map(m => <option key={m.id} value={m.id}>{m.title}</option>)}
+                  {dropdownMovies.map(m => <option key={m.id} value={m.id}>{m.title}</option>)}
                 </select>
               </div>
               <div className="admin-form-group">

@@ -8,6 +8,7 @@ const STATUS_LABELS = { SHOWING: 'Đang chiếu', COMING: 'Sắp chiếu', HIDDE
 const EMPTY_FORM = {
   title: '', description: '', duration: '', ageRating: '',
   posterUrl: '', trailerUrl: '', isFeatured: false, status: 'COMING', genreIds: [],
+  country: '', director: '', actors: '', releaseDate: '',
 };
 
 const MoviesPage = () => {
@@ -68,6 +69,10 @@ const MoviesPage = () => {
       isFeatured: m.isFeatured || false,
       status: m.status || 'COMING',
       genreIds: (m.genres || []).map(g => g.id),
+      country: m.country || '',
+      director: m.director || '',
+      actors: m.actors || '',
+      releaseDate: m.releaseDate || '',
     });
     setShowModal(true);
   };
@@ -98,6 +103,10 @@ const MoviesPage = () => {
     isFeatured: form.isFeatured,
     status: form.status,
     genres: form.genreIds.map(id => ({ id })),
+    country: form.country || null,
+    director: form.director || null,
+    actors: form.actors || null,
+    releaseDate: form.releaseDate || null,
   });
 
   const handleSubmit = async (e) => {
@@ -255,6 +264,26 @@ const MoviesPage = () => {
               <div className="admin-form-group">
                 <label className="admin-form-label">URL Trailer</label>
                 <input className="admin-form-input" name="trailerUrl" value={form.trailerUrl} onChange={handleFormChange} placeholder="https://youtube.com/..." />
+              </div>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label className="admin-form-label">Đạo diễn</label>
+                  <input className="admin-form-input" name="director" value={form.director} onChange={handleFormChange} placeholder="Tên đạo diễn" />
+                </div>
+                <div className="admin-form-group">
+                  <label className="admin-form-label">Quốc gia</label>
+                  <input className="admin-form-input" name="country" value={form.country} onChange={handleFormChange} placeholder="VD: Mỹ, Hàn Quốc, Việt Nam" />
+                </div>
+              </div>
+              <div className="admin-form-row">
+                <div className="admin-form-group">
+                  <label className="admin-form-label">Diễn viên</label>
+                  <input className="admin-form-input" name="actors" value={form.actors} onChange={handleFormChange} placeholder="Dàn diễn viên, cách nhau bởi dấu phẩy" />
+                </div>
+                <div className="admin-form-group">
+                  <label className="admin-form-label">Ngày phát hành</label>
+                  <input className="admin-form-input" name="releaseDate" type="date" value={form.releaseDate} onChange={handleFormChange} />
+                </div>
               </div>
               <div className="admin-form-row">
                 <div className="admin-form-group">

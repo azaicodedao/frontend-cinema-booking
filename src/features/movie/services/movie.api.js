@@ -14,6 +14,16 @@ class MovieService {
         return api.get(`${MOVIE_URL}/featured`).then(res => res.data.data);
     }
 
+    /** Lấy danh sách phim đang chiếu (có kèm rating) */
+    getShowingMovies() {
+        return api.get(`${MOVIE_URL}/showing`).then(res => res.data.data);
+    }
+
+    /** Lấy danh sách phim sắp chiếu (có kèm rating) */
+    getComingSoonMovies() {
+        return api.get(`${MOVIE_URL}/coming-soon`).then(res => res.data.data);
+    }
+
     getMovieById(id) {
         return api.get(`movies/${id}`).then(res => res.data.data);
     }

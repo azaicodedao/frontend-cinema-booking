@@ -1,29 +1,30 @@
-import React, { useContext } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
 import AuthContext from '../../context/AuthContext';
+import AuthModalContext from '../../context/AuthModalContext';
 
 /**
  * Lớp bảo vệ trang riêng tư (PrivateRoute Guard).
  * Nhiệm vụ: Yêu cầu người dùng phải ĐĂNG NHẬP để truy cập.
- * Thường dùng cho trang: Profile, Đặt vé, Thanh toán, Lịch sử vé.
+ * Thay vì chuyển trang, sẽ mở AuthModal ngay tại trang hiện tại.
  */
 const PrivateRoute = ({ children }) => {
-  // Lấy trạng thái đăng nhập và trạng thái khởi tạo từ Context
   const { isAuthenticated, isInitialized } = useContext(AuthContext);
-  
-  // Lưu lại vị trí hiện tại của người dùng để sau khi đăng nhập xong có thể quay lại đúng trang này
-  const location = useLocation();
+  const { openLogin } = useContext(AuthModalContext);
+
+  // Mở Modal đăng nhập nếu chưa xác thực (sau khi app đã khởi tạo xong)
+  useEffect(() => {
+    if (isInitialized && !isAuthenticated) {
+      openLogin();
+    }
+  }, [isInitialized, isAuthenticated, openLogin]);
 
   // Chờ cho đến khi ứng dụng xác định xong trạng thái đăng nhập từ bộ nhớ
   if (!isInitialized) return null;
 
-  // Nếu người dùng chưa đăng nhập -> Đẩy sang trang Login 
-  // kèm theo thông tin trang đang định truy cập (state.from)
-  if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
+  // Nếu chưa đăng nhập -> không render nội dung (Modal sẽ tự mở)
+  if (!isAuthenticated) return null;
 
-  // Nếu đã đăng nhập -> Cho phép xem nội dung trang
+  // Nếu đã đăng nhập -> cho phép xem nội dung trang
   return children;
 };
 

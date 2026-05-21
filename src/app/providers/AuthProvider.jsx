@@ -18,6 +18,22 @@ const AuthProvider = ({ children }) => {
     setIsInitialized(true);
   }, []);
 
+  useEffect(() => {
+    const handleSessionExpired = (event) => {
+      if (event?.type === 'storage' && event.key !== 'user') {
+        return;
+      }
+      setCurrentUser(null);
+    };
+
+    window.addEventListener('auth:session-expired', handleSessionExpired);
+    window.addEventListener('storage', handleSessionExpired);
+    return () => {
+      window.removeEventListener('auth:session-expired', handleSessionExpired);
+      window.removeEventListener('storage', handleSessionExpired);
+    };
+  }, []);
+
   const login = useCallback(async (email, password) => {
     const userData = await AuthService.login(email, password);
     setCurrentUser(userData);
@@ -45,10 +61,13 @@ const AuthProvider = ({ children }) => {
     (Array.isArray(currentUser?.roles) && currentUser.roles.includes('ADMIN')) ||
     (Array.isArray(currentUser?.user?.roles) && currentUser.user.roles.includes('ADMIN'));
 
-  // Log để debug (Bạn hãy mở F12 để xem cấu trúc thực tế nếu cần)
-  if (currentUser) {
-    console.log('[AuthProvider] Current User Data:', currentUser);
-    console.log('[AuthProvider] Is Admin:', isAdmin);
+  if (import.meta.env.DEV && currentUser) {
+    console.log('[AuthProvider] Auth state:', {
+      id: currentUser?.id || currentUser?.user?.id,
+      email: currentUser?.email || currentUser?.user?.email,
+      role: currentUser?.role || currentUser?.user?.role,
+      isAdmin,
+    });
   }
 
   return (

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
   --bg0: #09090f;
@@ -17,8 +17,8 @@
   --t1: #eeeef6;
   --t2: #8e8fa8;
   --t3: #50516a;
-  --fh: 'Sora', sans-serif;
-  --fb: 'DM Sans', sans-serif;
+  --fh: 'Montserrat', sans-serif;
+  --fb: 'Inter', sans-serif;
   --r: 12px;
   --rsm: 8px;
   --rxs: 6px;

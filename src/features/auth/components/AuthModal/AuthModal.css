@@ -1,0 +1,35 @@
+.auth-modal-content {
+    padding: 10px 5px;
+}
+
+.auth-modal-switch {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--t2);
+}
+
+.auth-modal-switch span {
+    color: var(--gold);
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: color 0.2s;
+}
+
+.auth-modal-switch span:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Đảm bảo form trong modal trông gọn gàng */
+.auth-modal-content .login-form__header,
+.auth-modal-content .register-form__header {
+    display: none; /* Ẩn header vì modal đã có tiêu đề riêng */
+}
+
+.auth-modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

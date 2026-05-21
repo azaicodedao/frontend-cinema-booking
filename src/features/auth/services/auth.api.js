@@ -12,21 +12,13 @@ class AuthService {
             .then(response => {
                 // Backend trả về: { success: true, message: "...", data: { accessToken, refreshToken, user: { ... } } }
                 const data = response.data.data || response.data; // Phòng hờ cấu trúc khác nhau
-                console.log('[AuthService] RAW DATA FROM SERVER:', JSON.stringify(data));
-
                 if (data && (data.accessToken || data.token)) {
                     const accessToken = data.accessToken || data.token;
                     const refreshToken = data.refreshToken;
                     const userDetails = data.user || {};
                     
                     // Lấy Role từ bất kỳ đâu có thể
-                    let detectedRole = userDetails.role || data.role || (Array.isArray(userDetails.roles) ? userDetails.roles[0] : null);
-                    
-                    // ÉP BUỘC: Nếu là email admin hệ thống, luôn gán ADMIN
-                    if (email === 'admin@cinema.com') {
-                        console.warn('[AuthService] Forcing ADMIN role for system admin email');
-                        detectedRole = 'ADMIN';
-                    }
+                    const detectedRole = userDetails.role || data.role || (Array.isArray(userDetails.roles) ? userDetails.roles[0] : null);
 
                     // Tạo object lưu trữ chuẩn cơm mẹ nấu
                     const userToStore = {
@@ -39,7 +31,14 @@ class AuthService {
                         avatarUrl: userDetails.avatarUrl || data.avatarUrl
                     };
                     
-                    console.log('[AuthService] FINAL USER OBJECT TO STORE:', userToStore);
+                    if (import.meta.env.DEV) {
+                        console.log('[AuthService] User authenticated:', {
+                            id: userToStore.id,
+                            email: userToStore.email,
+                            role: userToStore.role,
+                        });
+                    }
+
                     localStorage.setItem('user', JSON.stringify(userToStore));
                     return userToStore;
                 }

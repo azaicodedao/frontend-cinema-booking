@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
- import { useParams, useNavigate } from 'react-router-dom';
- import SockJS from 'sockjs-client';
- import { Client } from '@stomp/stompjs';
- import SeatApi from '../services/seat.api.js';
- import BookingService from '../services/booking.api'; // Thêm API quản lý Đặt vé
- import AuthContext from '../../../context/AuthContext';
- import './SeatSelection.css';
+import { useParams, useNavigate } from 'react-router-dom';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
+import SeatApi from '../services/seat.api.js';
+import BookingService from '../services/booking.api';
+import AuthContext from '../../../context/AuthContext';
+import './SeatSelection.css';
 
 /**
  * Component Chọn ghế (Seat Selection)
@@ -13,44 +13,43 @@ import React, { useEffect, useState, useRef, useContext } from 'react';
  */
 const SeatSelection = () => {
     const { showtimeId } = useParams();
-     const navigate = useNavigate();
-     const { currentUser } = useContext(AuthContext);
-     const [data, setData] = useState(null);
-     const [selectedSeats, setSelectedSeats] = useState([]);
-     const [loading, setLoading] = useState(true);
-     const [isCreatingBooking, setIsCreatingBooking] = useState(false); // Trạng thái đang tạo đơn hàng
-     const [timeLeft, setTimeLeft] = useState(600); // 10 minutes
+    const navigate = useNavigate();
+    const { currentUser } = useContext(AuthContext);
+    const [data, setData] = useState(null);
+    const [selectedSeats, setSelectedSeats] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [isCreatingBooking, setIsCreatingBooking] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(600); // 10 minutes
     const stompClient = useRef(null);
 
-    const isConfirmedRef = useRef(false); // Đánh dấu nếu người dùng nhấn Xác nhận ghế
-    const isBackRef = useRef(false); // Đánh dấu nếu người dùng nhấn nút 'Quay lại' trong UI
-    const selectedSeatsRef = useRef([]); // Lưu danh sách ghế mới nhất để dùng trong cleanup
+    const isConfirmedRef = useRef(false);
+    const isBackRef = useRef(false);
+    const selectedSeatsRef = useRef([]);
 
-    // Đồng bộ Ref với State mỗi khi selectedSeats thay đổi
+    // Lấy userId an toàn từ context (hỗ trợ cả cấu trúc phẳng và lồng)
+    const currentUserId = Number(currentUser?.id || currentUser?.user?.id || 0);
+
     useEffect(() => {
         selectedSeatsRef.current = selectedSeats;
     }, [selectedSeats]);
 
-    // Effect 1: Quản lý WebSocket (Chỉ chạy 1 lần khi mount)
+    // Effect: Load dữ liệu ban đầu và kết nối WebSocket
     useEffect(() => {
         fetchInitialData();
         connectWebSocket();
 
         return () => {
             if (stompClient.current) {
-                console.log('>>> [WS] Deactivating WebSocket...');
                 stompClient.current.deactivate();
             }
         };
     }, [showtimeId]);
 
-    // Effect 2: Tự động giải phóng ghế khi RỜI KHỎI trang (Chỉ chạy khi Unmount)
+    // Effect: Cleanup ghế khi thoát luồng
     useEffect(() => {
         return () => {
-            // PHƯƠNG ÁN B: Chỉ giải phóng nếu KHÔNG nhấn Xác nhận và KHÔNG nhấn Quay lại (tức là đi ra ngoài luồng đặt vé)
             if (!isConfirmedRef.current && !isBackRef.current && selectedSeatsRef.current.length > 0) {
                 const seatIds = selectedSeatsRef.current.map(s => s.seatId);
-                console.log(">>> [Cleanup] Tự động giải phóng ghế (Thoát luồng):", seatIds);
                 SeatApi.releaseSeats(seatIds, showtimeId).catch(err => 
                     console.error(">>> [Cleanup] Lỗi khi giải phóng ghế:", err)
                 );
@@ -66,42 +65,40 @@ const SeatSelection = () => {
     }, [timeLeft, selectedSeats.length > 0]);
 
     const fetchInitialData = async () => {
-         try {
-             setLoading(true);
-             const res = await SeatApi.getSeatSelection(showtimeId);
-             if (res.data.statusCode === 200 && res.data.data) {
-                 const fetchedData = res.data.data;
-                 setData(fetchedData);
- 
-                 // Khôi phục danh sách ghế đã chọn nếu người dùng quay lại trang
-                 if (currentUser?.user?.id) {
-                     const userId = currentUser.user.id;
-                     const alreadySelected = [];
-                     Object.values(fetchedData.seatsByRow).forEach(row => {
-                         row.forEach(seat => {
-                             if (seat.status === 'HOLDING' && seat.holdByUserId === userId) {
-                                 alreadySelected.push(seat);
-                             }
-                         });
-                     });
-                     if (alreadySelected.length > 0) {
-                         setSelectedSeats(alreadySelected);
-                     }
-                 }
-             }
-         } catch (error) {
-             console.error("Failed to fetch seat data", error);
-         } finally {
-             setLoading(false);
-         }
-     };
+        try {
+            setLoading(true);
+            const res = await SeatApi.getSeatSelection(showtimeId);
+            if (res.data.statusCode === 200 && res.data.data) {
+                const fetchedData = res.data.data;
+                setData(fetchedData);
+
+                // Khôi phục ghế đã chọn ngay tại đây (chỉ chạy 1 lần khi load)
+                // Dùng Map theo seatId để đảm bảo không trùng lặp
+                const userId = Number(currentUser?.id || currentUser?.user?.id || 0);
+                if (userId) {
+                    const mySeats = new Map();
+                    Object.values(fetchedData.seatsByRow).forEach(row => {
+                        row.forEach(seat => {
+                            if (seat.status === 'HOLDING' && Number(seat.holdByUserId) === userId) {
+                                mySeats.set(seat.seatId, seat);
+                            }
+                        });
+                    });
+                    setSelectedSeats(Array.from(mySeats.values()));
+                }
+            }
+        } catch (error) {
+            console.error("Failed to fetch seat data", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const connectWebSocket = () => {
         const socket = new SockJS('http://localhost:8080/ws-cinema');
         const client = new Client({
             webSocketFactory: () => socket,
             onConnect: () => {
-                console.log('Connected to WebSocket');
                 client.subscribe(`/topic/showtime/${showtimeId}`, (message) => {
                     const statusUpdate = JSON.parse(message.body);
                     updateSeatStatus(statusUpdate);
@@ -109,7 +106,6 @@ const SeatSelection = () => {
             },
             onStompError: (frame) => {
                 console.error('Broker reported error: ' + frame.headers['message']);
-                console.error('Additional details: ' + frame.body);
             },
         });
 
@@ -118,6 +114,7 @@ const SeatSelection = () => {
     };
 
     const updateSeatStatus = (update) => {
+        // Cập nhật sơ đồ ghế
         setData(prev => {
             if (!prev || !prev.seatsByRow) return prev;
             const updatedRows = { ...prev.seatsByRow };
@@ -133,24 +130,34 @@ const SeatSelection = () => {
             }
             return { ...prev, seatsByRow: updatedRows };
         });
+
+        // Nếu ghế chuyển sang AVAILABLE, xóa khỏi danh sách đang chọn
+        if (update.status === 'AVAILABLE') {
+            setSelectedSeats(prev => prev.filter(s => s.seatId !== update.seatId));
+        }
     };
 
     const handleSeatClick = async (seat) => {
-        if (seat.status === 'BOOKED' || (seat.status === 'HOLDING' && !selectedSeats.find(s => s.seatId === seat.seatId))) {
+        const isSelected = selectedSeats.find(s => s.seatId === seat.seatId);
+        const isMyHold = Number(seat.holdByUserId) === currentUserId;
+
+        // Chặn: ghế đã đặt hoặc đang giữ bởi người khác
+        if (seat.status === 'BOOKED' || (seat.status === 'HOLDING' && !isSelected && !isMyHold)) {
             return;
         }
 
-        const isSelected = selectedSeats.find(s => s.seatId === seat.seatId);
-
         try {
-            if (isSelected) {
-                // Release seat (Batch mode)
+            if (isSelected || isMyHold) {
+                // Release ghế (Backend sẽ tự hủy booking PENDING nếu cần)
                 await SeatApi.releaseSeats([seat.seatId], showtimeId);
                 setSelectedSeats(prev => prev.filter(s => s.seatId !== seat.seatId));
             } else {
-                // Hold seat (Batch mode)
+                // Hold ghế mới (Backend sẽ tự hủy booking PENDING cũ trước khi hold)
                 await SeatApi.holdSeats([seat.seatId], showtimeId);
-                setSelectedSeats(prev => [...prev, seat]);
+                // Chống trùng lặp: kiểm tra seatId trước khi thêm
+                setSelectedSeats(prev => 
+                    prev.find(s => s.seatId === seat.seatId) ? prev : [...prev, seat]
+                );
             }
         } catch (error) {
             alert(error.response?.data?.message || "Thao tác thất bại");
@@ -163,73 +170,54 @@ const SeatSelection = () => {
         return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
     };
 
-    /**
-     * Xử lý xác nhận ghế và tạo đơn hàng (Booking).
-     * Gửi danh sách ID ghế đã chọn lên Backend, sau đó điều hướng đến trang thanh toán.
-     */
-    /**
-     * Tính tổng tiền dựa trên số lượng ghế đã chọn và giá của suất chiếu.
-     * Nếu lấy được giá từ từng ghế thì dùng, nếu không thì lấy giá mặc định của Suất chiếu.
-     */
-    const ticketPrice = data?.price || 0;
-    const totalAmount = selectedSeats.length * ticketPrice;
+    const totalAmount = selectedSeats.reduce((sum, seat) => sum + (seat.price || 0), 0);
 
-    /**
-     * Xử lý xác nhận ghế và tạo đơn hàng (Booking).
-     * Gửi danh sách ID ghế đã chọn lên Backend, sau đó điều hướng đến trang thanh toán.
-     */
     const handleConfirmSeats = async () => {
         if (selectedSeats.length === 0) return;
         
         setIsCreatingBooking(true);
         const seatIds = selectedSeats.map(s => s.seatId);
         
-        console.log(">>> [Booking] Bắt đầu tạo đơn hàng...");
-        console.log(">>> [Booking] Showtime ID:", showtimeId);
-        console.log(">>> [Booking] Seat IDs:", seatIds);
-        console.log(">>> [Booking] Tổng tiền:", totalAmount);
-
         try {
-            const res = await BookingService.createBooking(showtimeId, seatIds, totalAmount);
-            console.log(">>> [Booking] Phản hồi từ Server:", res.data);
-            
-            // Backend trả về data chứa bookingId
+            const res = await BookingService.createBooking(showtimeId, seatIds);
             const bookingId = res.data?.data?.bookingId || res.data?.bookingId || res.data?.data?.id || res.data?.id;
             
             if (bookingId) {
-                console.log(">>> [Booking] Tạo thành công! ID:", bookingId);
-                isConfirmedRef.current = true; // Đánh dấu đã xác nhận để useEffect cleanup không giải phóng ghế
-                navigate(`/pay/${bookingId}`); // Điều hướng sang trang thanh toán với ID đơn hàng
+                isConfirmedRef.current = true;
+                navigate(`/pay/${bookingId}`);
             } else {
-                console.error(">>> [Booking] Lỗi: Không tìm thấy bookingId trong phản hồi", res.data);
-                throw new Error("Không lấy được mã đơn hàng (Booking ID)");
+                throw new Error("Không lấy được mã đơn hàng");
             }
         } catch (error) {
-            console.error(">>> [Booking] LỖI khi tạo đặt vé:", error);
-            if (error.response) {
-                console.error(">>> [Booking] Chi tiết lỗi từ Server:", error.response.status, error.response.data);
-            }
             alert(error.response?.data?.message || "Không thể tạo đơn hàng. Vui lòng thử lại.");
         } finally {
             setIsCreatingBooking(false);
         }
     };
 
-
-    if (loading) return <div className="loading">Đang tải sơ đồ ghế...</div>;
-    if (!data) return <div className="error">Không tìm thấy thông tin suất chiếu.</div>;
+    if (loading) return (
+        <div className="seat-selection-container" style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'60vh'}}>
+            <div style={{textAlign:'center'}}>
+                <div className="spinner" style={{margin:'0 auto 16px'}}></div>
+                <div style={{color:'var(--t2)',fontSize:14}}>Đang tải sơ đồ ghế...</div>
+            </div>
+        </div>
+    );
+    if (!data) return (
+        <div className="seat-selection-container" style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'60vh'}}>
+            <div style={{textAlign:'center',color:'var(--t2)'}}>
+                <div style={{fontSize:48,marginBottom:16}}>🎬</div>
+                <div style={{fontSize:16}}>Không tìm thấy thông tin suất chiếu.</div>
+                <button className="back" onClick={() => navigate(-1)} style={{marginTop:20}}>← Quay lại</button>
+            </div>
+        </div>
+    );
 
     const rows = data.seatsByRow || {};
 
     return (
         <div className="seat-selection-container">
-            <button 
-                className="back" 
-                onClick={() => { 
-                    isBackRef.current = true; // Đánh dấu là đang quay lại trang trước, không giải phóng ghế
-                    navigate(-1); 
-                }}
-            >
+            <button className="back" onClick={() => { isBackRef.current = true; navigate(-1); }}>
                 ← Quay lại
             </button>
 
@@ -238,8 +226,8 @@ const SeatSelection = () => {
                     <div className="smtitle">{data.movieTitle}</div>
                     <div className="smmeta">
                         {new Date(data.startTime).toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit' })} 
-                        · {new Date(data.startTime).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })} 
-                        · {data.roomName}
+                        {' · '}{new Date(data.startTime).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })} 
+                        {' · '}{data.roomName}
                     </div>
                 </div>
                 <div className="countdown-box">
@@ -254,10 +242,11 @@ const SeatSelection = () => {
             </div>
 
             <div className="legrow">
-                <div className="legit"><div className="legdot" style={{ background: 'var(--seat-avail)' }}></div>Trống</div>
-                <div className="legit"><div className="legdot" style={{ background: 'var(--gold)' }}></div>Đang chọn</div>
-                <div className="legit"><div className="legdot" style={{ background: 'var(--seat-holding)' }}></div>Đang giữ</div>
+                <div className="legit"><div className="legdot" style={{ background: 'var(--seat-avail)', borderColor: 'var(--seat-avail-border)' }}></div>Trống</div>
+                <div className="legit"><div className="legdot" style={{ background: 'var(--gold)', borderColor: 'var(--gold)' }}></div>Đang chọn</div>
+                <div className="legit"><div className="legdot" style={{ background: 'var(--seat-holding)', borderColor: 'rgba(78, 143, 255, 0.35)' }}></div>Đang giữ</div>
                 <div className="legit"><div className="legdot" style={{ background: 'var(--seat-booked)', opacity: 0.3 }}></div>Đã đặt</div>
+                <div className="legit"><div className="legdot" style={{ background: 'linear-gradient(180deg, rgba(232,160,32,0.35) 0%, rgba(232,160,32,0.1) 100%)', borderColor: 'rgba(232,160,32,0.45)', boxShadow: '0 0 6px rgba(232,160,32,0.12)' }}></div>VIP</div>
             </div>
 
             <div className="seat-grid-container">
@@ -267,7 +256,9 @@ const SeatSelection = () => {
                             <div className="row-label">{rowLabel}</div>
                             {rows[rowLabel].sort((a,b) => a.colNumber - b.colNumber).map(seat => {
                                 const isSelected = selectedSeats.find(s => s.seatId === seat.seatId);
-                                const statusClass = isSelected ? 'selected' : seat.status.toLowerCase();
+                                const isMyHold = Number(seat.holdByUserId) === currentUserId;
+                                
+                                const statusClass = (isSelected || isMyHold) ? 'selected' : seat.status.toLowerCase();
                                 const typeClass = seat.seatType.toLowerCase();
                                 
                                 return (
@@ -275,8 +266,8 @@ const SeatSelection = () => {
                                         key={seat.seatId}
                                         className={`seat-btn ${statusClass} ${typeClass}`}
                                         onClick={() => handleSeatClick(seat)}
-                                        disabled={seat.status === 'BOOKED' || (seat.status === 'HOLDING' && !isSelected)}
-                                        title={`${seat.rowLabel}${seat.colNumber} - ${seat.price.toLocaleString()}đ`}
+                                        disabled={seat.status === 'BOOKED' || (seat.status === 'HOLDING' && !isSelected && !isMyHold)}
+                                        title={`${seat.rowLabel}${seat.colNumber} · ${seat.seatType} · ${seat.price.toLocaleString()}đ`}
                                     >
                                         {seat.colNumber}
                                     </button>
@@ -291,7 +282,10 @@ const SeatSelection = () => {
                 <div className="sel-info">
                     <div className="sel-count">Đã chọn: <strong>{selectedSeats.length}</strong> ghế</div>
                     <div className="sel-names">
-                        {selectedSeats.map(s => `${s.rowLabel}${s.colNumber}`).join(', ')}
+                        {selectedSeats.length > 0
+                            ? selectedSeats.map(s => `${s.rowLabel}${s.colNumber}`).join(', ')
+                            : <span style={{color:'var(--t3)', fontWeight:400}}>Chọn ghế trên sơ đồ</span>
+                        }
                     </div>
                 </div>
                 <div className="price-box">
@@ -301,7 +295,7 @@ const SeatSelection = () => {
                         disabled={selectedSeats.length === 0 || isCreatingBooking}
                         onClick={handleConfirmSeats}
                     >
-                        {isCreatingBooking ? 'Đang xử lý...' : 'Xác nhận ghế'}
+                        {isCreatingBooking ? 'Đang xử lý...' : `Xác nhận ${selectedSeats.length > 0 ? selectedSeats.length + ' ghế' : ''}`}
                     </button>
                 </div>
             </div>

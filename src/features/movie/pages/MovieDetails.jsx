@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import AuthContext from '../../../context/AuthContext';
+import AuthModalContext from '../../../context/AuthModalContext';
 import MovieService from '../services/movie.api';
 import ReviewApi from '../services/review.api';
 import api from '../../../services/apiClient';
@@ -18,6 +19,7 @@ const MovieDetails = () => {
   const navigate = useNavigate();
   const showtimesRef = useRef(null);
   const { isAuthenticated } = useContext(AuthContext);
+  const { openLogin } = useContext(AuthModalContext);
   const [movie, setMovie] = useState(null);
   const [groupedShowtimes, setGroupedShowtimes] = useState({});
   const [dates, setDates] = useState([]);
@@ -140,7 +142,7 @@ const MovieDetails = () => {
             <div className="arow">
               <button className="btn-cta" onClick={() => {
                 if (!isAuthenticated) {
-                  navigate('/login', { state: { from: location } });
+                  openLogin();
                 } else {
                   scrollToShowtimes();
                 }
@@ -166,7 +168,7 @@ const MovieDetails = () => {
                 <p style={{ marginBottom: '20px', color: 'var(--t2)' }}>Vui lòng đăng nhập để xem lịch chiếu và đặt vé.</p>
                 <button 
                   className="btn-gold" 
-                  onClick={() => navigate('/login', { state: { from: location } })}
+                  onClick={() => openLogin()}
                 >
                   Đăng nhập ngay
                 </button>

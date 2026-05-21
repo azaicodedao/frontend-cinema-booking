@@ -1,5 +1,6 @@
 import React from 'react';
 import './DateTabs.css';
+import { formatLocalDate } from '../../../../utils/date';
 
 /**
  * Component hiển thị Thanh danh sách 7 ngày liên tiếp để chọn Lịch Chiếu.
@@ -17,7 +18,7 @@ const DateTabs = ({ selectedDate, onDateChange }) => {
     for (let i = 0; i < 7; i++) {
         const d = new Date(today);
         d.setDate(today.getDate() + i);
-        const dateStr = d.toISOString().split('T')[0];
+        const dateStr = formatLocalDate(d);
         
         let label = '';
         if (i === 0) label = 'Hôm nay';

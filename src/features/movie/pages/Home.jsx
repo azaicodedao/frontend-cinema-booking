@@ -24,7 +24,8 @@ const SLIDE_INTERVAL = 5000;
  */
 const Home = () => {
   const navigate = useNavigate();
-  const [movies, setMovies] = useState([]);
+  const [showingMovies, setShowingMovies] = useState([]);
+  const [comingSoonMovies, setComingSoonMovies] = useState([]);
   const [featuredMovies, setFeaturedMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -44,11 +45,13 @@ const Home = () => {
    */
   useEffect(() => {
     Promise.all([
-      MovieService.getAllMovies(),
+      MovieService.getShowingMovies(),
+      MovieService.getComingSoonMovies(),
       MovieService.getFeaturedMovies(),
       GenreApi.getAll().catch(() => []),
-    ]).then(([movieData, featuredData, genreData]) => {
-      setMovies(Array.isArray(movieData) ? movieData : []);
+    ]).then(([showingData, comingData, featuredData, genreData]) => {
+      setShowingMovies(Array.isArray(showingData) ? showingData : []);
+      setComingSoonMovies(Array.isArray(comingData) ? comingData : []);
       setFeaturedMovies(Array.isArray(featuredData) ? featuredData : []);
       setGenres(Array.isArray(genreData) ? genreData : []);
       setLoading(false);
@@ -62,7 +65,7 @@ const Home = () => {
    */
   const slides = featuredMovies.length > 0
     ? featuredMovies
-    : (movies.length > 0 ? [movies[0]] : []);
+    : (showingMovies.length > 0 ? [showingMovies[0]] : []);
 
   /**
    * Hàm chuyển sang slide tiếp theo (vòng lặp quay về đầu khi hết).
@@ -115,7 +118,7 @@ const Home = () => {
   };
 
   // --- Lọc phim theo từ khóa tìm kiếm và thể loại ---
-  const filteredMovies = movies.filter((movie) => {
+  const filterMovies = (list) => list.filter((movie) => {
     const matchesSearch = movie.title?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesGenre = !selectedGenre ||
       movie.genres?.some((g) => g.id === selectedGenre);
@@ -126,12 +129,8 @@ const Home = () => {
   const [showAllSoon, setShowAllSoon] = useState(false);
   const VISIBLE_LIMIT = 7;
 
-  const nowShowing = filteredMovies.filter(
-    (m) => m.status === 'NOW_SHOWING' || m.status === 'DANG_CHIEU' || m.status === 'SHOWING' || !m.status
-  );
-  const comingSoon = filteredMovies.filter(
-    (m) => m.status === 'COMING_SOON' || m.status === 'SAP_CHIEU' || m.status === 'COMING'
-  );
+  const nowShowing = filterMovies(showingMovies);
+  const comingSoon = filterMovies(comingSoonMovies);
 
   const displayedNowShowing = showAllNow ? nowShowing : nowShowing.slice(0, VISIBLE_LIMIT);
   const displayedComingSoon = showAllSoon ? comingSoon : comingSoon.slice(0, VISIBLE_LIMIT);

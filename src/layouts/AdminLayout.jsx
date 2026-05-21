@@ -8,6 +8,7 @@ const AdminLayout = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [openMenu, setOpenMenu] = useState(null);
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -53,6 +54,7 @@ const AdminLayout = () => {
             ),
             links: [
                 { to: '/admin/rooms', label: 'Quản lý Phòng chiếu' },
+                { to: '/admin/surcharges', label: 'Quản lý Phụ phí' },
                 { to: '/admin/showtimes', label: 'Quản lý Suất chiếu' },
             ],
         },
@@ -80,7 +82,27 @@ const AdminLayout = () => {
         <div className="admin-container">
             {/* Top navbar */}
             <nav className="admin-navbar">
-                <Link to="/admin" className="admin-nav-logo">
+                {/* Mobile menu toggle button */}
+                <button 
+                    className={`admin-mobile-toggle ${mobileOpen ? 'open' : ''}`}
+                    onClick={() => setMobileOpen(!mobileOpen)}
+                    aria-label="Toggle navigation"
+                >
+                    {mobileOpen ? (
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    ) : (
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <line x1="3" y1="18" x2="21" y2="18" />
+                        </svg>
+                    )}
+                </button>
+
+                <Link to="/admin" className="admin-nav-logo" onClick={() => setMobileOpen(false)}>
                     <svg viewBox="0 0 22 22" fill="none">
                         <rect x="1" y="5" width="20" height="14" rx="3" stroke="currentColor" strokeWidth="1.6" />
                         <path d="M8 9l5 3-5 3V9z" fill="currentColor" />
@@ -126,14 +148,52 @@ const AdminLayout = () => {
                     <button onClick={handleLogout} className="admin-nav-link" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                         Đăng xuất
                     </button>
-                    <Link to="/admin/profile" className="admin-nav-avatar" title="Xem hồ sơ">
+                    <Link to="/admin/profile" className="admin-nav-avatar" title="Xem hồ sơ" onClick={() => setMobileOpen(false)}>
                         {currentUser?.fullName?.charAt(0)?.toUpperCase() || 'A'}
                     </Link>
                 </div>
             </nav>
 
-            {/* Overlay to close dropdown */}
+            {/* Mobile Drawer (Outside Navbar to avoid stacking context issues due to backdrop-filter) */}
+            <div className={`admin-mobile-drawer ${mobileOpen ? 'open' : ''}`}>
+                {navItems.map((item) => (
+                    <div key={item.key} className="admin-mobile-menu-group">
+                        <button
+                            className={`admin-mobile-menu-btn ${item.links.some(l => location.pathname.startsWith(l.to)) ? 'active' : ''}`}
+                            onClick={() => toggleMenu(item.key)}
+                        >
+                            <span className="admin-mobile-menu-btn-content">
+                                {item.icon}
+                                {item.label}
+                            </span>
+                            <svg className={`chevron ${openMenu === item.key ? 'open' : ''}`} viewBox="0 0 12 12" fill="none">
+                                <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                            </svg>
+                        </button>
+                        {openMenu === item.key && (
+                            <div className="admin-mobile-submenu">
+                                {item.links.map((l) => (
+                                    <Link
+                                        key={l.to}
+                                        to={l.to}
+                                        className={`admin-mobile-submenu-item ${location.pathname === l.to ? 'active' : ''}`}
+                                        onClick={() => {
+                                            setOpenMenu(null);
+                                            setMobileOpen(false);
+                                        }}
+                                    >
+                                        {l.label}
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+
+            {/* Overlay to close dropdown / mobile menu */}
             {openMenu && <div className="admin-overlay" onClick={() => setOpenMenu(null)} />}
+            {mobileOpen && <div className="admin-mobile-overlay" onClick={() => setMobileOpen(false)} />}
 
             <main className="admin-main">
                 <Outlet />

@@ -8,6 +8,7 @@ const AuthContext = createContext({ // giá trị mặc định cho Context này
   logout: () => {},
   isAuthenticated: false, // Một biến kiểu Boolean (đúng/sai) để kiểm tra nhanh xem người dùng đã đăng nhập hay chưa (thường dùng để bảo vệ các Router)
   isAdmin: false,
+  isInitialized: false,
 });
 
 export default AuthContext;

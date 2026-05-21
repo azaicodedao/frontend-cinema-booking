@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as adminApi from '../services/admin.api';
 import '../../../layouts/AdminLayout.css';
+import { formatLocalDate } from '../../../utils/date';
 
 const ShowtimeStatsPage = () => {
   const [stats, setStats] = useState([]);
@@ -58,16 +59,16 @@ const ShowtimeStatsPage = () => {
       if (dateRange === '7days') {
         const d = new Date();
         d.setDate(d.getDate() - 7);
-        params.startDate = d.toISOString().split('T')[0];
-        params.endDate = now.toISOString().split('T')[0];
+        params.startDate = formatLocalDate(d);
+        params.endDate = formatLocalDate(now);
       } else if (dateRange === '30days') {
         const d = new Date();
         d.setDate(d.getDate() - 30);
-        params.startDate = d.toISOString().split('T')[0];
-        params.endDate = now.toISOString().split('T')[0];
+        params.startDate = formatLocalDate(d);
+        params.endDate = formatLocalDate(now);
       } else if (dateRange === 'thisMonth') {
-        params.startDate = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
-        params.endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
+        params.startDate = formatLocalDate(new Date(now.getFullYear(), now.getMonth(), 1));
+        params.endDate = formatLocalDate(new Date(now.getFullYear(), now.getMonth() + 1, 0));
       }
 
       const res = await adminApi.getShowtimeStats(params);
@@ -194,16 +195,22 @@ const ShowtimeStatsPage = () => {
         </table>
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="admin-pagination">
-          <button className="btn-admin-outline" disabled={page === 0} onClick={() => setPage(p => p - 1)}>
+      {/* Phân trang */}
+      {!loading && totalPages > 1 && (
+        <div style={{ padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border)' }}>
+          <button
+            className="btn-admin-secondary"
+            disabled={page === 0}
+            onClick={() => setPage(p => p - 1)}
+          >
             Trang trước
           </button>
-          <span style={{ color: 'var(--t2)', fontSize: 13 }}>
-            Trang {page + 1} / {totalPages}
-          </span>
-          <button className="btn-admin-outline" disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)}>
+          <span style={{ color: 'var(--t2)', fontSize: 14 }}>Trang {page + 1} / {totalPages}</span>
+          <button
+            className="btn-admin-secondary"
+            disabled={page >= totalPages - 1}
+            onClick={() => setPage(p => p + 1)}
+          >
             Trang sau
           </button>
         </div>

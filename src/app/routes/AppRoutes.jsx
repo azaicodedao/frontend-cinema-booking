@@ -17,8 +17,7 @@ const LoadingScreen = () => (
 // Lazy load Customer pages
 const Home = lazy(() => import('../../features/movie/pages/Home'));
 const Movies = lazy(() => import('../../features/movie/pages/Movies'));
-const Login = lazy(() => import('../../features/auth/pages/Login'));
-const Register = lazy(() => import('../../features/auth/pages/Register'));
+// Login và Register đã được chuyển sang AuthModal - không còn là trang riêng biệt
 const Profile = lazy(() => import('../../features/auth/pages/Profile'));
 const MovieDetails = lazy(() => import('../../features/movie/pages/MovieDetails'));
 const SeatSelection = lazy(() => import('../../features/booking/pages/SeatSelection'));
@@ -28,11 +27,11 @@ const TicketView = lazy(() => import('../../features/user/pages/TicketView'));
 const MovieReview = lazy(() => import('../../features/user/pages/MovieReview'));
 
 // Lazy load Admin pages
-const AdminDashboard = lazy(() => import('../../features/admin/pages/AdminDashboard'));
 const UsersPage = lazy(() => import('../../features/admin/pages/UsersPage'));
 const GenresPage = lazy(() => import('../../features/admin/pages/GenresPage'));
 const MoviesPage = lazy(() => import('../../features/admin/pages/MoviesPage'));
 const RoomsPage = lazy(() => import('../../features/admin/pages/RoomsPage'));
+const RoomSeatTypePage = lazy(() => import('../../features/admin/pages/RoomSeatTypePage'));
 const ShowtimesPage = lazy(() => import('../../features/admin/pages/ShowtimesPage'));
 const AdminProfilePage = lazy(() => import('../../features/admin/pages/AdminProfilePage'));
 const BookingStatsPage = lazy(() => import('../../features/admin/pages/BookingStatsPage'));
@@ -50,8 +49,9 @@ const AppRoutes = () => {
         <Route element={<AdminRedirectGuard><MainLayout /></AdminRedirectGuard>}>
           <Route path="/" element={<Home />} />
           <Route path="/movies" element={<Movies />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          {/* /login và /register redirect về trang chủ - dùng AuthModal thay thế */}
+          <Route path="/login" element={<Navigate to="/" state={{ openLogin: true }} replace />} />
+          <Route path="/register" element={<Navigate to="/" replace />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
           
           {/* Protected customer routes */}
@@ -72,13 +72,13 @@ const AppRoutes = () => {
           <Route path="genres" element={<GenresPage />} />
           <Route path="movies" element={<MoviesPage />} />
           <Route path="rooms" element={<RoomsPage />} />
+          <Route path="surcharges" element={<RoomSeatTypePage />} />
           <Route path="showtimes" element={<ShowtimesPage />} />
           <Route path="profile" element={<AdminProfilePage />} />
           <Route path="stats/bookings" element={<BookingStatsPage />} />
           <Route path="stats/showtimes" element={<ShowtimeStatsPage />} />
           
-          {/* Dashboard tổng quan (giữ lại nếu cần dùng sau này) */}
-          <Route path="dashboard" element={<AdminDashboard />} />
+          {/* Dashboard tổng quan đã được thay thế bằng các trang thống kê */}
         </Route>
       </Routes>
     </Suspense>

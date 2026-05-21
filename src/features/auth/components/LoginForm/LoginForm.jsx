@@ -76,7 +76,7 @@ const LoginForm = ({ onSubmit, loading = false, error = '' }) => {
       />
 
       <Button type="submit" fullWidth loading={loading} size="large">
-        Sign In
+        Đăng Nhập
       </Button>
     </form>
   );

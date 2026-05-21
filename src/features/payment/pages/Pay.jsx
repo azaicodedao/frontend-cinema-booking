@@ -89,7 +89,13 @@ const Pay = () => {
 
   return (
     <div className="inner">
-      <button className="back" onClick={() => navigate(-1)}>← Chọn lại ghế</button>
+      <button className="back" onClick={() => {
+        if (booking?.showtimeId) {
+          navigate(`/booking/seats/${booking.showtimeId}`);
+        } else {
+          navigate(-1);
+        }
+      }}>← Chọn lại ghế</button>
       <div className="ptitle">Xác nhận đặt vé</div>
       <div className="psub">Kiểm tra thông tin và chọn phương thức thanh toán</div>
 

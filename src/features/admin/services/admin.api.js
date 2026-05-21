@@ -39,3 +39,16 @@ export const deleteShowtime = (id) => api.delete(`/showtimes/${id}`);
 export const getMovieBookingStats = (params) => api.get('/statistics/movies/bookings', { params });
 export const getShowtimeStats = (params) => api.get('/statistics/showtimes', { params });
 export const getShowtimeSeatStats = (id) => api.get(`/statistics/showtimes/${id}/seats`);
+export const getDailyRevenue = (params) => api.get('/statistics/revenue/daily', { params });
+export const getRevenueChart = (params) => api.get('/statistics/revenue/chart', { params });
+
+// ── Surcharge (Room/Seat Types) Management ───────────────────────
+export const getRoomTypes = () => api.get('/admin/room-types');
+export const createRoomType = (data) => api.post('/admin/room-types', data);
+export const updateRoomType = (id, data) => api.put(`/admin/room-types/${id}`, data);
+export const deleteRoomType = (id) => api.delete(`/admin/room-types/${id}`);
+
+export const getSeatTypes = () => api.get('/admin/seat-types');
+export const createSeatType = (data) => api.post('/admin/seat-types', data);
+export const updateSeatType = (id, data) => api.put(`/admin/seat-types/${id}`, data);
+export const deleteSeatType = (id) => api.delete(`/admin/seat-types/${id}`);
