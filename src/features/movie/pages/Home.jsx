@@ -153,7 +153,7 @@ const Home = () => {
             key={movie.id || index}
             className={`home-page__slide ${index === activeSlide ? 'home-page__slide--active' : ''}`}
           >
-            {/* Ảnh nền poster */}
+            {/* Ảnh nền poster được làm mờ (blurred backdrop) */}
             <div
               className="home-page__hero-bg"
               style={movie.posterUrl ? { backgroundImage: `url(${movie.posterUrl})` } : {}}
@@ -161,39 +161,57 @@ const Home = () => {
             {/* Lớp phủ gradient tối */}
             <div className="home-page__hero-overlay" />
 
-            {/* Nội dung chữ và nút */}
-            <div className="home-page__hero-content">
-              <div className="home-page__hero-eyebrow">Phim nổi bật tuần này</div>
-              <div className="home-page__hero-title">{movie.title || 'CineBook'}</div>
-              <div className="home-page__hero-meta">
-                {movie.genres?.[0]?.name && <span>{movie.genres[0].name}</span>}
-                {movie.duration && (
-                  <>
-                    <div className="home-page__hero-sep" />
-                    <span>{movie.duration} phút</span>
-                  </>
-                )}
-                {movie.ageRating && (
-                  <>
-                    <div className="home-page__hero-sep" />
-                    <span>T{movie.ageRating}+</span>
-                  </>
-                )}
+            {/* Khung nội dung chính */}
+            <div className="home-page__hero-inner">
+              {/* Nội dung chữ và nút */}
+              <div className="home-page__hero-content">
+                <div className="home-page__hero-eyebrow">Phim nổi bật tuần này</div>
+                <div className="home-page__hero-title">{movie.title || 'CineBook'}</div>
+                <div className="home-page__hero-meta">
+                  {movie.genres?.[0]?.name && <span className="hero-meta-badge">{movie.genres[0].name}</span>}
+                  {movie.duration && (
+                    <>
+                      <div className="home-page__hero-sep" />
+                      <span>{movie.duration} phút</span>
+                    </>
+                  )}
+                  {movie.ageRating && (
+                    <>
+                      <div className="home-page__hero-sep" />
+                      <span className="hero-meta-age">T{movie.ageRating}+</span>
+                    </>
+                  )}
+                </div>
+                <div className="home-page__hero-btns">
+                  <button
+                    className="btn btn--primary btn--large"
+                    onClick={() => handleBookClick(movie)}
+                  >
+                    Đặt vé ngay
+                  </button>
+                  <button
+                    className="btn btn--ghost btn--large"
+                    onClick={() => handleTrailerClick(movie)}
+                  >
+                    ▶ Xem trailer
+                  </button>
+                </div>
               </div>
-              <div className="home-page__hero-btns">
-                <button
-                  className="btn btn--primary btn--large"
-                  onClick={() => handleBookClick(movie)}
+
+              {/* Poster 3D nổi bật bên phải */}
+              {movie.posterUrl && (
+                <div 
+                  className="home-page__hero-poster-wrapper"
+                  onClick={() => navigate(`/movie/${movie.id}`)}
                 >
-                  Đặt vé ngay
-                </button>
-                <button
-                  className="btn btn--ghost btn--large"
-                  onClick={() => handleTrailerClick(movie)}
-                >
-                  ▶ Xem trailer
-                </button>
-              </div>
+                  <div className="home-page__hero-poster-glow" style={{ backgroundImage: `url(${movie.posterUrl})` }} />
+                  <img
+                    src={movie.posterUrl}
+                    alt={movie.title}
+                    className="home-page__hero-poster-img"
+                  />
+                </div>
+              )}
             </div>
           </div>
         ))}

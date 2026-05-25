@@ -87,39 +87,15 @@
 }
 
 .btn-outline {
-  background: transparent;
-  color: var(--t1);
-  border: 1px solid var(--border-h);
-  border-radius: var(--rsm);
   padding: 8px 18px;
   font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: var(--fb);
-  transition: all 0.14s;
-  white-space: nowrap;
-}
-
-.btn-outline:hover {
-  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--rsm);
 }
 
 .btn-gold {
-  background: var(--gold);
-  color: #08080d;
-  border: none;
-  border-radius: var(--rsm);
   padding: 8px 18px;
   font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: var(--fh);
-  transition: opacity 0.14s;
-  white-space: nowrap;
-}
-
-.btn-gold:hover {
-  opacity: 0.88;
+  border-radius: var(--rsm);
 }
 
 .nav-avatar {

@@ -31,38 +31,50 @@
   pointer-events: auto; /* Cho phép bấm nút khi slide đang hiển thị */
 }
 
-/* --- Ảnh nền poster phim --- */
+/* --- Ảnh nền poster phim (Đã làm mờ premium) --- */
 .home-page__hero-bg {
   position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 70%;
+  inset: 0;
   background-color: var(--bg2);
-  background-image: linear-gradient(135deg, #1a1030 0%, #0e1428 45%, #1c1018 100%);
   background-size: cover;
-  background-position: center 30%;
+  background-position: center 25%;
   background-repeat: no-repeat;
-  transition: background-image 0.5s ease;
+  filter: blur(40px) saturate(1.8) brightness(0.45);
+  transform: scale(1.2); /* Tránh viền trắng khi blur */
+  opacity: 0.9;
+  transition: background-image 0.8s ease-in-out;
 }
 
-/* --- Lớp phủ gradient tối giúp chữ dễ đọc --- */
+/* --- Lớp phủ gradient tối giúp chữ dễ đọc và tập trung tiêu điểm --- */
 .home-page__hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(9, 9, 15, 0.97) 28%, rgba(9, 9, 15, 0.3) 65%, rgba(9, 9, 15, 0.75) 100%);
+  background: linear-gradient(90deg, #09090f 0%, rgba(9, 9, 15, 0.95) 30%, rgba(9, 9, 15, 0.6) 65%, rgba(9, 9, 15, 0.1) 100%);
+  z-index: 1;
 }
 
-/* --- Vùng chứa nội dung chữ trên mỗi slide --- */
-.home-page__hero-content {
+/* --- Khung chứa nội dung trung tâm căn chỉnh Flexbox --- */
+.home-page__hero-inner {
   position: relative;
   z-index: 2;
-  padding: 0 40px 50px;
-  max-width: 500px;
-  /* Hiệu ứng trượt nhẹ khi nội dung xuất hiện */
-  transform: translateY(15px);
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 40px 30px; /* Padding dưới để tránh đè chấm điều hướng */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+/* --- Vùng chứa nội dung chữ bên trái --- */
+.home-page__hero-content {
+  flex: 1;
+  max-width: 600px;
+  transform: translateY(20px);
   opacity: 0;
-  transition: transform 0.6s ease 0.2s, opacity 0.6s ease 0.2s;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
 }
 
 /* Khi slide active, nội dung trượt lên và hiện ra */
@@ -75,33 +87,70 @@
 .home-page__hero-eyebrow {
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 12px;
   text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.home-page__hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 1px;
 }
 
 /* --- Tên phim lớn --- */
 .home-page__hero-title {
   font-family: var(--fh);
-  font-size: 48px;
+  font-size: 46px;
   font-weight: 850;
-  line-height: 1.05;
-  margin-bottom: 12px;
-  letter-spacing: -0.02em;
-  text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  line-height: 1.15;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
 }
 
 /* --- Thông tin phụ (thể loại, thời lượng, giới hạn tuổi) --- */
 .home-page__hero-meta {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 24px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 30px;
   display: flex;
   gap: 14px;
   align-items: center;
   font-weight: 500;
+}
+
+/* Các nhãn thể loại và tuổi dạng badge */
+.hero-meta-badge {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.hero-meta-age {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 750;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  letter-spacing: 0.05em;
 }
 
 /* Dấu chấm tròn ngăn cách giữa các item meta */
@@ -147,32 +196,12 @@
   box-shadow: 0 4px 12px rgba(255, 200, 55, 0.2);
 }
 
-.btn--primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 200, 55, 0.35);
-  filter: brightness(1.1);
-}
-
-.btn--primary:active {
-  transform: translateY(0);
-}
-
 /* Nút Xem trailer - Ghost style */
 .btn--ghost {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
   border: 1.5px solid rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(4px);
-}
-
-.btn--ghost:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.4);
-  transform: translateY(-2px);
-}
-
-.btn--ghost:active {
-  transform: translateY(0);
 }
 
 /* ============================================================
@@ -239,4 +268,113 @@
   gap: 10px;
   margin: 32px 0 26px;
   flex-wrap: wrap;
+}
+
+/* ============================================================
+   FLOATING POSTER - Poster 3D hiển thị ở bên phải Hero Banner
+   ============================================================ */
+.home-page__hero-poster-wrapper {
+  position: relative;
+  width: 240px;
+  height: 345px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+}
+
+.home-page__slide--active .home-page__hero-poster-wrapper {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.home-page__hero-poster-wrapper:hover {
+  transform: translateY(-8px) scale(1.03);
+}
+
+.home-page__hero-poster-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 5px 15px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 2;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-page__hero-poster-wrapper:hover .home-page__hero-poster-img {
+  box-shadow: 0 25px 50px rgba(255, 200, 55, 0.2), 0 10px 25px rgba(0, 0, 0, 0.7);
+  border-color: rgba(255, 200, 55, 0.6);
+}
+
+/* Hiệu ứng bóng sáng mờ phía sau poster */
+.home-page__hero-poster-glow {
+  position: absolute;
+  inset: -10px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(30px) opacity(0.7);
+  border-radius: 20px;
+  z-index: 1;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+}
+
+.home-page__hero-poster-wrapper:hover .home-page__hero-poster-glow {
+  transform: scale(1.1);
+  filter: blur(35px) opacity(0.9);
+}
+
+/* ============================================================
+   RESPONSIVE LAYOUT FOR HERO BANNER
+   ============================================================ */
+@media (max-width: 900px) {
+  .home-page__hero {
+    height: 480px;
+  }
+  .home-page__hero-inner {
+    padding: 0 30px 40px;
+    gap: 30px;
+  }
+  .home-page__hero-title {
+    font-size: 40px;
+  }
+  .home-page__hero-poster-wrapper {
+    width: 200px;
+    height: 290px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-page__hero {
+    height: auto;
+    min-height: 380px;
+  }
+  .home-page__hero-inner {
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 24px 50px;
+    gap: 20px;
+    text-align: center;
+  }
+  .home-page__hero-poster-wrapper {
+    display: none; /* Ẩn poster trên màn hình nhỏ để tránh quá chật chội */
+  }
+  .home-page__hero-content {
+    max-width: 100%;
+    transform: translateY(15px);
+  }
+  .home-page__hero-eyebrow {
+    justify-content: center;
+  }
+  .home-page__hero-meta {
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .home-page__hero-btns {
+    justify-content: center;
+  }
 }

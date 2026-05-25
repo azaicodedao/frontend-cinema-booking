@@ -93,24 +93,9 @@
 }
 
 .movie-info__trailer-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
   padding: 12px 24px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 10px;
-  color: var(--text-main);
-  text-decoration: none;
-  font-weight: 600;
   font-size: 0.95rem;
-  transition: all 0.3s ease;
-}
-
-.movie-info__trailer-btn:hover {
-  background: rgba(255, 51, 102, 0.15);
-  border-color: var(--primary);
-  color: var(--primary);
 }
 
 @media (max-width: 768px) {

@@ -56,37 +56,152 @@ button:hover {
   box-shadow: none;
 }
 
-.btn-cta {
-  background: var(--gold);
-  color: #000;
+/* ============================================================
+   UNIFIED BUTTON STYLES & HOVER EFFECTS (BẢO TRÌ TẬP TRUNG)
+   ============================================================ */
+
+/* Cấu hình cơ bản của mọi nút bấm */
+.btn, .btn-cta, .btn-gold, .btn-outline, .btn-sec, .btn-primary, .btn-trailer, .movie-info__trailer-btn, .review-btn-small, .pagination__btn, .btn-admin-primary, .btn-admin-secondary, .btn-admin-danger, .btn-admin-success {
   font-family: var(--fh);
   font-weight: 700;
-  padding: 12px 24px;
-  border-radius: var(--rsm);
-  box-shadow: 0 4px 15px var(--gold-glow);
-  transition: all 0.2s;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
 }
 
-.btn-cta:hover {
-  background: #fff;
+/* --- NHÓM NÚT CHÍNH (PRIMARY / GOLD / CTA) --- */
+.btn--primary, .btn-cta, .btn-gold, .btn-primary, .btn-admin-primary {
+  background: var(--gold);
+  color: #08080d;
+}
+
+.btn--primary:hover:not(:disabled),
+.btn-cta:hover:not(:disabled),
+.btn-gold:hover:not(:disabled),
+.btn-primary:hover:not(:disabled),
+.btn-admin-primary:hover:not(:disabled) {
+  filter: brightness(1.1);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(232, 160, 32, 0.3);
+  box-shadow: 0 4px 15px rgba(232, 160, 32, 0.4);
+}
+
+.btn--primary:disabled,
+.btn-cta:disabled,
+.btn-gold:disabled,
+.btn-primary:disabled,
+.btn-admin-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* --- NHÓM NÚT PHỤ (SECONDARY / OUTLINE / GHOST) --- */
+.btn--secondary, .btn-sec, .btn-outline, .btn--ghost, .btn-trailer, .movie-info__trailer-btn, .review-btn-small, .btn-admin-secondary {
+  background: transparent;
+  color: var(--t1);
+  border: 1px solid var(--border-h);
+}
+
+.btn--secondary:hover:not(:disabled),
+.btn-sec:hover:not(:disabled),
+.btn-outline:hover:not(:disabled),
+.btn--ghost:hover:not(:disabled),
+.btn-trailer:hover:not(:disabled),
+.movie-info__trailer-btn:hover:not(:disabled),
+.review-btn-small:hover:not(:disabled),
+.btn-admin-secondary:hover:not(:disabled) {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(232, 160, 32, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(232, 160, 32, 0.15);
+}
+
+.btn--secondary:disabled,
+.btn-sec:disabled,
+.btn-outline:disabled,
+.btn--ghost:disabled,
+.btn-trailer:disabled,
+.movie-info__trailer-btn:disabled,
+.review-btn-small:disabled,
+.btn-admin-secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* --- NHÓM NÚT ĐẶC BIỆT CỦA ADMIN (DANGER & SUCCESS) --- */
+.btn-admin-danger {
+  background: rgba(232, 64, 64, 0.12);
+  color: var(--red);
+  border: 1px solid rgba(232, 64, 64, 0.25);
+}
+
+.btn-admin-danger:hover:not(:disabled) {
+  background: rgba(232, 64, 64, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-admin-danger:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-admin-success {
+  background: rgba(46, 200, 122, 0.12);
+  color: var(--green);
+  border: 1px solid rgba(46, 200, 122, 0.25);
+}
+
+.btn-admin-success:hover:not(:disabled) {
+  background: rgba(46, 200, 122, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-admin-success:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Phân trang dạng nút phụ không dịch chuyển (translateY) khi hover */
+.pagination__btn {
+  background: transparent;
+  color: var(--t2);
+  border: 1px solid var(--border);
+}
+
+.pagination__btn:hover:not(:disabled) {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(232, 160, 32, 0.12);
+}
+
+.pagination__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Cấu hình kích thước riêng biệt cho các nút CTA mặc định toàn cục */
+.btn-cta {
+  padding: 12px 24px;
+  border-radius: var(--rsm);
 }
 
 .btn-sec {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--t1);
-  border: 1px solid var(--border);
   padding: 12px 24px;
   border-radius: var(--rsm);
-  font-weight: 600;
-  transition: all 0.2s;
-}
-
-.btn-sec:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--border-h);
-  transform: translateY(-2px);
 }
 
 a {

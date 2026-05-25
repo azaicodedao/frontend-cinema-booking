@@ -2,49 +2,7 @@
    Các quy tắc CSS dùng cho Component Button dùng chung
    ========================================================= */
 
-/* Định dạng cơ bản (viền, font, căn giữa) của mọi nút bấm */
-.btn {
-  border-radius: var(--rsm);
-  font-family: var(--fh);
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.14s;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: none;
-}
-
-.btn:hover {
-  opacity: 0.88;
-  transform: none;
-  box-shadow: none;
-}
-
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* --- Các Biến thể màu sắc (Variants) --- */
-.btn--primary {
-  background: var(--gold);
-  color: #08080d;
-}
-
-.btn--secondary {
-  background: transparent;
-  color: var(--t2);
-  border: 1px solid var(--border-h);
-  font-family: var(--fb);
-  font-weight: 500;
-}
-
-.btn--secondary:hover {
-  color: var(--t1);
-}
+/* Định dạng cơ bản được kế thừa từ index.css, ở đây chỉ định nghĩa các lớp kích thước, spinner và biến thể nguy hiểm */
 
 .btn--danger {
   background: rgba(232, 64, 64, 0.12);
@@ -52,12 +10,9 @@
   border: 1px solid rgba(232, 64, 64, 0.2);
 }
 
-.btn--ghost {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--t1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  font-family: var(--fb);
-  font-weight: 500;
+.btn--danger:hover:not(:disabled) {
+  background: rgba(232, 64, 64, 0.2);
+  transform: translateY(-2px);
 }
 
 /* --- Các Kích thước (Sizes) --- */

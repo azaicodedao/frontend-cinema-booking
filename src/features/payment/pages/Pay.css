@@ -30,31 +30,9 @@
 }
 
 .btn-primary {
-    background: var(--gold);
-    color: #000;
-    border: none;
     border-radius: var(--rmd);
     padding: 14px 24px;
-    font-family: var(--fh);
-    font-weight: 800;
     font-size: 15px;
-    cursor: pointer;
-    transition: all .2s ease;
-    box-shadow: 0 4px 15px rgba(232, 160, 32, .25);
-}
-
-.btn-primary:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(232, 160, 32, .35);
-    background: #f0a82b;
-}
-
-.btn-primary:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-    background: var(--bg3);
-    color: var(--t3);
-    box-shadow: none;
 }
 
 .back {

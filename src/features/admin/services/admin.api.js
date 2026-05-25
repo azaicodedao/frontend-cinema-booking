@@ -52,3 +52,13 @@ export const getSeatTypes = () => api.get('/admin/seat-types');
 export const createSeatType = (data) => api.post('/admin/seat-types', data);
 export const updateSeatType = (id, data) => api.put(`/admin/seat-types/${id}`, data);
 export const deleteSeatType = (id) => api.delete(`/admin/seat-types/${id}`);
+
+export const uploadFile = (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return api.post('/admin/upload', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+};

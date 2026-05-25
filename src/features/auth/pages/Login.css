@@ -93,31 +93,11 @@
 
 .btn-cta {
   width: 100%;
-  background: var(--gold);
-  color: #08080d;
-  border: none;
-  border-radius: var(--rsm);
   padding: 14px;
   font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: var(--fh);
-  transition: all 0.2s;
   display: block;
   margin-top: 10px;
-  box-shadow: 0 4px 15px var(--gold-glow);
-}
-
-.btn-cta:hover {
-  background: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(232, 160, 32, 0.3);
-}
-
-.btn-cta:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
+  border-radius: var(--rsm);
 }
 
 .auth-error {

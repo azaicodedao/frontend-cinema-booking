@@ -25,6 +25,7 @@ const MoviesPage = () => {
   const [editMovie, setEditMovie] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [formLoading, setFormLoading] = useState(false);
+  const [uploadLoading, setUploadLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
 
   const fetchMovies = useCallback(async () => {
@@ -82,6 +83,33 @@ const MoviesPage = () => {
   const handleFormChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showError('Chỉ chấp nhận file hình ảnh');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      showError('Kích thước ảnh tối đa là 5MB');
+      return;
+    }
+
+    setUploadLoading(true);
+    try {
+      const res = await adminApi.uploadFile(file);
+      const url = res.data.data.url;
+      setForm(prev => ({ ...prev, posterUrl: url }));
+      showSuccess('Tải poster lên thành công!');
+    } catch (err) {
+      showError(err.response?.data?.message || 'Không thể tải ảnh lên Cloudinary');
+    } finally {
+      setUploadLoading(false);
+    }
   };
 
   const toggleGenre = (id) => {
@@ -258,8 +286,39 @@ const MoviesPage = () => {
                 </div>
               </div>
               <div className="admin-form-group">
-                <label className="admin-form-label">URL Poster</label>
-                <input className="admin-form-input" name="posterUrl" value={form.posterUrl} onChange={handleFormChange} placeholder="https://..." />
+                <label className="admin-form-label">Poster Phim *</label>
+                <div className="admin-poster-upload-container">
+                  <div className="admin-poster-upload-box">
+                    {uploadLoading ? (
+                      <div className="admin-poster-upload-status">
+                        <div className="admin-spinner"></div>
+                        <span>Đang tải ảnh lên...</span>
+                      </div>
+                    ) : form.posterUrl ? (
+                      <div className="admin-poster-preview-wrapper">
+                        <img src={form.posterUrl} alt="Poster Preview" className="admin-poster-upload-preview" />
+                        <button type="button" className="admin-poster-delete-btn" onClick={() => setForm(prev => ({ ...prev, posterUrl: '' }))}>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14 }}>
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                          </svg>
+                          Xóa ảnh
+                        </button>
+                      </div>
+                    ) : (
+                      <label className="admin-poster-upload-placeholder">
+                        <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="upload-icon" style={{ width: 32, height: 32 }}>
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                          <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <span>Tải ảnh lên từ thiết bị</span>
+                        <span className="upload-subtitle">Hỗ trợ JPG, PNG, WEBP (Tối đa 5MB)</span>
+                      </label>
+                    )}
+                  </div>
+                </div>
               </div>
               <div className="admin-form-group">
                 <label className="admin-form-label">URL Trailer</label>
@@ -310,7 +369,7 @@ const MoviesPage = () => {
               </div>
               <div className="admin-modal-footer">
                 <button type="button" className="btn-admin-secondary" onClick={closeModal}>Hủy</button>
-                <button type="submit" className="btn-admin-primary" disabled={formLoading}>
+                <button type="submit" className="btn-admin-primary" disabled={formLoading || uploadLoading}>
                   {formLoading ? 'Đang lưu...' : editMovie ? 'Cập nhật' : 'Lưu'}
                 </button>
               </div>
