@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { PATH_GENERATORS } from '../../../../config/routes';
 import './MovieCard.css';
 
 /**
@@ -16,7 +17,7 @@ const MovieCard = ({ movie }) => {
   const genreName = genres.length > 0 ? genres[0].name : '';
 
   return (
-    <div className="movie-card" onClick={() => navigate(`/movie/${movie.id}`)}>
+    <div className="movie-card" onClick={() => navigate(PATH_GENERATORS.movieDetails(movie.id))}>
       <div className="movie-card__poster">
         {movie.posterUrl ? (
           <img src={movie.posterUrl} alt={movie.title} className="movie-card__poster-bg" />

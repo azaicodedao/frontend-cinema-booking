@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import AuthContext from '../../context/AuthContext';
 import AuthService from '../../features/auth/services/auth.api';
+import { isAdminUser } from '../../utils/auth';
 
 /**
  * Provider quản lý trạng thái xác thực toàn cục cho ứng dụng.
@@ -55,11 +56,7 @@ const AuthProvider = ({ children }) => {
    * Kiểm tra quyền Admin cực kỳ linh hoạt (hỗ trợ mọi định dạng: string, array, nested).
    * Đảm bảo Admin luôn được nhận diện đúng dù dữ liệu trả về từ Backend có thay đổi cấu trúc.
    */
-  const isAdmin = 
-    currentUser?.role === 'ADMIN' || 
-    currentUser?.user?.role === 'ADMIN' ||
-    (Array.isArray(currentUser?.roles) && currentUser.roles.includes('ADMIN')) ||
-    (Array.isArray(currentUser?.user?.roles) && currentUser.user.roles.includes('ADMIN'));
+  const isAdmin = isAdminUser(currentUser);
 
   if (import.meta.env.DEV && currentUser) {
     console.log('[AuthProvider] Auth state:', {

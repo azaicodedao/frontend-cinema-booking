@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import * as adminApi from '../services/admin.api';
+import AdminPagination from '../components/AdminPagination/AdminPagination';
 import '../../../layouts/AdminLayout.css';
 
 const ROLE_OPTIONS = ['', 'CUSTOMER', 'ADMIN'];
@@ -190,7 +191,8 @@ const UsersPage = () => {
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
+      <AdminPagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+      {false && totalPages > 1 && (
         <div className="admin-pagination">
           <button className="admin-page-btn" disabled={page === 0} onClick={() => setPage(p => p - 1)}>‹</button>
           {Array.from({ length: totalPages }, (_, i) => (

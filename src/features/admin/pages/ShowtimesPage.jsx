@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import * as adminApi from '../services/admin.api';
+import AdminPagination from '../components/AdminPagination/AdminPagination';
 import '../../../layouts/AdminLayout.css';
 
 const STATUS_LABELS = { SCHEDULED: 'Lên lịch', ONGOING: 'Đang chiếu', FINISHED: 'Đã chiếu', CANCELLED: 'Hủy', OPEN: 'Mở bán', CLOSED: 'Đã đóng/Xoá' };
@@ -258,7 +259,8 @@ const ShowtimesPage = () => {
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
+      <AdminPagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+      {false && totalPages > 1 && (
         <div className="admin-pagination">
           <button className="admin-page-btn" disabled={page === 0} onClick={() => setPage(p => p - 1)}>‹</button>
           {Array.from({ length: totalPages }, (_, i) => (

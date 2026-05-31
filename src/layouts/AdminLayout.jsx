@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import { ROUTES } from '../config/routes';
 import './AdminLayout.css';
 
 const AdminLayout = () => {
@@ -12,7 +13,7 @@ const AdminLayout = () => {
 
     const handleLogout = () => {
         logout();
-        navigate('/', { replace: true });
+        navigate(ROUTES.HOME, { replace: true });
     };
 
     const navItems = [
@@ -26,7 +27,7 @@ const AdminLayout = () => {
                 </svg>
             ),
             links: [
-                { to: '/admin/users', label: 'Danh sách tài khoản' },
+                { to: ROUTES.ADMIN_USERS, label: 'Danh sách tài khoản' },
             ],
         },
         {
@@ -39,8 +40,8 @@ const AdminLayout = () => {
                 </svg>
             ),
             links: [
-                { to: '/admin/genres', label: 'Quản lý Thể loại' },
-                { to: '/admin/movies', label: 'Quản lý Phim' },
+                { to: ROUTES.ADMIN_GENRES, label: 'Quản lý Thể loại' },
+                { to: ROUTES.ADMIN_MOVIES, label: 'Quản lý Phim' },
             ],
         },
         {
@@ -53,9 +54,9 @@ const AdminLayout = () => {
                 </svg>
             ),
             links: [
-                { to: '/admin/rooms', label: 'Quản lý Phòng chiếu' },
-                { to: '/admin/surcharges', label: 'Quản lý Phụ phí' },
-                { to: '/admin/showtimes', label: 'Quản lý Suất chiếu' },
+                { to: ROUTES.ADMIN_ROOMS, label: 'Quản lý Phòng chiếu' },
+                { to: ROUTES.ADMIN_SURCHARGES, label: 'Quản lý Phụ phí' },
+                { to: ROUTES.ADMIN_SHOWTIMES, label: 'Quản lý Suất chiếu' },
             ],
         },
         {
@@ -70,8 +71,8 @@ const AdminLayout = () => {
                 </svg>
             ),
             links: [
-                { to: '/admin/stats/bookings', label: 'Thống kê Lượt đặt vé & Doanh thu' },
-                { to: '/admin/stats/showtimes', label: 'Thống kê Suất chiếu' },
+                { to: ROUTES.ADMIN_STATS_BOOKINGS, label: 'Thống kê Lượt đặt vé & Doanh thu' },
+                { to: ROUTES.ADMIN_STATS_SHOWTIMES, label: 'Thống kê Suất chiếu' },
             ],
         },
     ];
@@ -84,9 +85,9 @@ const AdminLayout = () => {
             <nav className="admin-navbar">
                 {/* Mobile menu toggle button */}
                 <button 
-                    className={`admin-mobile-toggle ${mobileOpen ? 'open' : ''}`}
-                    onClick={() => setMobileOpen(!mobileOpen)}
-                    aria-label="Toggle navigation"
+                     className={`admin-mobile-toggle ${mobileOpen ? 'open' : ''}`}
+                     onClick={() => setMobileOpen(!mobileOpen)}
+                     aria-label="Toggle navigation"
                 >
                     {mobileOpen ? (
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -102,7 +103,7 @@ const AdminLayout = () => {
                     )}
                 </button>
 
-                <Link to="/admin" className="admin-nav-logo" onClick={() => setMobileOpen(false)}>
+                <Link to={ROUTES.ADMIN_DASHBOARD} className="admin-nav-logo" onClick={() => setMobileOpen(false)}>
                     <svg viewBox="0 0 22 22" fill="none">
                         <rect x="1" y="5" width="20" height="14" rx="3" stroke="currentColor" strokeWidth="1.6" />
                         <path d="M8 9l5 3-5 3V9z" fill="currentColor" />
@@ -148,7 +149,7 @@ const AdminLayout = () => {
                     <button onClick={handleLogout} className="admin-nav-link" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                         Đăng xuất
                     </button>
-                    <Link to="/admin/profile" className="admin-nav-avatar" title="Xem hồ sơ" onClick={() => setMobileOpen(false)}>
+                    <Link to={ROUTES.ADMIN_PROFILE} className="admin-nav-avatar" title="Xem hồ sơ" onClick={() => setMobileOpen(false)}>
                         {currentUser?.fullName?.charAt(0)?.toUpperCase() || 'A'}
                     </Link>
                 </div>

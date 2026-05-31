@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PATH_GENERATORS } from '../../../../config/routes';
 import './TicketCard.css';
 
 /**
@@ -33,12 +34,12 @@ const TicketCard = ({ booking }) => {
       <div className="ticket-card__actions">
         <span className="ticket-card__price">${booking.totalPrice || 0}</span>
         {booking.status === 'PENDING' && (
-          <Link to={`/pay/${booking.id}`} className="ticket-card__pay-btn">
+          <Link to={PATH_GENERATORS.pay(booking.id)} className="ticket-card__pay-btn">
             Pay Now
           </Link>
         )}
         {booking.status === 'CONFIRMED' && (
-          <Link to={`/tickets/${booking.id}`} className="ticket-card__view-btn">
+          <Link to={PATH_GENERATORS.tickets(booking.id)} className="ticket-card__view-btn">
             View Tickets
           </Link>
         )}

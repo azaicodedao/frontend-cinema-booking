@@ -5,6 +5,8 @@ import AuthModalContext from '../../../context/AuthModalContext';
 import MovieService from '../services/movie.api';
 import ReviewApi from '../services/review.api';
 import api from '../../../services/apiClient';
+import { ROUTES, PATH_GENERATORS } from '../../../config/routes';
+import { isUpcomingShowtime } from '../../../utils/date';
 import './MovieDetails.css';
 
 /**
@@ -34,16 +36,17 @@ const MovieDetails = () => {
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      MovieService.getMovieDetail(id),
-      api.get(`showtimes/movie/${id}`).then((res) => res.data.data || res.data).catch(() => []),
-      ReviewApi.getReviewsByMovie(id).then((res) => res.data || []).catch(() => []),
-    ]).then(([movieData, showtimeData, reviewData]) => {
+      MovieService.getMovieDetail(id), 
+      api.get(`showtimes/movie/${id}`).then((res) => res.data.data || res.data).catch(() => []), 
+      ReviewApi.getReviewsByMovie(id).then((res) => res.data || []).catch(() => []), 
+    ]).then(([movieData, showtimeData, reviewData]) => { 
       setMovie(movieData);
       
+      // Gom các suất chiếu theo ngày
       const grouped = {};
       const now = new Date();
       const showtimesList = (Array.isArray(showtimeData) ? showtimeData : [])
-        .filter(st => new Date(st.startTime) >= now);
+        .filter(st => isUpcomingShowtime(st, now));
 
       showtimesList.forEach(st => {
         const dateKey = st.showDate;
@@ -51,14 +54,14 @@ const MovieDetails = () => {
         grouped[dateKey].push(st);
       });
 
-      // Sắp xếp các suất chiếu trong cùng 1 ngày theo thứ tự Thời gian (Sớm tới Muộn)
+      // Sắp xếp các suất chiếu trong cùng 1 ngày theo thứ tự Thời gian (Sớm tới Muộn )
       Object.keys(grouped).forEach(date => {
         grouped[date].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
       });
 
-      const sortedDates = Object.keys(grouped).sort();
+      const sortedDates = Object.keys(grouped).sort(); // Lấy danh sách các ngày và sắp xếp theo thứ tự ngày tháng
       setGroupedShowtimes(grouped);
-      setDates(sortedDates);
+      setDates(sortedDates); // Lấy danh sách các ngày và chọn ngày hiện tại là ngày được chọn mặc định
       if (sortedDates.length > 0) {
         setSelectedDate(sortedDates[0]);
       }
@@ -98,14 +101,14 @@ const MovieDetails = () => {
   if (!movie) return (
     <div className="inner" style={{padding: '100px 0', textAlign: 'center'}}>
       <h2 style={{color: 'var(--t1)'}}>Không tìm thấy phim</h2>
-      <Link to="/" className="btn-cta" style={{display: 'inline-block', marginTop: '20px'}}>Quay lại trang chủ</Link>
+      <Link to={ROUTES.HOME} className="btn-cta" style={{display: 'inline-block', marginTop: '20px'}}>Quay lại trang chủ</Link>
     </div>
   );
 
   return (
     <div className="screen" id="screen-detail">
       <div className="inner">
-        <Link to="/" className="back">← Quay lại danh sách</Link>
+        <Link to={ROUTES.HOME} className="back">← Quay lại danh sách</Link>
         
         <div className="dhero">
           <div className="dposter">
@@ -198,7 +201,7 @@ const MovieDetails = () => {
                     <div 
                       key={st.id} 
                       className={`st-btn ${st.status === 'FULL' ? 'full' : ''}`}
-                      onClick={() => st.status !== 'FULL' && navigate(`/booking/seats/${st.id}`)}
+                      onClick={() => st.status !== 'FULL' && navigate(PATH_GENERATORS.seatSelection(st.id))}
                     >
                       <div className="st-time-val">{st.timeString}</div>
                       <div className="st-room-val">{st.formatAndRoom}</div>

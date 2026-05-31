@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TicketApi from '../services/ticket.api';
 import ReviewApi from '../services/review.api';
 import Spinner from '../../../components/common/Spinner/Spinner';
+import { ROUTES } from '../../../config/routes';
 import './MovieReview.css';
 
 /**
@@ -107,8 +108,8 @@ const MovieReview = () => {
                         )}
 
                         <div className="gap10" style={{ justifyContent: 'center' }}>
-                            <button className="btn-cta" onClick={() => navigate('/profile', { state: { activeTab: 'history' } })}>Đánh giá phim khác</button>
-                            <button className="btn-sec" onClick={() => navigate('/')}>Về trang chủ</button>
+                            <button className="btn-cta" onClick={() => navigate(ROUTES.PROFILE, { state: { activeTab: 'history' } })}>Đánh giá phim khác</button>
+                            <button className="btn-sec" onClick={() => navigate(ROUTES.HOME)}>Về trang chủ</button>
                         </div>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ import PaymentApi from '../services/payment.api';
 import OrderSummary from '../components/OrderSummary/OrderSummary';
 import PaymentMethodPicker from '../components/PaymentMethodPicker/PaymentMethodPicker';
 import Spinner from '../../../components/common/Spinner/Spinner';
+import { PATH_GENERATORS } from '../../../config/routes';
 import './Pay.css';
 
 /**
@@ -81,7 +82,7 @@ const Pay = () => {
            <div className="review-success-icon">🎉</div>
            <div className="review-success-title">Thanh toán thành công!</div>
            <div className="review-success-sub">Vé điện tử của bạn đã sẵn sàng. Hãy vào xem ngay!</div>
-           <button className="btn-cta" onClick={() => navigate('/tickets/' + id)}>Xem vé của tôi</button>
+           <button className="btn-cta" onClick={() => navigate(PATH_GENERATORS.tickets(id))}>Xem vé của tôi</button>
         </div>
       </div>
     );
@@ -91,7 +92,7 @@ const Pay = () => {
     <div className="inner">
       <button className="back" onClick={() => {
         if (booking?.showtimeId) {
-          navigate(`/booking/seats/${booking.showtimeId}`);
+          navigate(PATH_GENERATORS.seatSelection(booking.showtimeId));
         } else {
           navigate(-1);
         }

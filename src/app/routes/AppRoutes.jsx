@@ -6,6 +6,7 @@ import AdminLayout from '../../layouts/AdminLayout';
 import PrivateRoute from '../guards/PrivateRoute';
 import AdminRoute from '../guards/AdminRoute';
 import AdminRedirectGuard from '../guards/AdminRedirectGuard';
+import { ROUTES, ADMIN_CHILD_ROUTES } from '../../config/routes';
 
 // Loading component
 const LoadingScreen = () => (
@@ -21,7 +22,6 @@ const Movies = lazy(() => import('../../features/movie/pages/Movies'));
 const Profile = lazy(() => import('../../features/auth/pages/Profile'));
 const MovieDetails = lazy(() => import('../../features/movie/pages/MovieDetails'));
 const SeatSelection = lazy(() => import('../../features/booking/pages/SeatSelection'));
-const Booking = lazy(() => import('../../features/booking/pages/Booking'));
 const Pay = lazy(() => import('../../features/payment/pages/Pay'));
 const TicketView = lazy(() => import('../../features/user/pages/TicketView'));
 const MovieReview = lazy(() => import('../../features/user/pages/MovieReview'));
@@ -47,36 +47,35 @@ const AppRoutes = () => {
       <Routes>
         {/* Customer / Public routes */}
         <Route element={<AdminRedirectGuard><MainLayout /></AdminRedirectGuard>}>
-          <Route path="/" element={<Home />} />
-          <Route path="/movies" element={<Movies />} />
+          <Route path={ROUTES.HOME} element={<Home />} />
+          <Route path={ROUTES.MOVIES} element={<Movies />} />
           {/* /login và /register redirect về trang chủ - dùng AuthModal thay thế */}
-          <Route path="/login" element={<Navigate to="/" state={{ openLogin: true }} replace />} />
-          <Route path="/register" element={<Navigate to="/" replace />} />
-          <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path={ROUTES.LOGIN} element={<Navigate to={ROUTES.HOME} state={{ openLogin: true }} replace />} />
+          <Route path={ROUTES.REGISTER} element={<Navigate to={ROUTES.HOME} replace />} />
+          <Route path={ROUTES.MOVIE_DETAILS} element={<MovieDetails />} />
           
           {/* Protected customer routes */}
-          <Route path="/booking/seats/:showtimeId" element={<PrivateRoute><SeatSelection /></PrivateRoute>} />
-          <Route path="/book/:id" element={<PrivateRoute><Booking /></PrivateRoute>} />
-          <Route path="/pay/:id" element={<PrivateRoute><Pay /></PrivateRoute>} />
-          <Route path="/tickets/:id" element={<PrivateRoute><TicketView /></PrivateRoute>} />
-          <Route path="/review/booking/:id" element={<PrivateRoute><MovieReview /></PrivateRoute>} />
-          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path={ROUTES.SEAT_SELECTION} element={<PrivateRoute><SeatSelection /></PrivateRoute>} />
+          <Route path={ROUTES.PAY} element={<PrivateRoute><Pay /></PrivateRoute>} />
+          <Route path={ROUTES.TICKETS} element={<PrivateRoute><TicketView /></PrivateRoute>} />
+          <Route path={ROUTES.REVIEW} element={<PrivateRoute><MovieReview /></PrivateRoute>} />
+          <Route path={ROUTES.PROFILE} element={<PrivateRoute><Profile /></PrivateRoute>} />
         </Route>
 
         {/* Admin routes */}
-        <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
+        <Route path={ROUTES.ADMIN_DASHBOARD} element={<AdminRoute><AdminLayout /></AdminRoute>}>
           {/* Mặc định chuyển hướng Admin vào trang thống kê đặt vé */}
-          <Route index element={<Navigate to="stats/bookings" replace />} />
+          <Route index element={<Navigate to={ADMIN_CHILD_ROUTES.STATS_BOOKINGS} replace />} />
           
-          <Route path="users" element={<UsersPage />} />
-          <Route path="genres" element={<GenresPage />} />
-          <Route path="movies" element={<MoviesPage />} />
-          <Route path="rooms" element={<RoomsPage />} />
-          <Route path="surcharges" element={<RoomSeatTypePage />} />
-          <Route path="showtimes" element={<ShowtimesPage />} />
-          <Route path="profile" element={<AdminProfilePage />} />
-          <Route path="stats/bookings" element={<BookingStatsPage />} />
-          <Route path="stats/showtimes" element={<ShowtimeStatsPage />} />
+          <Route path={ADMIN_CHILD_ROUTES.USERS} element={<UsersPage />} />
+          <Route path={ADMIN_CHILD_ROUTES.GENRES} element={<GenresPage />} />
+          <Route path={ADMIN_CHILD_ROUTES.MOVIES} element={<MoviesPage />} />
+          <Route path={ADMIN_CHILD_ROUTES.ROOMS} element={<RoomsPage />} />
+          <Route path={ADMIN_CHILD_ROUTES.SURCHARGES} element={<RoomSeatTypePage />} />
+          <Route path={ADMIN_CHILD_ROUTES.SHOWTIMES} element={<ShowtimesPage />} />
+          <Route path={ADMIN_CHILD_ROUTES.PROFILE} element={<AdminProfilePage />} />
+          <Route path={ADMIN_CHILD_ROUTES.STATS_BOOKINGS} element={<BookingStatsPage />} />
+          <Route path={ADMIN_CHILD_ROUTES.STATS_SHOWTIMES} element={<ShowtimeStatsPage />} />
           
           {/* Dashboard tổng quan đã được thay thế bằng các trang thống kê */}
         </Route>
@@ -86,3 +85,4 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
+

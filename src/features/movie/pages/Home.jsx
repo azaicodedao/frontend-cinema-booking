@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../../context/AuthContext';
 import MovieService from '../services/movie.api';
 import GenreApi from '../services/genre.api';
+import { ROUTES, PATH_GENERATORS } from '../../../config/routes';
 import SearchBar from '../../../components/common/SearchBar/SearchBar';
 import GenreFilter from '../components/GenreFilter/GenreFilter';
 import MovieList from '../components/MovieList/MovieList';
@@ -97,9 +98,9 @@ const Home = () => {
   const handleBookClick = (movie) => {
     if (!movie) return;
     if (!isAuthenticated) {
-      navigate('/login', { state: { from: { pathname: `/movie/${movie.id}`, search: '?book=true' } } });
+      navigate(ROUTES.LOGIN, { state: { from: { pathname: PATH_GENERATORS.movieDetails(movie.id), search: '?book=true' } } });
     } else {
-      navigate(`/movie/${movie.id}?book=true`);
+      navigate(PATH_GENERATORS.movieDetails(movie.id, true));
     }
   };
 
@@ -202,7 +203,7 @@ const Home = () => {
               {movie.posterUrl && (
                 <div 
                   className="home-page__hero-poster-wrapper"
-                  onClick={() => navigate(`/movie/${movie.id}`)}
+                  onClick={() => navigate(PATH_GENERATORS.movieDetails(movie.id))}
                 >
                   <div className="home-page__hero-poster-glow" style={{ backgroundImage: `url(${movie.posterUrl})` }} />
                   <img

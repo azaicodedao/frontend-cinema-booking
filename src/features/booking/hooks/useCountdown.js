@@ -1,13 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
 
-const useCountdown = (initialSeconds) => {
+const useCountdown = (initialSeconds, options = {}) => {
+  const { enabled = true } = options;
   const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
   const [isExpired, setIsExpired] = useState(false);
 
   useEffect(() => {
+    setSecondsLeft(initialSeconds);
+    setIsExpired(initialSeconds <= 0);
+  }, [initialSeconds]);
+
+  useEffect(() => {
+    if (!enabled) return undefined;
+
     if (secondsLeft <= 0) {
       setIsExpired(true);
-      return;
+      return undefined;
     }
 
     const timer = setInterval(() => {
@@ -22,7 +30,7 @@ const useCountdown = (initialSeconds) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [enabled, secondsLeft]);
 
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft % 60;

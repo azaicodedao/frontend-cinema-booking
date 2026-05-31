@@ -3,7 +3,7 @@ import './Movies.css';
 import DateTabs from '../components/DateTabs/DateTabs';
 import MovieScheduleCard from '../components/MovieScheduleCard/MovieScheduleCard';
 import MovieService from '../services/movie.api';
-import { formatLocalDate, parseLocalDateString } from '../../../utils/date';
+import { formatLocalDate, isUpcomingShowtime, parseLocalDateString } from '../../../utils/date';
 
 /**
  * Trang Lịch Chiếu Phim Truyền thống (Movies Page).
@@ -26,11 +26,10 @@ const Movies = () => {
         fetchAllSchedules();
     }, []);
 
-    const fetchAllSchedules = async () => {
+    const fetchAllSchedules = async () => { 
         setLoading(true);
         setError(null);
         try {
-            // Gọi API không truyền date để lấy toàn bộ lịch chiếu từ hôm nay trở đi
             const data = await MovieService.getSchedule();
             setFullSchedule(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -47,13 +46,14 @@ const Movies = () => {
      * Dùng useMemo để tối ưu hiệu năng, chỉ tính toán lại khi fullSchedule hoặc selectedDate thay đổi.
      */
     const filteredSchedule = useMemo(() => {
+        const now = new Date();
         return fullSchedule
             .map(movie => ({
                 ...movie,
                 // Lọc các suất chiếu khớp với ngày đang chọn
                 showtimes: (Array.isArray(movie?.showtimes) ? movie.showtimes : []).filter(st => {
                     const stDate = parseLocalDateString(st?.startTime);
-                    return stDate === selectedDate;
+                    return stDate === selectedDate && isUpcomingShowtime(st, now);
                 })
             }))
             // Chỉ giữ lại những phim có suất chiếu trong ngày đó
@@ -91,7 +91,7 @@ const Movies = () => {
                     ) : (
                         <div className="empty-state">
                             <div className="empty-icon">📅</div>
-                            <p>Hiện không có suất chiếu nào cho ngày {selectedDate}.</p>
+                            <p>Hiện không còn suất chiếu khả dụng trong ngày này.</p>
                         </div>
                     )}
                 </div>

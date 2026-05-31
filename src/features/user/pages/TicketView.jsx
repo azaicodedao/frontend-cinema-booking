@@ -4,6 +4,7 @@ import TicketApi from '../services/ticket.api';
 import ReviewApi from '../services/review.api';
 import Spinner from '../../../components/common/Spinner/Spinner';
 import ViewReviewModal from '../../../components/common/ViewReviewModal/ViewReviewModal';
+import { ROUTES, PATH_GENERATORS } from '../../../config/routes';
 import './TicketView.css';
 
 /**
@@ -66,7 +67,7 @@ const TicketView = () => {
     // UC12b: Transaction Detail Summary
     const renderSummary = () => (
         <div className="inner">
-            <button className="back" onClick={() => navigate('/profile', { state: { activeTab: 'history' } })}>← Lịch sử mua vé</button>
+            <button className="back" onClick={() => navigate(ROUTES.PROFILE, { state: { activeTab: 'history' } })}>← Lịch sử mua vé</button>
             <div className="ptitle">Chi tiết giao dịch</div>
             
             <div className="ocard" style={{ maxWidth: '580px', marginBottom: '16px' }}>
@@ -128,7 +129,7 @@ const TicketView = () => {
                     <button className="btn-cta" onClick={() => setShowTicket(true)}>Xem vé điện tử</button>
                 )}
                 {booking.status === 'CONFIRMED' && !booking.hasReviewed && (
-                    <button className="btn-sec" onClick={() => navigate(`/review/booking/${id}`)}>Đánh giá phim</button>
+                    <button className="btn-sec" onClick={() => navigate(PATH_GENERATORS.review(id))}>Đánh giá phim</button>
                 )}
                 {booking.hasReviewed && (
                     <button className="btn-sec" onClick={handleViewReview}>Xem đánh giá</button>
@@ -218,8 +219,8 @@ const TicketView = () => {
                 </div>
 
                 <div className="gap10" style={{ marginTop: '30px' }}>
-                    <button className="btn-sec" onClick={() => navigate('/profile', { state: { activeTab: 'history' } })}>Lịch sử mua vé</button>
-                    <button className="btn-cta" onClick={() => navigate('/')}>Đặt vé khác</button>
+                    <button className="btn-sec" onClick={() => navigate(ROUTES.PROFILE, { state: { activeTab: 'history' } })}>Lịch sử mua vé</button>
+                    <button className="btn-cta" onClick={() => navigate(ROUTES.HOME)}>Đặt vé khác</button>
                 </div>
             </div>
         );

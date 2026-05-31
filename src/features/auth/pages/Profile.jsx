@@ -5,6 +5,7 @@ import UserApi from '../services/user.api';
 import TicketApi from '../../user/services/ticket.api';
 import ProfileForm from '../components/ProfileForm/ProfileForm';
 import ChangePasswordForm from '../components/ChangePasswordForm/ChangePasswordForm';
+import { PATH_GENERATORS } from '../../../config/routes';
 import './Profile.css';
 
 /**
@@ -205,9 +206,9 @@ const Profile = () => {
                                         className="hit" 
                                         onClick={() => {
                                             if (booking.status === 'PENDING') {
-                                                navigate(`/pay/${booking.bookingId}`);
+                                                navigate(PATH_GENERATORS.pay(booking.bookingId));
                                             } else {
-                                                navigate(`/tickets/${booking.bookingId}`);
+                                                navigate(PATH_GENERATORS.tickets(booking.bookingId));
                                             }
                                         }}
                                     >
@@ -232,7 +233,7 @@ const Profile = () => {
                                                     className="btn-sec review-btn-small" 
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        navigate(`/review/booking/${booking.bookingId}`);
+                                                        navigate(PATH_GENERATORS.review(booking.bookingId));
                                                     }}
                                                 >
                                                     ⭐ Đánh giá phim
@@ -243,7 +244,7 @@ const Profile = () => {
                                                     style={{borderColor: '#2980b9', color: '#2980b9'}}
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        navigate(`/pay/${booking.bookingId}`);
+                                                        navigate(PATH_GENERATORS.pay(booking.bookingId));
                                                     }}
                                                 >
                                                     💳 Tiếp tục thanh toán

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../../../context/AuthContext';
 import AuthModalContext from '../../../../context/AuthModalContext';
+import { PATH_GENERATORS } from '../../../../config/routes';
 import './MovieScheduleCard.css';
 
 /**
@@ -22,7 +23,7 @@ const MovieScheduleCard = ({ movie }) => {
         if (!showtimeId) return;
 
         // Chuyển hướng sang trang chọn ghế
-        navigate(`/booking/seats/${showtimeId}`);
+        navigate(PATH_GENERATORS.seatSelection(showtimeId));
     };
 
     return (

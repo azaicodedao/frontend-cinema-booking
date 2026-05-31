@@ -21,8 +21,9 @@ const SEAT_STATUS = {
  */
 const SeatMap = ({ seats = [], selectedSeats = [], onToggleSeat, maxSeats = 8 }) => {
   // Nhóm ghế theo dòng (A, B, C,...) thành một Object: { A: [...], B: [...] }
+  const rows = {};
   seats.forEach((seat) => {
-    const row = seat.rowLetter || seat.row || 'A';
+    const row = seat.rowLetter || seat.row || 'A';//  
     if (!rows[row]) rows[row] = [];
     rows[row].push(seat);
   });
@@ -53,7 +54,7 @@ const SeatMap = ({ seats = [], selectedSeats = [], onToggleSeat, maxSeats = 8 })
       <div className="seat-map__grid">
         {Object.entries(rows)
           .sort(([a], [b]) => a.localeCompare(b))
-          .map(([rowLetter, rowSeats]) => (
+          .map(([rowLetter, rowSeats]) => ( // rowLetter = "A" rowSeats = [ghế A1, ghế A2]
             <div key={rowLetter} className="seat-map__row">
               <span className="seat-map__row-label">{rowLetter}</span>
               <div className="seat-map__seats">

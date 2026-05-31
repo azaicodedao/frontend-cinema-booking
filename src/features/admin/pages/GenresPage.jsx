@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as adminApi from '../services/admin.api';
+import AdminModal from '../components/AdminModal/AdminModal';
+import AdminConfirmModal from '../components/AdminConfirmModal/AdminConfirmModal';
 import '../../../layouts/AdminLayout.css';
 
 const GenresPage = () => {
@@ -7,12 +9,10 @@ const GenresPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
   const [showModal, setShowModal] = useState(false);
-  const [editGenre, setEditGenre] = useState(null); // null = create, object = edit
+  const [editGenre, setEditGenre] = useState(null);
   const [formName, setFormName] = useState('');
   const [formLoading, setFormLoading] = useState(false);
-
   const [deleteConfirm, setDeleteConfirm] = useState(null);
 
   const fetchGenres = async () => {
@@ -29,21 +29,21 @@ const GenresPage = () => {
 
   useEffect(() => { fetchGenres(); }, []);
 
-  const showSuccess = (msg) => { 
-    setSuccess(msg); 
-    setTimeout(() => setSuccess(''), 3000); 
+  const showSuccess = (msg) => {
+    setSuccess(msg);
+    setTimeout(() => setSuccess(''), 3000);
   };
-  const showError = (msg) => { 
-    setError(msg); 
-    setTimeout(() => setError(''), 3000); 
+  const showError = (msg) => {
+    setError(msg);
+    setTimeout(() => setError(''), 3000);
   };
 
   const openCreate = () => { setEditGenre(null); setFormName(''); setShowModal(true); };
-  const openEdit = (g) => { setEditGenre(g); setFormName(g.name); setShowModal(true); };
+  const openEdit = (genre) => { setEditGenre(genre); setFormName(genre.name); setShowModal(true); };
   const closeModal = () => { setShowModal(false); setEditGenre(null); setFormName(''); };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (!formName.trim()) return;
     setFormLoading(true);
     setError('');
@@ -72,12 +72,10 @@ const GenresPage = () => {
       setDeleteConfirm(null);
       fetchGenres();
     } catch (e) {
-      const emsg = e.response?.data?.message || 'Không thể xoá thể loại đang được sử dụng. Vui lòng gỡ khỏi các phim liên quan trước.';
-      showError(emsg);
+      showError(e.response?.data?.message || 'Không thể xóa thể loại đang được sử dụng');
       setDeleteConfirm(null);
     }
   };
-  
 
   return (
     <div>
@@ -108,24 +106,14 @@ const GenresPage = () => {
               <tr><td colSpan={3}><div className="admin-loading"><div className="admin-spinner" /></div></td></tr>
             ) : genres.length === 0 ? (
               <tr><td colSpan={3}><div className="admin-empty">Chưa có thể loại nào</div></td></tr>
-            ) : genres.map(g => (
-              <tr key={g.id}>
-                <td style={{ color: 'var(--t3)', fontSize: 12 }}>#{g.id}</td>
-                <td style={{ fontWeight: 600 }}>{g.name}</td>
+            ) : genres.map((genre) => (
+              <tr key={genre.id}>
+                <td style={{ color: 'var(--t3)', fontSize: 12 }}>#{genre.id}</td>
+                <td style={{ fontWeight: 600 }}>{genre.name}</td>
                 <td>
                   <div className="admin-actions-group">
-                    <button className="btn-admin-secondary" onClick={() => openEdit(g)}>
-                      <svg viewBox="0 0 14 14" fill="none" style={{ width: 12, height: 12 }}>
-                        <path d="M9.5 1.5l3 3L4 13H1v-3L9.5 1.5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
-                      </svg>
-                      Sửa
-                    </button>
-                    <button className="btn-admin-danger" onClick={() => setDeleteConfirm(g)}>
-                      <svg viewBox="0 0 14 14" fill="none" style={{ width: 12, height: 12 }}>
-                        <path d="M2 3.5h10M5 3.5V2.5h4v1M5.5 6v4M8.5 6v4M3 3.5l.7 8h6.6l.7-8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                      Xóa
-                    </button>
+                    <button className="btn-admin-secondary" onClick={() => openEdit(genre)}>Sửa</button>
+                    <button className="btn-admin-danger" onClick={() => setDeleteConfirm(genre)}>Xóa</button>
                   </div>
                 </td>
               </tr>
@@ -134,52 +122,42 @@ const GenresPage = () => {
         </table>
       </div>
 
-      {/* Create/Edit Modal */}
-      {showModal && (
-        <div className="admin-modal-overlay" onClick={closeModal}>
-          <div className="admin-modal" style={{ maxWidth: 400 }} onClick={e => e.stopPropagation()}>
-            <button className="admin-modal-close" onClick={closeModal}>×</button>
-            <h2 className="admin-modal-title">{editGenre ? 'Sửa thể loại' : 'Thêm thể loại mới'}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="admin-form-group">
-                <label className="admin-form-label">Tên thể loại *</label>
-                <input
-                  className="admin-form-input"
-                  placeholder="Nhập tên thể loại..."
-                  value={formName}
-                  onChange={e => setFormName(e.target.value)}
-                  required
-                  autoFocus
-                />
-              </div>
-              <div className="admin-modal-footer">
-                <button type="button" className="btn-admin-secondary" onClick={closeModal}>Hủy</button>
-                <button type="submit" className="btn-admin-primary" disabled={formLoading}>
-                  {formLoading ? 'Đang lưu...' : editGenre ? 'Cập nhật' : 'Thêm mới'}
-                </button>
-              </div>
-            </form>
+      <AdminModal
+        isOpen={showModal}
+        onClose={closeModal}
+        title={editGenre ? 'Sửa thể loại' : 'Thêm thể loại mới'}
+        size="small"
+      >
+        <form onSubmit={handleSubmit}>
+          <div className="admin-form-group">
+            <label className="admin-form-label">Tên thể loại *</label>
+            <input
+              className="admin-form-input"
+              placeholder="Nhập tên thể loại..."
+              value={formName}
+              onChange={(event) => setFormName(event.target.value)}
+              required
+              autoFocus
+            />
           </div>
-        </div>
-      )}
+          <div className="admin-modal-footer">
+            <button type="button" className="btn-admin-secondary" onClick={closeModal}>Hủy</button>
+            <button type="submit" className="btn-admin-primary" disabled={formLoading}>
+              {formLoading ? 'Đang lưu...' : editGenre ? 'Cập nhật' : 'Thêm mới'}
+            </button>
+          </div>
+        </form>
+      </AdminModal>
 
-      {/* Delete Confirm */}
-      {deleteConfirm && (
-        <div className="admin-modal-overlay" onClick={() => setDeleteConfirm(null)}>
-          <div className="admin-modal admin-confirm-modal" onClick={e => e.stopPropagation()}>
-            <button className="admin-modal-close" onClick={() => setDeleteConfirm(null)}>×</button>
-            <h2 className="admin-modal-title">Xóa thể loại</h2>
-            <p className="admin-confirm-text">
-              Bạn có chắc muốn xóa thể loại <strong>"{deleteConfirm.name}"</strong>?
-              Thao tác này không thể hoàn tác. Thể loại chỉ có thể xóa nếu chưa được gán cho phim nào.
-            </p>
-            <div className="admin-modal-footer">
-              <button className="btn-admin-secondary" onClick={() => setDeleteConfirm(null)}>Hủy</button>
-              <button className="btn-admin-danger" onClick={handleDelete}>Xóa</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <AdminConfirmModal
+        isOpen={!!deleteConfirm}
+        onClose={() => setDeleteConfirm(null)}
+        title="Xóa thể loại"
+        confirmText="Xóa"
+        onConfirm={handleDelete}
+      >
+        Bạn có chắc muốn xóa thể loại <strong>"{deleteConfirm?.name}"</strong>? Thao tác này không thể hoàn tác.
+      </AdminConfirmModal>
     </div>
   );
 };
