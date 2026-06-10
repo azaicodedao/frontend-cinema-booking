@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import AuthContext from '../../../context/AuthContext';
 import UserApi from '../../auth/services/user.api';
 import ProfileForm from '../../auth/components/ProfileForm/ProfileForm';
@@ -16,7 +16,38 @@ const AdminProfilePage = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  const clearMessages = () => { setMessage(''); setError(''); };
+  const messageTimeoutRef = useRef(null);
+  const errorTimeoutRef = useRef(null);
+
+  const clearMessages = () => {
+    setMessage('');
+    setError('');
+    if (messageTimeoutRef.current) clearTimeout(messageTimeoutRef.current);
+    if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+  };
+
+  const showSuccess = (msg) => {
+    clearMessages();
+    setMessage(msg);
+    messageTimeoutRef.current = setTimeout(() => {
+      setMessage('');
+    }, 3000);
+  };
+
+  const showError = (msg) => {
+    clearMessages();
+    setError(msg);
+    errorTimeoutRef.current = setTimeout(() => {
+      setError('');
+    }, 3000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (messageTimeoutRef.current) clearTimeout(messageTimeoutRef.current);
+      if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+    };
+  }, []);
 
   /**
    * Tự động lấy dữ liệu hồ sơ mới nhất từ server khi vào trang.
@@ -42,9 +73,9 @@ const AdminProfilePage = () => {
       const res = await UserApi.updateProfile(data);
       const userData = res.data?.data || res.data;
       setCurrentUser({ ...currentUser, ...userData });
-      setMessage('Cập nhật hồ sơ thành công!');
+      showSuccess('Cập nhật hồ sơ thành công!');
     } catch (err) {
-      setError(err.response?.data?.message || 'Cập nhật thất bại.');
+      showError(err.response?.data?.message || 'Cập nhật thất bại.');
     } finally {
       setLoading(false);
     }
@@ -55,9 +86,9 @@ const AdminProfilePage = () => {
     clearMessages();
     try {
       await UserApi.changePassword(data);
-      setMessage('Đổi mật khẩu thành công!');
+      showSuccess('Đổi mật khẩu thành công!');
     } catch (err) {
-      setError(err.response?.data?.message || 'Đổi mật khẩu thất bại.');
+      showError(err.response?.data?.message || 'Đổi mật khẩu thất bại.');
     } finally {
       setLoading(false);
     }
@@ -106,10 +137,10 @@ const AdminProfilePage = () => {
         {message && <div className="admin-alert admin-alert-success">{message}</div>}
         {error && <div className="admin-alert admin-alert-error">{error}</div>}
 
-        <div style={{ 
-          background: 'var(--bg1)', 
-          border: '1px solid var(--border)', 
-          borderRadius: '16px', 
+        <div style={{
+          background: 'var(--bg1)',
+          border: '1px solid var(--border)',
+          borderRadius: '16px',
           padding: '32px',
           boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
           animation: 'fadeIn 0.4s ease-out'
@@ -118,9 +149,9 @@ const AdminProfilePage = () => {
             <>
               {/* Avatar & Info Row - Đồng bộ với Profile khách hàng */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 32, paddingBottom: 24, borderBottom: '1px solid var(--border)' }}>
-                <div style={{ 
-                  width: 80, height: 80, borderRadius: '50%', background: 'var(--gold-dim)', 
-                  border: '2px solid var(--gold)', display: 'flex', alignItems: 'center', 
+                <div style={{
+                  width: 80, height: 80, borderRadius: '50%', background: 'var(--gold-dim)',
+                  border: '2px solid var(--gold)', display: 'flex', alignItems: 'center',
                   justifyContent: 'center', fontSize: 32, fontWeight: 800, color: 'var(--gold)',
                   overflow: 'hidden', boxShadow: '0 0 15px rgba(232, 160, 32, 0.2)'
                 }}>
@@ -140,11 +171,11 @@ const AdminProfilePage = () => {
               </div>
 
               <div style={{ maxWidth: '600px' }}>
-                <ProfileForm 
-                  user={currentUser} 
-                  onSubmit={handleUpdateProfile} 
+                <ProfileForm
+                  user={currentUser}
+                  onSubmit={handleUpdateProfile}
                   onResetMessages={clearMessages}
-                  loading={loading} 
+                  loading={loading}
                 />
               </div>
             </>
@@ -156,10 +187,10 @@ const AdminProfilePage = () => {
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--t1)', marginBottom: 8 }}>Đổi mật khẩu</h2>
                 <p style={{ fontSize: 13, color: 'var(--t2)' }}>Cập nhật mật khẩu để bảo mật tài khoản quản trị</p>
               </div>
-              <ChangePasswordForm 
-                onSubmit={handleChangePassword} 
+              <ChangePasswordForm
+                onSubmit={handleChangePassword}
                 onResetMessages={clearMessages}
-                loading={loading} 
+                loading={loading}
               />
             </div>
           )}

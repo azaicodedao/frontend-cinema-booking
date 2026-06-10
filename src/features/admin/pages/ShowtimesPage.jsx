@@ -21,7 +21,7 @@ const ShowtimesPage = () => {
 
   const [movieFilter, setMovieFilter] = useState('');
   const [roomFilter, setRoomFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('OPEN');
+  const [statusFilter, setStatusFilter] = useState('');
   const [dateFilter, setDateFilter] = useState('');
 
   const [showModal, setShowModal] = useState(false);
@@ -155,8 +155,8 @@ const ShowtimesPage = () => {
   // Tính danh sách phim cho dropdown modal (chỉ phim đang chiếu, nhưng khi sửa thì bao gồm cả phim hiện tại)
   const dropdownMovies = editShowtime
     ? (showingMovies.some(m => m.id === editShowtime.movieId)
-        ? showingMovies
-        : [...showingMovies, { id: editShowtime.movieId, title: editShowtime.movieTitle }])
+      ? showingMovies
+      : [...showingMovies, { id: editShowtime.movieId, title: editShowtime.movieTitle }])
     : showingMovies;
 
   return (
@@ -188,7 +188,7 @@ const ShowtimesPage = () => {
         <select className="admin-select" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ flex: 1, minWidth: 200 }}>
           <option value="">Tất cả trạng thái</option>
           <option value="OPEN">Mở bán</option>
-          <option value="CLOSED">Đã đóng/Xoá</option>
+          <option value="CLOSED">Đã đóng</option>
         </select>
 
         <input
@@ -201,7 +201,7 @@ const ShowtimesPage = () => {
 
         <button
           className="btn-admin-secondary"
-          onClick={() => { setMovieFilter(''); setRoomFilter(''); setStatusFilter('OPEN'); setDateFilter(''); }}
+          onClick={() => { setMovieFilter(''); setRoomFilter(''); setStatusFilter(''); setDateFilter(''); }}
           style={{ whiteSpace: 'nowrap' }}
         >
           Xóa bộ lọc

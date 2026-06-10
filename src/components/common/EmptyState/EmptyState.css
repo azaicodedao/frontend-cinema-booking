@@ -1,8 +1,3 @@
-/* =========================================================
-   Các quy tắc CSS cho trạng thái không có dữ liệu (Empty State) 
-   ========================================================= */
-
-/* Bao ngoài khối, canh giữa nội dung và tạo khoảng đệm */
 .empty-state {
   text-align: center;
   padding: 60px 20px;

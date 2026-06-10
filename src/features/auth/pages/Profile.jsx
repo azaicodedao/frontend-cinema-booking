@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import AuthContext from '../../../context/AuthContext';
 import UserApi from '../services/user.api';
@@ -26,6 +26,39 @@ const Profile = () => {
     const [bookings, setBookings] = useState([]);
     const [fetchingHistory, setFetchingHistory] = useState(false);
 
+    const messageTimeoutRef = useRef(null);
+    const errorTimeoutRef = useRef(null);
+
+    const clearMessages = () => {
+        setMessage('');
+        setError('');
+        if (messageTimeoutRef.current) clearTimeout(messageTimeoutRef.current);
+        if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+    };
+
+    const showSuccess = (msg) => {
+        clearMessages();
+        setMessage(msg);
+        messageTimeoutRef.current = setTimeout(() => {
+            setMessage('');
+        }, 3000);
+    };
+
+    const showError = (msg) => {
+        clearMessages();
+        setError(msg);
+        errorTimeoutRef.current = setTimeout(() => {
+            setError('');
+        }, 3000);
+    };
+
+    useEffect(() => {
+        return () => {
+            if (messageTimeoutRef.current) clearTimeout(messageTimeoutRef.current);
+            if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+        };
+    }, []);
+
     /**
      * Hàm tự động chạy 1 LẦN duy nhất khi người dùng lúc nào mở trang Trang cá nhân lên.
      * Ở đây, nó sẽ cập nhật (Refresh) toàn bộ Dữ liệu từ cơ sở dữ liệu để chống lỗi dữ liệu cũ.
@@ -44,8 +77,7 @@ const Profile = () => {
         };
 
         loadProfile();
-        setMessage('');
-        setError('');
+        clearMessages();
 
         if (activeTab === 'history') {
             fetchBookingHistory();
@@ -85,15 +117,14 @@ const Profile = () => {
 
     const handleUpdateProfile = async (data) => {
         setLoading(true);
-        setMessage('');
-        setError('');
+        clearMessages();
         try {
             const res = await UserApi.updateProfile(data);
             const userData = res.data?.data || res.data;
             setCurrentUser({ ...currentUser, ...userData });
-            setMessage('Cập nhật hồ sơ thành công!');
+            showSuccess('Cập nhật hồ sơ thành công!');
         } catch (err) {
-            setError(err.response?.data?.message || 'Cập nhật thất bại.');
+            showError(err.response?.data?.message || 'Cập nhật thất bại.');
         } finally {
             setLoading(false);
         }
@@ -101,13 +132,12 @@ const Profile = () => {
 
     const handleChangePassword = async (data) => {
         setLoading(true);
-        setMessage('');
-        setError('');
+        clearMessages();
         try {
             await UserApi.changePassword(data);
-            setMessage('Đổi mật khẩu thành công!');
+            showSuccess('Đổi mật khẩu thành công!');
         } catch (err) {
-            setError(err.response?.data?.message || 'Đổi mật khẩu thất bại.');
+            showError(err.response?.data?.message || 'Đổi mật khẩu thất bại.');
         } finally {
             setLoading(false);
         }
@@ -129,20 +159,20 @@ const Profile = () => {
                 <div className="psub">Quản lý thông tin tài khoản và lịch sử giao dịch</div>
 
                 <div className="ttabs">
-                    <div 
-                        className={`ttab ${activeTab === 'info' ? 'on' : ''}`} 
+                    <div
+                        className={`ttab ${activeTab === 'info' ? 'on' : ''}`}
                         onClick={() => setActiveTab('info')}
                     >
                         Thông tin tài khoản
                     </div>
-                    <div 
-                        className={`ttab ${activeTab === 'history' ? 'on' : ''}`} 
+                    <div
+                        className={`ttab ${activeTab === 'history' ? 'on' : ''}`}
                         onClick={() => setActiveTab('history')}
                     >
                         Lịch sử mua vé
                     </div>
-                    <div 
-                        className={`ttab ${activeTab === 'password' ? 'on' : ''}`} 
+                    <div
+                        className={`ttab ${activeTab === 'password' ? 'on' : ''}`}
                         onClick={() => setActiveTab('password')}
                     >
                         Đổi mật khẩu
@@ -173,7 +203,7 @@ const Profile = () => {
                                     <ProfileForm
                                         user={currentUser}
                                         onSubmit={handleUpdateProfile}
-                                        onResetMessages={() => { setMessage(''); setError(''); }}
+                                        onResetMessages={clearMessages}
                                         loading={loading}
                                     />
                                 </div>
@@ -184,10 +214,10 @@ const Profile = () => {
                     {activeTab === 'password' && (
                         <div className="psec" style={{ maxWidth: '500px' }}>
                             <div className="h3-title">Đổi mật khẩu</div>
-                            <div className="psub" style={{marginBottom: '20px'}}>Cập nhật mật khẩu để bảo vệ tài khoản của bạn</div>
+                            <div className="psub" style={{ marginBottom: '20px' }}>Cập nhật mật khẩu để bảo vệ tài khoản của bạn</div>
                             <ChangePasswordForm
                                 onSubmit={handleChangePassword}
-                                onResetMessages={() => { setMessage(''); setError(''); }}
+                                onResetMessages={clearMessages}
                                 loading={loading}
                             />
                         </div>
@@ -201,9 +231,9 @@ const Profile = () => {
                                 <div className="hempty">Bạn chưa có giao dịch nào gần đây.</div>
                             ) : (
                                 bookings.map(booking => (
-                                    <div 
-                                        key={booking.bookingId} 
-                                        className="hit" 
+                                    <div
+                                        key={booking.bookingId}
+                                        className="hit"
                                         onClick={() => {
                                             if (booking.status === 'PENDING') {
                                                 navigate(PATH_GENERATORS.pay(booking.bookingId));
@@ -225,12 +255,12 @@ const Profile = () => {
                                                 {getStatusText(booking.status)}
                                             </span>
                                             <div className="hprice">{booking.totalPrice?.toLocaleString()} đ</div>
-                                            
+
                                             {booking.hasReviewed ? (
                                                 <span className="reviewed-badge">✓ Đã đánh giá</span>
                                             ) : booking.status === 'CONFIRMED' ? (
-                                                <button 
-                                                    className="btn-sec review-btn-small" 
+                                                <button
+                                                    className="btn-sec review-btn-small"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         navigate(PATH_GENERATORS.review(booking.bookingId));
@@ -239,9 +269,9 @@ const Profile = () => {
                                                     ⭐ Đánh giá phim
                                                 </button>
                                             ) : booking.status === 'PENDING' && (
-                                                <button 
-                                                    className="btn-sec review-btn-small" 
-                                                    style={{borderColor: '#2980b9', color: '#2980b9'}}
+                                                <button
+                                                    className="btn-sec review-btn-small"
+                                                    style={{ borderColor: '#2980b9', color: '#2980b9' }}
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         navigate(PATH_GENERATORS.pay(booking.bookingId));

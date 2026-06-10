@@ -46,7 +46,7 @@ const MoviesPage = () => {
   useEffect(() => { fetchMovies(); }, [fetchMovies]);
 
   useEffect(() => {
-    adminApi.getGenres().then(r => setGenres(r.data.data || [])).catch(() => {});
+    adminApi.getGenres().then(r => setGenres(r.data.data || [])).catch(() => { });
   }, []);
 
   const showSuccess = (msg) => { setSuccess(msg); setTimeout(() => setSuccess(''), 3000); };
@@ -58,24 +58,30 @@ const MoviesPage = () => {
     setShowModal(true);
   };
 
-  const openEdit = (m) => {
-    setEditMovie(m);
-    setForm({
-      title: m.title || '',
-      description: m.description || '',
-      duration: m.duration || '',
-      ageRating: m.ageRating || '',
-      posterUrl: m.posterUrl || '',
-      trailerUrl: m.trailerUrl || '',
-      isFeatured: m.isFeatured || false,
-      status: m.status || 'COMING',
-      genreIds: (m.genres || []).map(g => g.id),
-      country: m.country || '',
-      director: m.director || '',
-      actors: m.actors || '',
-      releaseDate: m.releaseDate || '',
-    });
-    setShowModal(true);
+  const openEdit = async (m) => {
+    try {
+      const res = await adminApi.getMovieById(m.id);
+      const fullMovie = res.data.data;
+      setEditMovie(fullMovie);
+      setForm({
+        title: fullMovie.title || '',
+        description: fullMovie.description || '',
+        duration: fullMovie.duration || '',
+        ageRating: fullMovie.ageRating || '',
+        posterUrl: fullMovie.posterUrl || '',
+        trailerUrl: fullMovie.trailerUrl || '',
+        isFeatured: fullMovie.isFeatured || false,
+        status: fullMovie.status || 'COMING',
+        genreIds: (fullMovie.genres || []).map(g => g.id),
+        country: fullMovie.country || '',
+        director: fullMovie.director || '',
+        actors: fullMovie.actors || '',
+        releaseDate: fullMovie.releaseDate || '',
+      });
+      setShowModal(true);
+    } catch (err) {
+      showError('Không thể tải thông tin chi tiết phim');
+    }
   };
 
   const closeModal = () => { setShowModal(false); setEditMovie(null); setForm(EMPTY_FORM); };
@@ -327,17 +333,17 @@ const MoviesPage = () => {
               <div className="admin-form-row">
                 <div className="admin-form-group">
                   <label className="admin-form-label">Đạo diễn</label>
-                  <input className="admin-form-input" name="director" value={form.director} onChange={handleFormChange} placeholder="Tên đạo diễn" />
+                  <input className="admin-form-input" name="director" value={form.director} onChange={handleFormChange} />
                 </div>
                 <div className="admin-form-group">
                   <label className="admin-form-label">Quốc gia</label>
-                  <input className="admin-form-input" name="country" value={form.country} onChange={handleFormChange} placeholder="VD: Mỹ, Hàn Quốc, Việt Nam" />
+                  <input className="admin-form-input" name="country" value={form.country} onChange={handleFormChange} />
                 </div>
               </div>
               <div className="admin-form-row">
                 <div className="admin-form-group">
                   <label className="admin-form-label">Diễn viên</label>
-                  <input className="admin-form-input" name="actors" value={form.actors} onChange={handleFormChange} placeholder="Dàn diễn viên, cách nhau bởi dấu phẩy" />
+                  <input className="admin-form-input" name="actors" value={form.actors} onChange={handleFormChange} />
                 </div>
                 <div className="admin-form-group">
                   <label className="admin-form-label">Ngày phát hành</label>
