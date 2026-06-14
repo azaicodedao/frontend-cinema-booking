@@ -30,7 +30,7 @@ const RoomsPage = () => {
       const res = await adminApi.getRooms();
       setRooms(res.data.data || []);
     } catch (e) {
-      setError('Không thể tải danh sách phòng chiếu');
+      showError('Không thể tải danh sách phòng chiếu');
     } finally {
       setLoading(false);
     }
@@ -82,7 +82,7 @@ const RoomsPage = () => {
       closeModal();
       fetchRooms();
     } catch (e) {
-      setError(e.response?.data?.message || 'Lỗi khi lưu phòng chiếu');
+      showError(e.response?.data?.message || 'Không thể thay đổi cấu hình ghế khi phòng đang có suất chiếu được lên lịch.');
     } finally {
       setFormLoading(false);
     }
@@ -96,7 +96,7 @@ const RoomsPage = () => {
       setDeleteConfirm(null);
       fetchRooms();
     } catch (e) {
-      showError(e.response?.data?.message || 'Không thể xoá phòng chiếu.Vì phòng có suất chiếu đã và đang được lên lịch.Vui lòng xoá suất chiếu trước.');
+      showError(e.response?.data?.message || 'Không thể xoá phòng đang có suất chiếu. Vui lòng xoá suất chiếu trước.');
       setDeleteConfirm(null);
     }
   };
@@ -141,7 +141,7 @@ const RoomsPage = () => {
       showSuccess('Đã cập nhật sơ đồ ghế');
       closeSeatModal();
     } catch (e) {
-      showError('Lỗi khi lưu sơ đồ ghế');
+      showError(e.response?.data?.message || 'Không thể thay đổi loại ghế khi phòng đang có suất chiếu được lên lịch.');
     } finally {
       setSeatSaveLoading(false);
     }
@@ -228,7 +228,7 @@ const RoomsPage = () => {
             <form onSubmit={handleSubmit}>
               <div className="admin-form-group">
                 <label className="admin-form-label">Tên phòng *</label>
-                <input className="admin-form-input" name="name" value={form.name} onChange={handleFormChange} required placeholder="VD: Phòng 1, Phòng IMAX A..." />
+                <input className="admin-form-input" name="name" value={form.name} onChange={handleFormChange} required />
               </div>
               <div className="admin-form-group">
                 <label className="admin-form-label">Loại phòng</label>
@@ -239,11 +239,11 @@ const RoomsPage = () => {
               <div className="admin-form-row">
                 <div className="admin-form-group">
                   <label className="admin-form-label">Số hàng *</label>
-                  <input className="admin-form-input" name="totalRows" type="number" min="1" max="30" value={form.totalRows} onChange={handleFormChange} required placeholder />
+                  <input className="admin-form-input" name="totalRows" type="number" min="1" max="30" value={form.totalRows} onChange={handleFormChange} required />
                 </div>
                 <div className="admin-form-group">
                   <label className="admin-form-label">Số cột *</label>
-                  <input className="admin-form-input" name="totalCols" type="number" min="1" max="20" value={form.totalCols} onChange={handleFormChange} required placeholder />
+                  <input className="admin-form-input" name="totalCols" type="number" min="1" max="20" value={form.totalCols} onChange={handleFormChange} required />
                 </div>
               </div>
 
