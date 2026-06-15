@@ -19,6 +19,29 @@
   position: relative;
 }
 
+/* ——— Back Button ——— */
+.back {
+  background: none;
+  border: none;
+  color: var(--t2);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.back:hover {
+  color: var(--gold);
+  transform: translateX(-4px);
+}
+
+
 /* ——— Info Bar (Movie + Countdown) ——— */
 .sibar {
   display: flex;
