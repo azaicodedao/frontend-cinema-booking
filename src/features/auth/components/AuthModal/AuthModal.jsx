@@ -44,11 +44,11 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
         }
     };
 
-    const handleRegister = async (fullName, email, password) => {
+    const handleRegister = async (fullName, email, password, confirmPassword) => {
         setLoading(true);
         setError('');
         try {
-            await register(fullName, email, password);
+            await register(fullName, email, password, confirmPassword);
             setMode('login'); // Chuyển sang đăng nhập sau khi đăng ký thành công
             // Hoặc có thể tự động đăng nhập luôn tùy vào logic của register trong AuthContext
         } catch (err) {

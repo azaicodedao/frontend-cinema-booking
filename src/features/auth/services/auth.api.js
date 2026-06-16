@@ -51,8 +51,8 @@ class AuthService {
         localStorage.removeItem('user');
     }
 
-    register(fullName, email, password) {
-        return api.post(AUTH_URL + 'signup', { fullName, email, password });
+    register(fullName, email, password, confirmPassword) {
+        return api.post(AUTH_URL + 'signup', { fullName, email, password, confirmPassword });
     }
 
     getCurrentUser() {

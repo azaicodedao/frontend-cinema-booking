@@ -41,8 +41,8 @@ const AuthProvider = ({ children }) => {
     return userData;
   }, []);
 
-  const register = useCallback(async (fullName, email, password) => {
-    return await AuthService.register(fullName, email, password);
+  const register = useCallback(async (fullName, email, password, confirmPassword) => {
+    return await AuthService.register(fullName, email, password, confirmPassword);
   }, []);
 
   const logout = useCallback(() => {

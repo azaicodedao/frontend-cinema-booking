@@ -58,7 +58,7 @@ const GenresPage = () => {
       closeModal();
       fetchGenres();
     } catch (e) {
-      showError(e.response?.data?.message || 'Lỗi khi lưu thể loại');
+      showError(e.response?.data?.message || 'Thể loại đã tồn tại');
     } finally {
       setFormLoading(false);
     }
